@@ -1,0 +1,118 @@
+Expr -> E1 ZomIorXor .
+
+ZomIorXor -> .
+ZomIorXor -> ior E1 ZomIorXor .
+ZomIorXor -> xor E1 ZomIorXor .
+
+E1 -> E2 ZomAnd .
+
+ZomAnd -> .
+ZomAnd -> and E2 ZomAnd .
+
+E2 -> E3 OptRel .
+
+OptRel -> .
+OptRel -> equ E3 .
+OptRel -> neq E3 .
+OptRel -> leq E3 .
+OptRel -> geq E3 .
+OptRel -> lth E3 .
+OptRel -> gth E3 .
+
+E3 -> E4 ZomAddSub .
+
+ZomAddSub -> .
+ZomAddSub -> add E4 ZomAddSub .
+ZomAddSub -> sub E4 ZomAddSub .
+
+E4 -> E5 ZomMulDivMod .
+
+ZomMulDivMod -> .
+ZomMulDivMod -> mul E5 ZomMulDivMod .
+ZomMulDivMod -> div E5 ZomMulDivMod .
+ZomMulDivMod -> mod E5 ZomMulDivMod .
+
+E5 -> ZomUnaryOp E6 .
+
+ZomUnaryOp -> .
+ZomUnaryOp -> not ZomUnaryOp .
+ZomUnaryOp -> add ZomUnaryOp .
+ZomUnaryOp -> sub ZomUnaryOp .
+ZomUnaryOp -> mem ZomUnaryOp .
+ZomUnaryOp -> val ZomUnaryOp .
+ZomUnaryOp -> del ZomUnaryOp .
+ZomUnaryOp -> lbracket Type rbracket ZomUnaryOp .
+
+E6 -> new Type .
+E6 -> E7 .
+
+E7 -> E8 ZomAccessOp .
+
+ZomAccessOp -> .
+ZomAccessOp -> lbracket Expr rbracket ZomAccessOp .
+ZomAccessOp -> dot identifier ZomAccessOp .
+
+E8 -> voidconst .
+E8 -> boolconst .
+E8 -> charconst .
+E8 -> intconst .
+E8 -> ptrconst .
+E8 -> identifier OptFunParenthesis .
+E8 -> lbrace Stmt ZomSemicStmt colon Expr OptWhereStmt rbrace .
+E8 -> lparenthesis Expr rparenthesis .
+
+OptFunParenthesis -> .
+OptFunParenthesis -> lparenthesis OptArg rparenthesis .
+
+OptArg -> .
+OptArg -> Expr ZomCommaArg .
+
+ZomCommaArg -> .
+ZomCommaArg -> comma Expr ZomCommaArg .
+
+ZomSemicStmt -> .
+ZomSemicStmt -> semic Stmt ZomSemicStmt .
+
+OptWhereStmt -> .
+OptWhereStmt -> where Decl ZomSemicDecl .
+
+ZomSemicDecl -> .
+ZomSemicDecl -> semic Decl ZomSemicDecl .
+
+
+
+Type -> void .
+Type -> bool .
+Type -> char .
+Type -> int .
+Type -> arr lbracket Expr rbracket Type .
+Type -> rec lparenthesis identifier colon Type ZomCommaCompDecl rparenthesis .
+Type -> ptr Type .
+Type -> identifier .
+
+ZomCommaCompDecl -> .
+ZomCommaCompDecl -> comma identifier colon Type ZomCommaCompDecl .
+
+
+
+Stmt -> Expr OptAssignExpr .
+Stmt -> if Expr then Stmt ZomSemicStmt OptElseStmt end .
+Stmt -> while Expr do Stmt ZomSemicStmt end .
+
+OptAssignExpr -> .
+OptAssignExpr -> assign Expr .
+
+OptElseStmt -> .
+OptElseStmt -> else Stmt ZomSemicStmt .
+
+
+
+Decl -> typ identifier colon Type .
+Decl -> var identifier colon Type .
+Decl -> fun identifier lparenthesis OptParDecl rparenthesis colon Type OptAssignExpr .
+
+OptParDecl -> .
+OptParDecl -> identifier colon Type ZomCommaParDecl .
+
+ZomCommaParDecl -> .
+ZomCommaParDecl -> comma identifier colon Type ZomCommaParDecl .
