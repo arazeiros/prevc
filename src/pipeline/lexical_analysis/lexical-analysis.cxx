@@ -42,6 +42,30 @@ namespace prevc
                 }
             }
 
+            void LexicalAnalysis::consume_char_literal()
+            {
+                util::Location start(reader.get_location());
+                std::uint32_t last = reader.read_one();
+
+                if (last < 32 || last > 126)
+                    CompileTimeError::raise(pipeline->file_name.c_str(), reader.get_location(), util::String::format(
+                            "character out of allowed range: %lc (decimal value: %d)",
+                            last,
+                            last
+                    ));
+
+                if (reader.read_one() != '\'')
+                    CompileTimeError::raise(pipeline->file_name.c_str(), reader.get_location(), util::String::format(
+                            "closing single quote (') expected, but found character: %lc",
+                            reader.last_one()
+                    ));
+
+                util::String lexeme(util::String::format("'%c'", last));
+                util::Location location(start, reader.get_location());
+                pipeline->symbols_vector.emplace_back(Token::CHAR_LITERAL, std::move(lexeme), std::move(location));
+                reader.read_one();
+            }
+
             void LexicalAnalysis::consume_integer_literal()
             {
                 std::vector<std::uint8_t> lexeme;
@@ -196,8 +220,7 @@ namespace prevc
                     }
                     else if (last == '\'')
                     {
-                        // TODO not implemented yet
-                        InternalError::raise("lack of implementation for parsing char literals");
+                        consume_char_literal();
                         return false;
                     }
                     else if (last == '!')

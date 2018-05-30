@@ -60,6 +60,12 @@ namespace prevc
                 void consume_integer_literal();
 
                 /**
+                 * \brief Consumes the rest of the character literal from the reader and stores the symbol in the
+                 *     output vector.
+                 * */
+                void consume_char_literal();
+
+                /**
                  * \brief Consumes the rest of a symbol starting with a letter. The symbol can be a literal, keyword
                  *     or an identifier.
                  * */
