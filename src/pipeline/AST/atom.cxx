@@ -44,8 +44,20 @@ namespace prevc
                         return llvm::ConstantInt::get(type, string_to_uint64_t(lexeme.c_str()));
                     }
 
+                    case Atom::Type::BOOLEAN:
+                    {
+                        auto type = llvm::Type::getInt8Ty(context);
+                        return llvm::ConstantInt::get(type, (lexeme == "true") ? 1 : 0);
+                    }
+
+                    case Atom::Type::CHARACTER:
+                    {
+                        auto type = llvm::Type::getInt8Ty(context);
+                        return llvm::ConstantInt::get(type, (std::uint64_t) lexeme.c_str()[1]);
+                    }
+
                     default:
-                        InternalError::raise("illegal state: case not handled");
+                        InternalError::raise("illegal state: case not handled: AST atom generating IR");
                         return nullptr;
                 }
             }

@@ -98,8 +98,24 @@ namespace prevc
                                     AST::Atom::Type::INTEGER, symbol.lexeme);
                         }
 
+                        case lexical_analysis::Token::CHAR_LITERAL:
+                        {
+                            return new AST::Atom(
+                                    pipeline,
+                                    util::Location(symbol.location),
+                                    AST::Atom::Type::CHARACTER, symbol.lexeme);
+                        }
+
+                        case lexical_analysis::Token::BOOL_LITERAL:
+                        {
+                            return new AST::Atom(
+                                    pipeline,
+                                    util::Location(symbol.location),
+                                    AST::Atom::Type::BOOLEAN, symbol.lexeme);
+                        }
+
                         default:
-                            InternalError::raise("illegal state: case not handled");
+                            InternalError::raise("illegal state: case not handled: terminal syntax node");
                     }
                 }
                 else
@@ -178,7 +194,7 @@ namespace prevc
                     }
                 }
 
-                InternalError::raise("illegal state: case not handled");
+                InternalError::raise("illegal state: case not handled: variable syntax node");
                 return nullptr; // should never come here, but disable warnings
             }
 

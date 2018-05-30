@@ -25,8 +25,7 @@ namespace prevc
                 {
                     INTEGER,
                     BOOLEAN,
-                    CHARACTER,
-                    STRING
+                    CHARACTER
                 };
 
                 /**
@@ -80,7 +79,6 @@ namespace prevc
                     case Atom::Type::INTEGER:   return "INTEGER";
                     case Atom::Type::BOOLEAN:   return "BOOLEAN";
                     case Atom::Type::CHARACTER: return "CHARACTER";
-                    case Atom::Type::STRING:    return "STRING";
 
                     default:
                         prevc::InternalError::raise("token not recognized");
