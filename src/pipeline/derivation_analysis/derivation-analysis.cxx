@@ -27,6 +27,33 @@ namespace prevc
             {
                 switch (symbol.token)
                 {
+                    case lexical_analysis::Token::OR:
+                        return AST::BinaryOperation::Operator::OR;
+
+                    case lexical_analysis::Token::XOR:
+                        return AST::BinaryOperation::Operator::XOR;
+
+                    case lexical_analysis::Token::AND:
+                        return AST::BinaryOperation::Operator::AND;
+
+                    case lexical_analysis::Token::EQU:
+                        return AST::BinaryOperation::Operator::EQU;
+
+                    case lexical_analysis::Token::NEQ:
+                        return AST::BinaryOperation::Operator::NEQ;
+
+                    case lexical_analysis::Token::LTH:
+                        return AST::BinaryOperation::Operator::LTH;
+
+                    case lexical_analysis::Token::LEQ:
+                        return AST::BinaryOperation::Operator::LEQ;
+
+                    case lexical_analysis::Token::GTH:
+                        return AST::BinaryOperation::Operator::GTH;
+
+                    case lexical_analysis::Token::GEQ:
+                        return AST::BinaryOperation::Operator::GEQ;
+
                     case lexical_analysis::Token::ADD:
                         return AST::BinaryOperation::Operator::ADD;
 
@@ -131,9 +158,6 @@ namespace prevc
                     switch (variable->type)
                     {
                         /* The following cases have to be implemented somewhere else*/
-                        case T::E0:
-                        case T::E1:
-                        case T::E2:
                         case T::E7:
                         /* --- */
 
@@ -145,6 +169,9 @@ namespace prevc
                         case T::E8:
                             return analyze(pipeline, nodes[0], nullptr);
 
+                        case T::E0:
+                        case T::E1:
+                        case T::E2:
                         case T::E3:
                         case T::E4:
                         {
@@ -152,6 +179,9 @@ namespace prevc
                             return analyze(pipeline, nodes[1], left);
                         }
 
+                        case T::ExtOrXor:
+                        case T::ExtAnd:
+                        case T::OptRel:
                         case T::ExtAddSub:
                         case T::ExtMulDivMod:
                         {
@@ -166,6 +196,9 @@ namespace prevc
                                     analyze_binary_operator(((Terminal) nodes[0])->symbol),
                                     (AST::Expression*) accumulator,
                                     right);
+
+                            if (variable->type == T::OptRel)
+                                return expression;
 
                             return analyze(pipeline, nodes[2], expression);
                         }

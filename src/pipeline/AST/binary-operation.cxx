@@ -30,6 +30,33 @@ namespace prevc
 
                 switch (operator_)
                 {
+                    case Operator::OR:
+                        return builder->CreateOr(left, right);
+
+                    case Operator::XOR:
+                        return builder->CreateXor(left, right);
+
+                    case Operator::AND:
+                        return builder->CreateAnd(left, right);
+
+                    case Operator::EQU:
+                        return builder->CreateICmpEQ(left, right);
+
+                    case Operator::NEQ:
+                        return builder->CreateICmpNE(left, right);
+
+                    case Operator::LTH:
+                        return builder->CreateICmpSLT(left, right);
+
+                    case Operator::LEQ:
+                        return builder->CreateICmpSLE(left, right);
+
+                    case Operator::GTH:
+                        return builder->CreateICmpSGT(left, right);
+
+                    case Operator::GEQ:
+                        return builder->CreateICmpSGE(left, right);
+
                     case Operator::ADD:
                         return builder->CreateAdd(left, right);
 

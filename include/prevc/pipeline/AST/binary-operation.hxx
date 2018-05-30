@@ -22,11 +22,20 @@ namespace prevc
                  * */
                 enum class Operator
                 {
+                    OR,
+                    XOR,
+                    AND,
+                    EQU,
+                    NEQ,
+                    LTH,
+                    LEQ,
+                    GTH,
+                    GEQ,
                     ADD,
                     SUBTRACT,
                     MULTIPLY,
                     DIVIDE,
-                    MODULE
+                    MODULE,
                 };
 
                 /**
@@ -84,6 +93,15 @@ namespace prevc
             {
                 switch (operator_)
                 {
+                    case BinaryOperation::Operator::OR:       return "OR";
+                    case BinaryOperation::Operator::XOR:      return "XOR";
+                    case BinaryOperation::Operator::AND:      return "AND";
+                    case BinaryOperation::Operator::EQU:      return "EQU";
+                    case BinaryOperation::Operator::NEQ:      return "NEQ";
+                    case BinaryOperation::Operator::LTH:      return "LTH";
+                    case BinaryOperation::Operator::LEQ:      return "LEQ";
+                    case BinaryOperation::Operator::GTH:      return "GTH";
+                    case BinaryOperation::Operator::GEQ:      return "GEQ";
                     case BinaryOperation::Operator::ADD:      return "ADD";
                     case BinaryOperation::Operator::SUBTRACT: return "SUBTRACT";
                     case BinaryOperation::Operator::MULTIPLY: return "MULTIPLY";
