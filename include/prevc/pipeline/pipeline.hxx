@@ -16,11 +16,6 @@ namespace prevc
             class UnaryOperation;
         }
 
-        namespace IR_generation
-        {
-            class IRGeneration;
-        }
-
         namespace derivation_analysis
         {
             class DerivationAnalysis;
@@ -29,6 +24,11 @@ namespace prevc
         namespace lexical_analysis
         {
             class LexicalAnalysis;
+        }
+
+        namespace output_generation
+        {
+            class OutputGeneration;
         }
 
         namespace syntax_analysis
@@ -58,11 +58,11 @@ namespace prevc
             friend AST::BinaryOperation;
             friend AST::Parenthesis;
             friend AST::UnaryOperation;
-            friend IR_generation::IRGeneration;
             friend derivation_analysis::DerivationAnalysis;
             friend lexical_analysis::LexicalAnalysis;
             friend syntax_analysis::SyntaxAnalysis;
             friend syntax_analysis::SyntaxTreeBuilder;
+            friend output_generation::OutputGeneration;
 
         public:
             /**

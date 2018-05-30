@@ -1,6 +1,6 @@
 #include <prevc/pipeline/pipeline.hxx>
-#include <prevc/pipeline/IR_generation/IR-generation.hxx>
 #include <prevc/pipeline/lexical_analysis/lexical-analysis.hxx>
+#include <prevc/pipeline/output_generation/output-generation.hxx>
 #include <prevc/pipeline/syntax_analysis/syntax-analysis.hxx>
 #include <prevc/pipeline/derivation_analysis/derivation-analysis.hxx>
 
@@ -43,8 +43,8 @@ namespace prevc
             syntax_analysis.complete();
             derivation_analysis::DerivationAnalysis derivation_analysis(this);
             derivation_analysis.complete();
-            IR_generation::IRGeneration IR_generation(this);
-            IR_generation.complete();
+            output_generation::OutputGeneration output_generation(this);
+            output_generation.complete();
         }
 
         void Pipeline::release_symbols_vector()
