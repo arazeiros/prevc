@@ -1,0 +1,8 @@
+# IDEA project folders:
+.idea/
+
+# CMake build folders:
+cmake-build*
+
+# ignored folder (put in whatever you want):
+ignored/
