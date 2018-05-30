@@ -31,6 +31,9 @@ namespace prevc
 
                     case Operator::MINUS:
                         return builder->CreateNeg(sub);
+
+                    case Operator::NOT:
+                        return builder->CreateXor(sub, 1);
                 }
 
                 InternalError::raise("illegal state: case not handled");
