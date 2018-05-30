@@ -1,118 +1,156 @@
-Expr -> E1 ZomIorXor .
+###
+# LL(1) grammar for the Prev programming language.
+# Credits to Rok Grmek for the original version of the grammar.
+###
 
-ZomIorXor -> .
-ZomIorXor -> ior E1 ZomIorXor .
-ZomIorXor -> xor E1 ZomIorXor .
+########################################################
+### Source structure
 
-E1 -> E2 ZomAnd .
+Source -> Expression end_of_file
 
-ZomAnd -> .
-ZomAnd -> and E2 ZomAnd .
+########################################################
+### Expressions
 
-E2 -> E3 OptRel .
+Expression -> E0
 
-OptRel -> .
-OptRel -> equ E3 .
-OptRel -> neq E3 .
-OptRel -> leq E3 .
-OptRel -> geq E3 .
-OptRel -> lth E3 .
-OptRel -> gth E3 .
+E0       -> E1 ExtOrXor
+ExtOrXor -> $
+ExtOrXor -> or E1 ExtOrXor
+ExtOrXor -> xor E1 ExtOrXor
 
-E3 -> E4 ZomAddSub .
+E1     -> E2 ExtAnd
+ExtAnd -> $
+ExtAnd -> and E2 ExtAnd
 
-ZomAddSub -> .
-ZomAddSub -> add E4 ZomAddSub .
-ZomAddSub -> sub E4 ZomAddSub .
+E2     -> E3 OptRel
+OptRel -> $
+OptRel -> equ E3
+OptRel -> neq E3
+OptRel -> leq E3
+OptRel -> geq E3
+OptRel -> lth E3
+OptRel -> gth E3
 
-E4 -> E5 ZomMulDivMod .
+E3        -> E4 ExtAddSub
+ExtAddSub -> $
+ExtAddSub -> add E4 ExtAddSub
+ExtAddSub -> sub E4 ExtAddSub
 
-ZomMulDivMod -> .
-ZomMulDivMod -> mul E5 ZomMulDivMod .
-ZomMulDivMod -> div E5 ZomMulDivMod .
-ZomMulDivMod -> mod E5 ZomMulDivMod .
+E4           -> E5 ExtMulDivMod
+ExtMulDivMod -> $
+ExtMulDivMod -> mul E5 ExtMulDivMod
+ExtMulDivMod -> div E5 ExtMulDivMod
+ExtMulDivMod -> mod E5 ExtMulDivMod
 
-E5 -> ZomUnaryOp E6 .
+E5       -> E6
+E5       -> ExtUnary
+ExtUnary -> Unary0
+ExtUnary -> Unary1
 
-ZomUnaryOp -> .
-ZomUnaryOp -> not ZomUnaryOp .
-ZomUnaryOp -> add ZomUnaryOp .
-ZomUnaryOp -> sub ZomUnaryOp .
-ZomUnaryOp -> mem ZomUnaryOp .
-ZomUnaryOp -> val ZomUnaryOp .
-ZomUnaryOp -> del ZomUnaryOp .
-ZomUnaryOp -> lbracket Type rbracket ZomUnaryOp .
+Unary0 -> not E5
+Unary0 -> add E5
+Unary0 -> sub E5
+Unary0 -> mem E5
+Unary0 -> val E5
+Unary0 -> del E5
+Unary1 -> left_bracket Type right_bracket E5
 
-E6 -> new Type .
-E6 -> E7 .
+E6 -> New
+E6 -> E7
 
-E7 -> E8 ZomAccessOp .
+New -> new Type
 
-ZomAccessOp -> .
-ZomAccessOp -> lbracket Expr rbracket ZomAccessOp .
-ZomAccessOp -> dot identifier ZomAccessOp .
+E7        -> E8 ExtAccess
+ExtAccess -> $
+ExtAccess -> ArrayAccess ExtAccess
+ExtAccess -> ComponentAccess ExtAccess
 
-E8 -> voidconst .
-E8 -> boolconst .
-E8 -> charconst .
-E8 -> intconst .
-E8 -> ptrconst .
-E8 -> identifier OptFunParenthesis .
-E8 -> lbrace Stmt ZomSemicStmt colon Expr OptWhereStmt rbrace .
-E8 -> lparenthesis Expr rparenthesis .
+ArrayAccess     -> left_bracket Expression right_bracket
+ComponentAccess -> dot identifier
 
-OptFunParenthesis -> .
-OptFunParenthesis -> lparenthesis OptArg rparenthesis .
+E8 -> void_literal
+E8 -> bool_literal
+E8 -> char_literal
+E8 -> int_literal
+E8 -> ptr_literal
+E8 -> IdOrCall
+E8 -> Compound
+E8 -> Parenthesis
 
-OptArg -> .
-OptArg -> Expr ZomCommaArg .
+IdOrCall    -> identifier OptFunctionCall
+Compound    -> left_brace Statements colon Expression OptWhere right_brace
+Parenthesis -> left_parenthesis Expression right_parenthesis
 
-ZomCommaArg -> .
-ZomCommaArg -> comma Expr ZomCommaArg .
+OptFunctionCall -> $
+OptFunctionCall -> left_parenthesis OptArguments right_parenthesis
 
-ZomSemicStmt -> .
-ZomSemicStmt -> semic Stmt ZomSemicStmt .
+OptArguments -> $
+OptArguments -> Expression ExtArguments
+ExtArguments -> $
+ExtArguments -> comma Expression ExtArguments
 
-OptWhereStmt -> .
-OptWhereStmt -> where Decl ZomSemicDecl .
+OptWhere -> $
+OptWhere -> where Declarations
 
-ZomSemicDecl -> .
-ZomSemicDecl -> semic Decl ZomSemicDecl .
+########################################################
+### Types
 
+Type -> void
+Type -> bool
+Type -> char
+Type -> int
+Type -> Array
+Type -> Record
+Type -> Pointer
+Type -> identifier
 
+Array   -> arr left_bracket Expression right_bracket Type
+Record  -> rec left_parenthesis Components right_parenthesis
+Pointer -> ptr Type
 
-Type -> void .
-Type -> bool .
-Type -> char .
-Type -> int .
-Type -> arr lbracket Expr rbracket Type .
-Type -> rec lparenthesis identifier colon Type ZomCommaCompDecl rparenthesis .
-Type -> ptr Type .
-Type -> identifier .
+Components    -> Component ExtComponents
+ExtComponents -> $
+ExtComponents -> comma Component ExtComponents
+Component     -> identifier colon Type
 
-ZomCommaCompDecl -> .
-ZomCommaCompDecl -> comma identifier colon Type ZomCommaCompDecl .
+########################################################
+### Statements
 
+Statements    -> Statement ExtStatements
+ExtStatements -> $
+ExtStatements -> semi_colon Statement ExtStatements
 
+Statement -> ExpressionStatement
+Statement -> If
+Statement -> While
 
-Stmt -> Expr OptAssignExpr .
-Stmt -> if Expr then Stmt ZomSemicStmt OptElseStmt end .
-Stmt -> while Expr do Stmt ZomSemicStmt end .
+ExpressionStatement -> Expression OptAssign
+If                  -> if Expression then Statements OptElse end
+While               -> while Expression do Statements end
 
-OptAssignExpr -> .
-OptAssignExpr -> assign Expr .
+OptAssign -> $
+OptAssign -> assign Expression
 
-OptElseStmt -> .
-OptElseStmt -> else Stmt ZomSemicStmt .
+OptElse -> $
+OptElse -> else Statements
 
+########################################################
+### Declarations
 
+Declarations    -> Declaration ExtDeclarations
+ExtDeclarations -> $
+ExtDeclarations -> semi_colon Declaration ExtDeclarations
 
-Decl -> typ identifier colon Type .
-Decl -> var identifier colon Type .
-Decl -> fun identifier lparenthesis OptParDecl rparenthesis colon Type OptAssignExpr .
+Declaration -> TypeDeclaration
+Declaration -> VariableDeclaration
+Declaration -> FunctionDeclaration
 
-OptParDecl -> .
-OptParDecl -> identifier colon Type ZomCommaParDecl .
+TypeDeclaration     -> typ identifier colon Type
+VariableDeclaration -> var identifier colon Type
+FunctionDeclaration -> fun identifier left_parenthesis OptParameter right_parenthesis colon Type OptAssign
 
-ZomCommaParDecl -> .
-ZomCommaParDecl -> comma identifier colon Type ZomCommaParDecl .
+OptParameter -> $
+OptParameter -> identifier colon Type ExtParameter
+
+ExtParameter -> $
+ExtParameter -> comma identifier colon Type ExtParameter
