@@ -15,7 +15,7 @@ namespace prevc
              * \brief A node that represent a collection of AST nodes.
              * */
             template <typename TNode>
-            class CollectionNode: public Node, protected std::vector<TNode>
+            class CollectionNode: public Node, public std::vector<TNode>
             {
             public:
                 typedef TNode NodeType;

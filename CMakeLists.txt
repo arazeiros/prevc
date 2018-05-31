@@ -37,6 +37,7 @@ ADD_EXECUTABLE(prevc
     src/pipeline/output_generation/output-generation.cxx
     src/pipeline/AST/atom.cxx
     src/pipeline/AST/binary-operation.cxx
+    src/pipeline/AST/compound.cxx
     src/pipeline/AST/declaration.cxx
     src/pipeline/AST/declarations.cxx
     src/pipeline/AST/expression.cxx
