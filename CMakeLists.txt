@@ -40,6 +40,8 @@ ADD_EXECUTABLE(prevc
     src/pipeline/AST/expression.cxx
     src/pipeline/AST/node.cxx
     src/pipeline/AST/parenthesis.cxx
+    src/pipeline/AST/statement.cxx
+    src/pipeline/AST/statements.cxx
     src/pipeline/AST/unary-operation.cxx
     src/util/location.cxx
     src/util/reader.cxx
