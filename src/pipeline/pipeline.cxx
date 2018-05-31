@@ -64,9 +64,13 @@ namespace prevc
 
         void Pipeline::release_IR_module()
         {
+            if (IR_module == nullptr)
+                return;
+
             auto context = &IR_module->getContext();
-            zero_delete(&IR_module);
+            delete IR_module;
             delete context;
+            IR_module = nullptr;
         }
     }
 }
