@@ -12,6 +12,12 @@ namespace prevc
             {
 
             }
+
+            void Statements::generate_IR(llvm::IRBuilder<>* builder)
+            {
+                for (auto statement : *this)
+                    statement->generate_IR(builder);
+            }
         }
     }
 }

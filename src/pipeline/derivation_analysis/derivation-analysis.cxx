@@ -2,8 +2,12 @@
 #include <utility>
 #include <prevc/pipeline/AST/atom.hxx>
 #include <prevc/pipeline/AST/binary-operation.hxx>
+#include <prevc/pipeline/AST/compound.hxx>
+#include <prevc/pipeline/AST/declarations.hxx>
 #include <prevc/pipeline/AST/expression.hxx>
+#include <prevc/pipeline/AST/expression-statement.hxx>
 #include <prevc/pipeline/AST/parenthesis.hxx>
+#include <prevc/pipeline/AST/statements.hxx>
 #include <prevc/pipeline/AST/unary-operation.hxx>
 
 namespace prevc
@@ -106,6 +110,17 @@ namespace prevc
                 collect_extension<E, I0, I1>(pipeline, vector, variable->nodes[I1]);
             }
 
+            template <typename E, int I0, int I1, typename C>
+            static C* collect_nodes(Pipeline* pipeline, const std::vector<const syntax_analysis::SyntaxNode*>& nodes)
+            {
+                std::vector<E> collection;
+                auto first = (E) analyze(pipeline, nodes[0], nullptr);
+                collection.emplace_back(first);
+                collect_extension<E, I0, I1>(pipeline, &collection, nodes[1]);
+                util::Location location(collection.front()->location, collection.back()->location);
+                return new C(pipeline, std::move(location), std::move(collection));
+            }
+
             static AST::Node* analyze(Pipeline* pipeline, const syntax_analysis::SyntaxNode* syntax_node, AST::Node* accumulator)
             {
                 using T = syntax_analysis::VariableType;
@@ -167,6 +182,8 @@ namespace prevc
                         case T::ExtUnary:
                         case T::E6:
                         case T::E8:
+                        case T::Statement:
+                        case T::Declaration:
                             return analyze(pipeline, nodes[0], nullptr);
 
                         case T::E0:
@@ -215,7 +232,7 @@ namespace prevc
                                     sub);
                         }
 
-                        case syntax_analysis::VariableType::Parenthesis:
+                        case T::Parenthesis:
                         {
                             auto sub = (AST::Expression*) analyze(pipeline, nodes[1], nullptr);
 
@@ -224,6 +241,49 @@ namespace prevc
                                     util::Location(terminal_location(0), terminal_location(2)),
                                     sub);
                         }
+
+                        case T::Compound:
+                        {
+                            auto statements = (AST::Statements*) analyze(pipeline, nodes[1], nullptr);
+                            auto expression = (AST::Expression*) analyze(pipeline, nodes[3], nullptr);
+                            auto declarations = (AST::Declarations*) analyze(pipeline, nodes[4], nullptr);
+
+                            const util::Location end(declarations->empty() ? expression->location : declarations->location);
+                            util::Location location(statements->location, end);
+
+                            return new AST::Compound(pipeline, std::move(location), statements, expression, declarations);
+                        }
+
+                        case T::Statements:
+                            return collect_nodes<AST::Statement*, 1, 2, AST::Statements>(pipeline, nodes);
+
+                        case T::ExpressionStatement:
+                        {
+                            auto expression = analyze(pipeline, nodes[0], nullptr);
+                            return analyze(pipeline, nodes[1], expression);
+                        }
+
+                        case T::OptAssign:
+                        {
+                            auto expression = (AST::Expression*) accumulator;
+
+                            if (nodes.empty())
+                                return new AST::ExpressionStatement(pipeline, util::Location(expression->location), expression);
+
+                            // TODO implement...
+                            break;
+                        }
+
+                        case T::OptWhere:
+                        {
+                            if (nodes.empty())
+                                return new AST::Declarations(pipeline, util::Location(0, 0), {});
+
+                            return analyze(pipeline, nodes[1], nullptr);
+                        }
+
+                        case T::Declarations:
+                            return collect_nodes<AST::Declaration*, 1, 2, AST::Declarations>(pipeline, nodes);
                     }
                 }
 

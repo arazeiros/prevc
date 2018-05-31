@@ -33,7 +33,7 @@ namespace prevc
                  * \brief Generate the IR code for this statement.
                  * \param builder The builder of the IR block containing this statement.
                  * */
-                virtual void generate_IR(llvm::IRBuilder<>* builder) = 0;
+                virtual void generate_IR(llvm::IRBuilder<>* builder);
             };
         }
     }
