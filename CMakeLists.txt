@@ -38,6 +38,7 @@ ADD_EXECUTABLE(prevc
     src/pipeline/AST/atom.cxx
     src/pipeline/AST/binary-operation.cxx
     src/pipeline/AST/expression.cxx
+    src/pipeline/AST/expression-statement.cxx
     src/pipeline/AST/node.cxx
     src/pipeline/AST/parenthesis.cxx
     src/pipeline/AST/statement.cxx
