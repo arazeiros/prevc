@@ -10,10 +10,19 @@ namespace prevc
         {
             template <typename TNode>
             CollectionNode<TNode>::CollectionNode(Pipeline* pipeline, util::Location&& location, std::vector<NodeType>&& nodes):
-                Node(pipeline, std::move(location)),
-                std::vector<TNode>(std::move(nodes))
+                    Node(pipeline, std::move(location)),
+                    std::vector<TNode>(std::move(nodes))
             {
 
+            }
+
+            template <typename TNode>
+            CollectionNode<TNode>::~CollectionNode()
+            {
+                for (auto node : *this)
+                    delete node;
+
+                this->clear();
             }
 
             template <typename TNode>

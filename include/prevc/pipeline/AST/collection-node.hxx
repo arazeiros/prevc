@@ -29,9 +29,9 @@ namespace prevc
                 CollectionNode(Pipeline* pipeline, util::Location&& location, std::vector<NodeType>&& nodes);
 
                 /**
-                 * \brief Default implementation.
+                 * \brief Delete all the nodes in the vector.
                  * */
-                virtual ~CollectionNode() = default;
+                virtual ~CollectionNode();
 
                 /**
                  * \brief Returns a string representation of this collection.
