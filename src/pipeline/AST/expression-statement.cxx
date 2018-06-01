@@ -27,7 +27,7 @@ namespace prevc
             util::String ExpressionStatement::to_string() const noexcept
             {
                 return util::String::format(
-                        R"({"type": "expression-statement", "location": %s, "expression": "%s"})",
+                        R"({"type": "expression-statement", "location": %s, "expression": %s})",
                         location.to_string().c_str(),
                         expression->to_string().c_str());
             }

@@ -35,7 +35,7 @@ namespace prevc
             util::String Compound::to_string() const noexcept
             {
                 return util::String::format(
-                        R"({"type": "compound", "location": %s, "statements": "%s", "expression": %s, "declarations": %s})",
+                        R"({"type": "compound", "location": %s, "statements": %s, "expression": %s, "declarations": %s})",
                         location.to_string().c_str(),
                         statements->to_string().c_str(),
                         expression->to_string().c_str(),
