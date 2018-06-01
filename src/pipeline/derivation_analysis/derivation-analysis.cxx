@@ -12,6 +12,7 @@
 #include <prevc/pipeline/AST/type.hxx>
 #include <prevc/pipeline/AST/new.hxx>
 #include <prevc/pipeline/AST/primitive-type.hxx>
+#include <prevc/pipeline/AST/variable-declaration.hxx>
 
 namespace prevc
 {
@@ -184,7 +185,8 @@ namespace prevc
                         }
 
                         default:
-                            InternalError::raise("illegal state: case not handled: terminal syntax node");
+                            InternalError::raise(util::String::format(
+                                    "illegal state: case not handled: terminal syntax node: %s", to_string(symbol.token)));
                     }
                 }
                 else
@@ -320,10 +322,21 @@ namespace prevc
                         case T::Declarations:
                             return collect_nodes<AST::Declaration*, 1, 2, AST::Declarations>(pipeline, nodes);
 
+                        case T::VariableDeclaration:
+                        {
+                            auto& name = ((Terminal) nodes[1])->symbol.lexeme;
+                            auto type = (AST::Type*) analyze(pipeline, nodes[3], nullptr);
+                            util::Location location(((Terminal) nodes[0])->symbol.location, type->location);
+                            return new AST::VariableDeclaration(pipeline, std::move(location), name, type);
+                        }
+
                     }
+
+                    InternalError::raise(util::String::format(
+                            "illegal state: case not handled: variable syntax node: %s", variable->to_string().c_str()));
                 }
 
-                InternalError::raise("illegal state: case not handled: variable syntax node");
+                InternalError::raise("illegal state: derivation analysis");
                 return nullptr; // should never come here, but disable warnings
             }
 

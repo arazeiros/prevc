@@ -7,10 +7,18 @@ namespace prevc
     {
         namespace AST
         {
-            Declaration::Declaration(Pipeline* pipeline, util::Location&& location):
-                Node(pipeline, std::move(location))
+            Declaration::Declaration(Pipeline* pipeline, util::Location&& location,
+                                     const util::String& name, Type* type):
+                Node(pipeline, std::move(location)),
+                name(name),
+                type(type)
             {
 
+            }
+
+            Declaration::~Declaration()
+            {
+                delete type;
             }
         }
     }

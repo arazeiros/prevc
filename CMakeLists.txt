@@ -50,6 +50,7 @@ ADD_EXECUTABLE(prevc
     src/pipeline/AST/statements.cxx
     src/pipeline/AST/type.cxx
     src/pipeline/AST/unary-operation.cxx
+    src/pipeline/AST/variable-declaration.cxx
     src/util/location.cxx
     src/util/reader.cxx
     src/util/string.cxx
