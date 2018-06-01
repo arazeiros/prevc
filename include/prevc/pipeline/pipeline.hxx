@@ -12,6 +12,7 @@ namespace prevc
         {
             class Atom;
             class BinaryOperation;
+            class New;
             class Parenthesis;
             class UnaryOperation;
         }
@@ -56,6 +57,7 @@ namespace prevc
         {
             friend AST::Atom;
             friend AST::BinaryOperation;
+            friend AST::New;
             friend AST::Parenthesis;
             friend AST::UnaryOperation;
             friend derivation_analysis::DerivationAnalysis;

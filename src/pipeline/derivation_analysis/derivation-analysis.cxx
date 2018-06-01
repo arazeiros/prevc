@@ -9,6 +9,9 @@
 #include <prevc/pipeline/AST/parenthesis.hxx>
 #include <prevc/pipeline/AST/statements.hxx>
 #include <prevc/pipeline/AST/unary-operation.hxx>
+#include <prevc/pipeline/AST/type.hxx>
+#include <prevc/pipeline/AST/new.hxx>
+#include <prevc/pipeline/AST/primitive-type.hxx>
 
 namespace prevc
 {
@@ -156,6 +159,30 @@ namespace prevc
                                     AST::Atom::Type::BOOLEAN, symbol.lexeme);
                         }
 
+                        case lexical_analysis::Token::INT:
+                        {
+                            return new AST::PrimitiveType(
+                                    pipeline,
+                                    util::Location(symbol.location),
+                                    AST::PrimitiveType::Name::INT);
+                        }
+
+                        case lexical_analysis::Token::CHAR:
+                        {
+                            return new AST::PrimitiveType(
+                                    pipeline,
+                                    util::Location(symbol.location),
+                                    AST::PrimitiveType::Name::CHAR);
+                        }
+
+                        case lexical_analysis::Token::BOOL:
+                        {
+                            return new AST::PrimitiveType(
+                                    pipeline,
+                                    util::Location(symbol.location),
+                                    AST::PrimitiveType::Name::BOOL);
+                        }
+
                         default:
                             InternalError::raise("illegal state: case not handled: terminal syntax node");
                     }
@@ -184,6 +211,7 @@ namespace prevc
                         case T::E8:
                         case T::Statement:
                         case T::Declaration:
+                        case T::Type:
                             return analyze(pipeline, nodes[0], nullptr);
 
                         case T::E0:
@@ -230,6 +258,13 @@ namespace prevc
                                     util::Location(sign->symbol.location, sub->location),
                                     analyze_unary_operator(sign->symbol),
                                     sub);
+                        }
+
+                        case T::New:
+                        {
+                            auto type = (AST::Type*) analyze(pipeline, nodes[1], nullptr);
+                            util::Location location(((Terminal) nodes[0])->symbol.location, type->location);
+                            return new AST::New(pipeline, std::move(location), type);
                         }
 
                         case T::Parenthesis:
@@ -284,6 +319,7 @@ namespace prevc
 
                         case T::Declarations:
                             return collect_nodes<AST::Declaration*, 1, 2, AST::Declarations>(pipeline, nodes);
+
                     }
                 }
 
