@@ -78,7 +78,8 @@ namespace prevc
                         return AST::BinaryOperation::Operator::MODULE;
 
                     default:
-                        InternalError::raise("illegal state: case not handled");
+                        InternalError::raise("derivation analysis: illegal state: case not handled");
+                        return AST::BinaryOperation::Operator::MODULE; // never reached, disable warnings
                 }
             }
 
@@ -96,7 +97,8 @@ namespace prevc
                         return AST::UnaryOperation::Operator::NOT;
 
                     default:
-                        InternalError::raise("illegal state: case not handled");
+                        InternalError::raise("derivation analysis: illegal state: case not handled");
+                        return AST::UnaryOperation::Operator::NOT; // never reached, disable warnings
                 }
             }
 
@@ -186,7 +188,8 @@ namespace prevc
 
                         default:
                             InternalError::raise(util::String::format(
-                                    "illegal state: case not handled: terminal syntax node: %s", to_string(symbol.token)));
+                                    "derivation analysis: illegal state: case not handled: terminal syntax node: %s",
+                                    to_string(symbol.token)));
                     }
                 }
                 else
@@ -330,13 +333,16 @@ namespace prevc
                             return new AST::VariableDeclaration(pipeline, std::move(location), name, type);
                         }
 
+                        default:
+                            break; // disable warnings
                     }
 
                     InternalError::raise(util::String::format(
-                            "illegal state: case not handled: variable syntax node: %s", variable->to_string().c_str()));
+                            "derivation analysis: illegal state: case not handled: variable syntax node: %s",
+                            variable->to_string().c_str()));
                 }
 
-                InternalError::raise("illegal state: derivation analysis");
+                InternalError::raise("derivation analysis: illegal state");
                 return nullptr; // should never come here, but disable warnings
             }
 

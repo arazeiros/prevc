@@ -67,6 +67,7 @@ namespace prevc
 
                     default:
                         prevc::InternalError::raise("not known type name");
+                        return nullptr; // disable warnings
                 }
             }
         }
