@@ -6,6 +6,7 @@
 #include <prevc/pipeline/AST/declarations.hxx>
 #include <prevc/pipeline/AST/expression.hxx>
 #include <prevc/pipeline/AST/expression-statement.hxx>
+#include <prevc/pipeline/AST/function-declaration.hxx>
 #include <prevc/pipeline/AST/parameters.hxx>
 #include <prevc/pipeline/AST/parenthesis.hxx>
 #include <prevc/pipeline/AST/statements.hxx>
@@ -360,6 +361,18 @@ namespace prevc
                             return new AST::VariableDeclaration(pipeline, std::move(location), name, type);
                         }
 
+                        case T::FunctionDeclaration:
+                        {
+                            auto& symbol = ((Terminal) nodes[1])->symbol;
+                            auto& name = symbol.lexeme;
+                            auto parameters = (AST::Parameters*) analyze(pipeline, nodes[3], nullptr);
+                            auto type = (AST::Type*) analyze(pipeline, nodes[6], nullptr);
+                            util::Location location(symbol.location, type->location);
+                            auto declaration = new AST::FunctionDeclaration(pipeline, std::move(location), name,
+                                    type, parameters);
+                            return analyze(pipeline, nodes[7], declaration);
+                        }
+
                         case T::OptParameters:
                         {
                             if (nodes.empty())
@@ -375,6 +388,15 @@ namespace prevc
                             auto type = (AST::Type*) analyze(pipeline, nodes[2], nullptr);
                             util::Location location(symbol.location, type->location);
                             return new AST::Parameter(pipeline, std::move(location), name, type);
+                        }
+
+                        case T::OptImplementation:
+                        {
+                            if (nodes.empty())
+                                return accumulator;
+
+                            // TODO create function definition
+                            break;
                         }
 
                         default:
