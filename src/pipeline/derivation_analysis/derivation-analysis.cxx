@@ -13,6 +13,7 @@
 #include <prevc/pipeline/AST/new.hxx>
 #include <prevc/pipeline/AST/primitive-type.hxx>
 #include <prevc/pipeline/AST/variable-declaration.hxx>
+#include <prevc/pipeline/AST/variable-name.hxx>
 
 namespace prevc
 {
@@ -272,6 +273,14 @@ namespace prevc
                             return new AST::New(pipeline, std::move(location), type);
                         }
 
+                        case T::IdOrCall:
+                        {
+                            auto& symbol = ((Terminal) nodes[0])->symbol;
+                            util::Location location(symbol.location);
+                            auto variable = new AST::VariableName(pipeline, std::move(location), symbol.lexeme);
+                            return analyze(pipeline, nodes[1], variable);
+                        }
+
                         case T::Parenthesis:
                         {
                             auto sub = (AST::Expression*) analyze(pipeline, nodes[1], nullptr);
@@ -280,6 +289,14 @@ namespace prevc
                                     pipeline,
                                     util::Location(terminal_location(0), terminal_location(2)),
                                     sub);
+                        }
+
+                        case T::OptFunctionCall:
+                        {
+                            if (nodes.empty())
+                                return accumulator;
+
+                            break;
                         }
 
                         case T::Compound:

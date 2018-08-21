@@ -17,7 +17,7 @@ namespace prevc
             util::String VariableDeclaration::to_string() const noexcept
             {
                 return util::String::format(
-                        R"({"type": "variable-declaration", "location": %s, "name": "%s", "type": %s})",
+                        R"({"type": "variable-declaration", "location": %s, "name": "%s", "declarationType": %s})",
                         location.to_string().c_str(),
                         name.c_str(),
                         type->to_string().c_str());
