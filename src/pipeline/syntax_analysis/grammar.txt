@@ -147,12 +147,13 @@ Declaration -> FunctionDeclaration
 
 TypeDeclaration     -> typ identifier colon Type
 VariableDeclaration -> var identifier colon Type
-FunctionDeclaration -> fun identifier left_parenthesis OptParameter right_parenthesis colon Type OptImplementation
+FunctionDeclaration -> fun identifier left_parenthesis OptParameters right_parenthesis colon Type OptImplementation
 
-OptParameter -> $
-OptParameter -> identifier colon Type ExtParameter
-ExtParameter -> $
-ExtParameter -> comma identifier colon Type ExtParameter
+OptParameters -> $
+OptParameters -> Parameter ExtParameters
+ExtParameters -> $
+ExtParameters -> comma Parameter ExtParameters
+Parameter     -> identifier colon Type
 
 OptImplementation -> $
 OptImplementation -> assign Expression

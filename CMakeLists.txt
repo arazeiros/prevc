@@ -45,6 +45,8 @@ ADD_EXECUTABLE(prevc
     src/pipeline/AST/new.cxx
     src/pipeline/AST/node.cxx
     src/pipeline/AST/parenthesis.cxx
+    src/pipeline/AST/parameter.cxx
+    src/pipeline/AST/parameters.cxx
     src/pipeline/AST/primitive-type.cxx
     src/pipeline/AST/statement.cxx
     src/pipeline/AST/statements.cxx

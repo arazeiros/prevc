@@ -6,6 +6,7 @@
 #include <prevc/pipeline/AST/declarations.hxx>
 #include <prevc/pipeline/AST/expression.hxx>
 #include <prevc/pipeline/AST/expression-statement.hxx>
+#include <prevc/pipeline/AST/parameters.hxx>
 #include <prevc/pipeline/AST/parenthesis.hxx>
 #include <prevc/pipeline/AST/statements.hxx>
 #include <prevc/pipeline/AST/unary-operation.hxx>
@@ -285,8 +286,8 @@ namespace prevc
                         {
                             auto& symbol = ((Terminal) nodes[0])->symbol;
                             util::Location location(symbol.location);
-                            auto variable = new AST::VariableName(pipeline, std::move(location), symbol.lexeme);
-                            return analyze(pipeline, nodes[1], variable);
+                            auto variableName = new AST::VariableName(pipeline, std::move(location), symbol.lexeme);
+                            return analyze(pipeline, nodes[1], variableName);
                         }
 
                         case T::Parenthesis:
@@ -352,10 +353,28 @@ namespace prevc
 
                         case T::VariableDeclaration:
                         {
-                            auto& name = ((Terminal) nodes[1])->symbol.lexeme;
-                            auto type = (AST::Type*) analyze(pipeline, nodes[3], nullptr);
-                            util::Location location(((Terminal) nodes[0])->symbol.location, type->location);
+                            auto& symbol = ((Terminal) nodes[0])->symbol;
+                            auto& name = symbol.lexeme;
+                            auto type = (AST::Type*) analyze(pipeline, nodes[2], nullptr);
+                            util::Location location(symbol.location, type->location);
                             return new AST::VariableDeclaration(pipeline, std::move(location), name, type);
+                        }
+
+                        case T::OptParameters:
+                        {
+                            if (nodes.empty())
+                                return new AST::Parameters(pipeline, util::Location(0, 0), {});
+
+                            return collect_nodes<AST::Parameter*, 1, 2, AST::Parameters>(pipeline, nodes);
+                        }
+
+                        case T::Parameter:
+                        {
+                            auto& symbol = ((Terminal) nodes[0])->symbol;
+                            auto& name = symbol.lexeme;
+                            auto type = (AST::Type*) analyze(pipeline, nodes[2], nullptr);
+                            util::Location location(symbol.location, type->location);
+                            return new AST::Parameter(pipeline, std::move(location), name, type);
                         }
 
                         default:

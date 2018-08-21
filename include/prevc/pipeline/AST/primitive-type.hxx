@@ -64,6 +64,7 @@ namespace prevc
                     case PrimitiveType::Name::INT:  return "INT";
                     case PrimitiveType::Name::CHAR: return "CHAR";
                     case PrimitiveType::Name::BOOL: return "BOOL";
+                    case PrimitiveType::Name::VOID: return "VOID";
 
                     default:
                         prevc::InternalError::raise("not known type name");
