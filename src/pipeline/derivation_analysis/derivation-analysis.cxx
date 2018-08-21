@@ -187,6 +187,14 @@ namespace prevc
                                     AST::PrimitiveType::Name::BOOL);
                         }
 
+                        case lexical_analysis::Token::VOID:
+                        {
+                            return new AST::PrimitiveType(
+                                    pipeline,
+                                    util::Location(symbol.location),
+                                    AST::PrimitiveType::Name::VOID);
+                        }
+
                         default:
                             InternalError::raise(util::String::format(
                                     "derivation analysis: illegal state: case not handled: terminal syntax node: %s",
