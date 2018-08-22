@@ -7,6 +7,7 @@
 #include <prevc/pipeline/AST/declarations.hxx>
 #include <prevc/pipeline/AST/expression.hxx>
 #include <prevc/pipeline/AST/expression-statement.hxx>
+#include <prevc/pipeline/AST/function-call.hxx>
 #include <prevc/pipeline/AST/function-declaration.hxx>
 #include <prevc/pipeline/AST/parameters.hxx>
 #include <prevc/pipeline/AST/parenthesis.hxx>
@@ -307,8 +308,12 @@ namespace prevc
                             if (nodes.empty())
                                 return accumulator;
 
+                            auto& name = ((AST::VariableName*) accumulator)->name;
                             auto args = (AST::Arguments*) analyze(pipeline, nodes[1], nullptr);
-                            break;
+                            util::Location location(accumulator->location, ((Terminal) nodes[2])->symbol.location);
+                            auto functionCall = new AST::FunctionCall(pipeline, std::move(location), name, args);
+                            delete accumulator;
+                            return functionCall;
                         }
 
                         case T::OptArguments:
