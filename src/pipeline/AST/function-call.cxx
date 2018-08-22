@@ -24,9 +24,14 @@ namespace prevc
 
             llvm::Value* FunctionCall::generate_IR(llvm::IRBuilder<>* builder)
             {
-                // TODO implement
-                InternalError::raise("missing implementation: AST function call generating IR");
-                return nullptr;
+                auto& module   = pipeline->IR_module;
+                auto  function = module->getFunction(this->name.c_str());
+                std::vector<llvm::Value*> args;
+
+                for (auto argument : *arguments)
+                    args.emplace_back(argument->generate_IR(builder));
+
+                return builder->CreateCall(function, args);
             }
 
             util::String FunctionCall::to_string() const noexcept
