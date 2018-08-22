@@ -1,5 +1,6 @@
 #include <prevc/pipeline/derivation_analysis/derivation-analysis.hxx>
 #include <utility>
+#include <prevc/pipeline/AST/arguments.hxx>
 #include <prevc/pipeline/AST/atom.hxx>
 #include <prevc/pipeline/AST/binary-operation.hxx>
 #include <prevc/pipeline/AST/compound.hxx>
@@ -306,7 +307,16 @@ namespace prevc
                             if (nodes.empty())
                                 return accumulator;
 
+                            auto args = (AST::Arguments*) analyze(pipeline, nodes[1], nullptr);
                             break;
+                        }
+
+                        case T::OptArguments:
+                        {
+                            if (nodes.empty())
+                                return new AST::Arguments(pipeline, util::Location(0, 0), {});
+
+                            return collect_nodes<AST::Expression*, 1, 2, AST::Arguments>(pipeline, nodes);
                         }
 
                         case T::Compound:
