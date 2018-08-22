@@ -31,6 +31,12 @@ namespace prevc
                 auto module = new llvm::Module(pipeline->file_name, *context);
                 pipeline->IR_module = module;
 
+                auto voidType = llvm::Type::getVoidTy(*context);
+                auto intType  = llvm::Type::getInt64Ty(*context);
+                auto ptrType  = llvm::Type::getInt8PtrTy(*context);
+                module->getOrInsertFunction("malloc", ptrType, intType, nullptr);
+                module->getOrInsertFunction("free", voidType, ptrType, nullptr);
+
                 auto target_triple = llvm::sys::getDefaultTargetTriple();
                 std::string error;
                 auto target = llvm::TargetRegistry::lookupTarget(target_triple, error);
