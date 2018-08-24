@@ -101,8 +101,13 @@ namespace prevc
                     case lexical_analysis::Token::NOT:
                         return AST::UnaryOperation::Operator::NOT;
 
+                    case lexical_analysis::Token::DEL:
+                        return AST::UnaryOperation::Operator::DEL;
+
                     default:
-                        InternalError::raise("derivation analysis: illegal state: case not handled");
+                        InternalError::raise(util::String::format(
+                                "derivation analysis: illegal state: case not handled: terminal syntax node: %s",
+                                to_string(symbol.token)));
                         return AST::UnaryOperation::Operator::NOT; // never reached, disable warnings
                 }
             }

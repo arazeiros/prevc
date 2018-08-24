@@ -34,9 +34,17 @@ namespace prevc
 
                     case Operator::NOT:
                         return builder->CreateXor(sub, 1);
+
+                    case Operator::DEL:
+                    {
+                        auto& module = pipeline->IR_module;
+                        auto  f_free = module->getFunction("free");
+                        builder->CreateCall(f_free, llvm::ArrayRef<llvm::Value*>({sub}));
+                        return sub; // returning the freed address
+                    }
                 }
 
-                InternalError::raise("illegal state: case not handled");
+                InternalError::raise("illegal state: case not handled: UnaryOperation::generate_IR");
                 return nullptr;
             }
 
