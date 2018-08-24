@@ -58,12 +58,14 @@ namespace prevc
 
                     case Atom::Type::VOID:
                     {
-                        return llvm::ConstantInt::getFalse(context);
+                        return llvm::ConstantInt::get(llvm::Type::getInt8Ty(context), 0); // just a random 0
                     }
 
                     case Atom::Type::POINTER:
                     {
-                        return llvm::ConstantInt::get(llvm::Type::getInt8PtrTy(context), 0); // aka NULL
+                        return llvm::ConstantPointerNull::get(
+                                llvm::PointerType::getUnqual(
+                                        llvm::Type::getInt8Ty(context))); // aka NULL
                     }
 
                     default:
