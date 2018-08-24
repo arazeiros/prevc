@@ -38,12 +38,13 @@ namespace prevc
                 auto f_putchar   = (llvm::Function*) module->getOrInsertFunction("putchar", llvm::FunctionType::get(int32Type, {int32Type}, false));
                 auto f_printint  = llvm::Function::Create(llvm::FunctionType::get(voidType, {intType}, false), llvm::Function::PrivateLinkage, "printint", module);
                 auto f_printchar = llvm::Function::Create(llvm::FunctionType::get(voidType, {intType}, false), llvm::Function::PrivateLinkage, "printchar", module);
+                auto f_printbool = llvm::Function::Create(llvm::FunctionType::get(voidType, {intType}, false), llvm::Function::PrivateLinkage, "printbool", module);
                 auto f_println   = llvm::Function::Create(llvm::FunctionType::get(voidType, false), llvm::Function::PrivateLinkage, "println", module);
 
                 {
                     // defining printint
                     auto arg0 = f_printint->arg_begin();
-                    auto block = llvm::BasicBlock::Create(*context, "printint_entry", f_printint);
+                    auto block = llvm::BasicBlock::Create(*context, "entry", f_printint);
                     llvm::IRBuilder<> builder(block);
                     builder.CreateCall(f_printf, llvm::ArrayRef<llvm::Value*>({builder.CreateGlobalStringPtr("%ld"), arg0}));
                     builder.CreateRetVoid();
@@ -52,15 +53,48 @@ namespace prevc
                 {
                     // defining printchar
                     auto arg0 = f_printchar->arg_begin();
-                    auto block = llvm::BasicBlock::Create(*context, "printchar_entry", f_printchar);
+                    auto block = llvm::BasicBlock::Create(*context, "entry", f_printchar);
                     llvm::IRBuilder<> builder(block);
                     builder.CreateCall(f_putchar, llvm::ArrayRef<llvm::Value*>({arg0}));
                     builder.CreateRetVoid();
                 }
 
                 {
+                    // defining printbool
+                    auto arg0        = f_printbool->arg_begin();
+                    auto entry       = llvm::BasicBlock::Create(*context, "entry", f_printbool);
+                    auto print_true  = llvm::BasicBlock::Create(*context, "is_true", f_printbool);
+                    auto print_false = llvm::BasicBlock::Create(*context, "is_false");
+                    auto get_out     = llvm::BasicBlock::Create(*context, "get_out");
+
+                    llvm::IRBuilder<> builder(entry);
+                    auto result = builder.CreateICmpNE(arg0, llvm::ConstantInt::get(intType, 0));
+                    builder.CreateCondBr(result, print_true, print_false);
+
+                    builder.SetInsertPoint(print_true);
+                    auto str_true = builder.CreateGlobalStringPtr("true");
+                    builder.CreateBr(get_out);
+                    print_true = builder.GetInsertBlock();
+
+                    f_printbool->getBasicBlockList().push_back(print_false);
+                    builder.SetInsertPoint(print_false);
+                    auto str_false = builder.CreateGlobalStringPtr("false");
+                    builder.CreateBr(get_out);
+                    print_false = builder.GetInsertBlock();
+
+                    f_printbool->getBasicBlockList().push_back(get_out);
+                    builder.SetInsertPoint(get_out);
+                    auto phi = builder.CreatePHI(ptrType, 2);
+                    phi->addIncoming(str_true, print_true);
+                    phi->addIncoming(str_false, print_false);
+                    auto str_formatted_str = builder.CreateGlobalStringPtr("%s");
+                    builder.CreateCall(f_printf, llvm::ArrayRef<llvm::Value*>({str_formatted_str, phi}));
+                    builder.CreateRetVoid();
+                }
+
+                {
                     // defining println
-                    auto block = llvm::BasicBlock::Create(*context, "println_entry", f_println);
+                    auto block = llvm::BasicBlock::Create(*context, "entry", f_println);
                     llvm::IRBuilder<> builder(block);
                     llvm::ArrayRef<llvm::Value*> args({llvm::ConstantInt::get(int32Type, '\n')});
                     builder.CreateCall(f_putchar, args);
