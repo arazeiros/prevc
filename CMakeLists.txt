@@ -36,6 +36,7 @@ ADD_EXECUTABLE(prevc
     src/pipeline/derivation_analysis/derivation-analysis.cxx
     src/pipeline/output_generation/output-generation.cxx
     src/pipeline/AST/arguments.cxx
+    src/pipeline/AST/array-access.cxx
     src/pipeline/AST/atom.cxx
     src/pipeline/AST/binary-operation.cxx
     src/pipeline/AST/compound.cxx

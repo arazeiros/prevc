@@ -16,26 +16,39 @@ namespace prevc
                 /**
                  * \brief Create an array access node in the AST.
                  * \param location The location of the node.
-                 * \param array_expression The expression representing the accessed array.
-                 * \param index_expression The expression representing the index of the accessed array's element.
+                 * \param array The expression representing the accessed array.
+                 * \param index The expression representing the index of the accessed array's element.
                  * */
-                ArrayAccess(util::Location&& location, Expression* array_expression, Expression* index_expression);
+                ArrayAccess(Pipeline* pipeline, util::Location&& location, Expression* array, Expression* index);
 
                 /**
                  * \brief Default implementation.
                  * */
-                virtual ~ArrayAccess() = default;
+                virtual ~ArrayAccess();
+
+                /**
+                 * \brief Generate the IR code for this expression.
+                 * \param builder The builder of the IR block containing this expression.
+                 * \return The IR value representing this expression.
+                 * */
+                virtual llvm::Value* generate_IR(llvm::IRBuilder<>* builder) override;
+
+                /**
+                 * \brief Returns a string representation of this expression.
+                 * \return The representation in JSON format.
+                 * */
+                virtual util::String to_string() const noexcept override;
 
             private:
                 /**
                  * \brief The expression representing the accessed array.
                  * */
-                Expression* array_expression;
+                Expression* array;
 
                 /**
                  * \brief The expression representing the index of the accessed array's element.
                  * */
-                Expression* index_expression;
+                Expression* index;
             };
         }
     }

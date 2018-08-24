@@ -32,7 +32,7 @@ namespace prevc
             util::String New::to_string() const noexcept
             {
                 return util::String::format(
-                        R"({"type": "new", "location": %s, "type": %s})",
+                        R"({"type": "new", "location": %s, "dataType": %s})",
                         location.to_string().c_str(),
                         type->to_string().c_str());
             }

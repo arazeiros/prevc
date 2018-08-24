@@ -1,6 +1,7 @@
 #include <prevc/pipeline/derivation_analysis/derivation-analysis.hxx>
 #include <utility>
 #include <prevc/pipeline/AST/arguments.hxx>
+#include <prevc/pipeline/AST/array-access.hxx>
 #include <prevc/pipeline/AST/atom.hxx>
 #include <prevc/pipeline/AST/binary-operation.hxx>
 #include <prevc/pipeline/AST/compound.hxx>
@@ -228,10 +229,6 @@ namespace prevc
 
                     switch (variable->type)
                     {
-                        /* The following cases have to be implemented somewhere else*/
-                        case T::E7:
-                        /* --- */
-
                         case T::Source:
                         case T::Expression:
                         case T::E5:
@@ -294,6 +291,30 @@ namespace prevc
                             auto type = (AST::Type*) analyze(pipeline, nodes[1], nullptr);
                             util::Location location(((Terminal) nodes[0])->symbol.location, type->location);
                             return new AST::New(pipeline, std::move(location), type);
+                        }
+
+                        case T::E7:
+                        {
+                            auto base = analyze(pipeline, nodes[0], nullptr);
+                            auto x = analyze(pipeline, nodes[1], base);
+                            return x;
+                        }
+
+                        case T::ExtAccess:
+                        {
+                            if (nodes.empty())
+                                return accumulator;
+
+                            auto access = analyze(pipeline, nodes[0], accumulator);
+                            return analyze(pipeline, nodes[1], access);
+                        }
+
+                        case T::ArrayAccess:
+                        {
+                            auto array = (AST::Expression*) accumulator;
+                            auto index = (AST::Expression*) analyze(pipeline, nodes[1], nullptr);
+                            util::Location location(array->location, ((Terminal) nodes[2])->symbol.location);
+                            return new AST::ArrayAccess(pipeline, std::move(location), array, index);
                         }
 
                         case T::IdOrCall:
