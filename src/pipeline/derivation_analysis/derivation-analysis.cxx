@@ -180,6 +180,22 @@ namespace prevc
                                     AST::Atom::Type::BOOLEAN, symbol.lexeme);
                         }
 
+                        case lexical_analysis::Token::VOID_LITERAL:
+                        {
+                            return new AST::Atom(
+                                    pipeline,
+                                    util::Location(symbol.location),
+                                    AST::Atom::Type::VOID, symbol.lexeme);
+                        }
+
+                        case lexical_analysis::Token::PTR_LITERAL:
+                        {
+                            return new AST::Atom(
+                                    pipeline,
+                                    util::Location(symbol.location),
+                                    AST::Atom::Type::POINTER, symbol.lexeme);
+                        }
+
                         case lexical_analysis::Token::INT:
                         {
                             return new AST::PrimitiveType(

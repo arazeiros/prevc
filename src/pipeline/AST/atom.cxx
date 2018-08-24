@@ -56,6 +56,16 @@ namespace prevc
                         return llvm::ConstantInt::get(type, (std::uint64_t) lexeme.c_str()[1]);
                     }
 
+                    case Atom::Type::VOID:
+                    {
+                        return llvm::ConstantInt::getFalse(context);
+                    }
+
+                    case Atom::Type::POINTER:
+                    {
+                        return llvm::ConstantInt::get(llvm::Type::getInt8PtrTy(context), 0); // aka NULL
+                    }
+
                     default:
                         InternalError::raise("illegal state: case not handled: AST atom generating IR");
                         return nullptr;
