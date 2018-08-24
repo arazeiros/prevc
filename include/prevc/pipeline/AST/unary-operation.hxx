@@ -25,7 +25,9 @@ namespace prevc
                     PLUS,
                     MINUS,
                     NOT,
-                    DEL
+                    DEL,
+                    MEM, // $ (in C is &)
+                    VAL  // @ (in C is *)
                 };
 
                 /**
@@ -80,6 +82,8 @@ namespace prevc
                     case UnaryOperation::Operator::MINUS: return "MINUS";
                     case UnaryOperation::Operator::NOT:   return "NOT";
                     case UnaryOperation::Operator::DEL:   return "DEL";
+                    case UnaryOperation::Operator::MEM:   return "MEM";
+                    case UnaryOperation::Operator::VAL:   return "VAL";
 
                     default:
                         prevc::InternalError::raise("token not recognized");

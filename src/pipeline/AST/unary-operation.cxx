@@ -23,6 +23,7 @@ namespace prevc
             llvm::Value* UnaryOperation::generate_IR(llvm::IRBuilder<>* builder)
             {
                 auto sub = sub_expression->generate_IR(builder);
+                auto& module = pipeline->IR_module;
 
                 switch (operator_)
                 {
@@ -37,11 +38,17 @@ namespace prevc
 
                     case Operator::DEL:
                     {
-                        auto& module = pipeline->IR_module;
                         auto  f_free = module->getFunction("free");
                         builder->CreateCall(f_free, llvm::ArrayRef<llvm::Value*>({sub}));
                         return sub; // returning the freed address
                     }
+
+                    case Operator::MEM:
+                        // TODO implement...
+                        break;
+
+                    case Operator::VAL:
+                        return builder->CreateLoad(sub);
                 }
 
                 InternalError::raise("illegal state: case not handled: UnaryOperation::generate_IR");

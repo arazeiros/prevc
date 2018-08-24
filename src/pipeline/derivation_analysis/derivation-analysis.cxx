@@ -104,6 +104,12 @@ namespace prevc
                     case lexical_analysis::Token::DEL:
                         return AST::UnaryOperation::Operator::DEL;
 
+                    case lexical_analysis::Token::MEM:
+                        return AST::UnaryOperation::Operator::MEM;
+
+                    case lexical_analysis::Token::VAL:
+                        return AST::UnaryOperation::Operator::VAL;
+
                     default:
                         InternalError::raise(util::String::format(
                                 "derivation analysis: illegal state: case not handled: terminal syntax node: %s",
