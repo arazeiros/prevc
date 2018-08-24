@@ -4,6 +4,7 @@
 #include <prevc/pipeline/AST/array-access.hxx>
 #include <prevc/pipeline/AST/atom.hxx>
 #include <prevc/pipeline/AST/binary-operation.hxx>
+#include <prevc/pipeline/AST/component-access.hxx>
 #include <prevc/pipeline/AST/compound.hxx>
 #include <prevc/pipeline/AST/declarations.hxx>
 #include <prevc/pipeline/AST/expression.hxx>
@@ -296,8 +297,7 @@ namespace prevc
                         case T::E7:
                         {
                             auto base = analyze(pipeline, nodes[0], nullptr);
-                            auto x = analyze(pipeline, nodes[1], base);
-                            return x;
+                            return analyze(pipeline, nodes[1], base);
                         }
 
                         case T::ExtAccess:
@@ -315,6 +315,14 @@ namespace prevc
                             auto index = (AST::Expression*) analyze(pipeline, nodes[1], nullptr);
                             util::Location location(array->location, ((Terminal) nodes[2])->symbol.location);
                             return new AST::ArrayAccess(pipeline, std::move(location), array, index);
+                        }
+
+                        case T::ComponentAccess:
+                        {
+                            auto& symbol = ((Terminal) nodes[1])->symbol;
+                            auto  record = (AST::Expression*) accumulator;
+                            util::Location location(record->location, symbol.location);
+                            return new AST::ComponentAccess(pipeline, std::move(location), record, symbol.lexeme);
                         }
 
                         case T::IdOrCall:
