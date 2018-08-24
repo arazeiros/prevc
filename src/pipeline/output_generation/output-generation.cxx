@@ -25,17 +25,54 @@ namespace prevc
 
             OutputGeneration::~OutputGeneration() = default;
 
+            static void declare_standard_library(llvm::LLVMContext* context, llvm::Module* module)
+            {
+                auto voidType  = llvm::Type::getVoidTy(*context);
+                auto int32Type = llvm::Type::getInt32Ty(*context);
+                auto intType   = llvm::Type::getInt64Ty(*context);
+                auto ptrType   = llvm::Type::getInt8PtrTy(*context);
+
+                auto f_malloc    = (llvm::Function*) module->getOrInsertFunction("malloc", ptrType, intType, nullptr);
+                auto f_free      = (llvm::Function*) module->getOrInsertFunction("free", voidType, ptrType, nullptr);
+                auto f_printf    = (llvm::Function*) module->getOrInsertFunction("printf", llvm::FunctionType::get(int32Type, {ptrType}, true));
+                auto f_putchar   = (llvm::Function*) module->getOrInsertFunction("putchar", llvm::FunctionType::get(int32Type, {int32Type}, false));
+                auto f_printint  = llvm::Function::Create(llvm::FunctionType::get(voidType, {intType}, false), llvm::Function::PrivateLinkage, "printint", module);
+                auto f_printchar = llvm::Function::Create(llvm::FunctionType::get(voidType, {intType}, false), llvm::Function::PrivateLinkage, "printchar", module);
+                auto f_println   = llvm::Function::Create(llvm::FunctionType::get(voidType, false), llvm::Function::PrivateLinkage, "println", module);
+
+                {
+                    // defining printint
+                    auto arg0 = f_printint->arg_begin();
+                    auto block = llvm::BasicBlock::Create(*context, "printint_entry", f_printint);
+                    llvm::IRBuilder<> builder(block);
+                    builder.CreateCall(f_printf, llvm::ArrayRef<llvm::Value*>({builder.CreateGlobalStringPtr("%ld"), arg0}));
+                    builder.CreateRetVoid();
+                }
+
+                {
+                    // defining printchar
+                    auto arg0 = f_printchar->arg_begin();
+                    auto block = llvm::BasicBlock::Create(*context, "printchar_entry", f_printchar);
+                    llvm::IRBuilder<> builder(block);
+                    builder.CreateCall(f_putchar, llvm::ArrayRef<llvm::Value*>({arg0}));
+                    builder.CreateRetVoid();
+                }
+
+                {
+                    // defining println
+                    auto block = llvm::BasicBlock::Create(*context, "println_entry", f_println);
+                    llvm::IRBuilder<> builder(block);
+                    llvm::ArrayRef<llvm::Value*> args({llvm::ConstantInt::get(int32Type, '\n')});
+                    builder.CreateCall(f_putchar, args);
+                    builder.CreateRetVoid();
+                }
+            }
+
             void OutputGeneration::complete_0()
             {
                 auto context = new llvm::LLVMContext();
                 auto module = new llvm::Module(pipeline->file_name, *context);
                 pipeline->IR_module = module;
-
-                auto voidType = llvm::Type::getVoidTy(*context);
-                auto intType  = llvm::Type::getInt64Ty(*context);
-                auto ptrType  = llvm::Type::getInt8PtrTy(*context);
-                module->getOrInsertFunction("malloc", ptrType, intType, nullptr);
-                module->getOrInsertFunction("free", voidType, ptrType, nullptr);
 
                 auto target_triple = llvm::sys::getDefaultTargetTriple();
                 std::string error;
@@ -51,6 +88,8 @@ namespace prevc
                 auto target_machine = target->createTargetMachine(target_triple, "generic", "", llvm::TargetOptions(), RM);
                 module->setDataLayout(target_machine->createDataLayout());
                 module->setTargetTriple(target_triple);
+
+                declare_standard_library(context, module);
 
                 auto main_type = llvm::Type::getInt32Ty(*context);
                 auto main = (llvm::Function*) module->getOrInsertFunction("main", main_type, NULL);
