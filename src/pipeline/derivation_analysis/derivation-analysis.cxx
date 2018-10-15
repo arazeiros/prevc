@@ -3,6 +3,7 @@
 #include <prevc/pipeline/AST/arguments.hxx>
 #include <prevc/pipeline/AST/array-access.hxx>
 #include <prevc/pipeline/AST/array-type.hxx>
+#include <prevc/pipeline/AST/assignment.hxx>
 #include <prevc/pipeline/AST/atom.hxx>
 #include <prevc/pipeline/AST/binary-operation.hxx>
 #include <prevc/pipeline/AST/cast.hxx>
@@ -472,8 +473,10 @@ namespace prevc
                             if (nodes.empty())
                                 return new AST::ExpressionStatement(pipeline, util::Location(expression->location), expression);
 
-                            // TODO implement...
-                            break;
+                            auto destination = expression;
+                            auto source = (AST::Expression*) analyze(pipeline, nodes[1], nullptr);
+                            util::Location location(destination->location, source->location);
+                            return new AST::Assignment(pipeline, std::move(location), destination, source);
                         }
 
                         case T::Declarations:

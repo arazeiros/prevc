@@ -131,13 +131,12 @@ If                  -> if Expression then Statements OptElse end
 # TODO
 While               -> while Expression do Statements end
 
-OptAssign -> $
-# TODO
-OptAssign -> assign Expression
-
 OptElse -> $
 # TODO
 OptElse -> else Statements
+
+OptAssign -> $
+OptAssign -> assign Expression
 
 ########################################################
 ### Declarations
