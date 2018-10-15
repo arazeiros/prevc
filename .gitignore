@@ -6,3 +6,6 @@ cmake-build*
 
 # ignored folder (put in whatever you want):
 ignored/
+
+# Valgrind files:
+vgcore.*
