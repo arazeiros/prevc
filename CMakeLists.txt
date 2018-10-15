@@ -49,6 +49,7 @@ ADD_EXECUTABLE(prevc
     src/pipeline/AST/expression-statement.cxx
     src/pipeline/AST/function-call.cxx
     src/pipeline/AST/function-declaration.cxx
+    src/pipeline/AST/named-type.cxx
     src/pipeline/AST/new.cxx
     src/pipeline/AST/node.cxx
     src/pipeline/AST/parenthesis.cxx

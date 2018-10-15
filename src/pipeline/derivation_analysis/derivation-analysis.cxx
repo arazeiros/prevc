@@ -18,6 +18,7 @@
 #include <prevc/pipeline/AST/statements.hxx>
 #include <prevc/pipeline/AST/unary-operation.hxx>
 #include <prevc/pipeline/AST/type.hxx>
+#include <prevc/pipeline/AST/named-type.hxx>
 #include <prevc/pipeline/AST/new.hxx>
 #include <prevc/pipeline/AST/pointer-type.hxx>
 #include <prevc/pipeline/AST/primitive-type.hxx>
@@ -424,6 +425,12 @@ namespace prevc
                             auto type = (AST::Type*) analyze(pipeline, nodes[1], nullptr);
                             util::Location location(((Terminal) nodes[0])->symbol.location, type->location);
                             return new AST::PointerType(pipeline, std::move(location), type);
+                        }
+
+                        case T::NamedType:
+                        {
+                            auto& symbol = ((Terminal) nodes[0])->symbol;
+                            return new AST::NamedType(pipeline, util::Location(symbol.location), symbol.lexeme);
                         }
 
                         case T::Statements:
