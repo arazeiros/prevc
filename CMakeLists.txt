@@ -68,6 +68,7 @@ ADD_EXECUTABLE(prevc
     src/pipeline/AST/type-declaration.cxx
     src/pipeline/AST/variable-declaration.cxx
     src/pipeline/AST/variable-name.cxx
+    src/pipeline/AST/while.cxx
     src/util/location.cxx
     src/util/reader.cxx
     src/util/string.cxx

@@ -29,6 +29,7 @@
 #include <prevc/pipeline/AST/type-declaration.hxx>
 #include <prevc/pipeline/AST/variable-declaration.hxx>
 #include <prevc/pipeline/AST/variable-name.hxx>
+#include <prevc/pipeline/AST/while.hxx>
 
 namespace prevc
 {
@@ -464,6 +465,14 @@ namespace prevc
                         {
                             auto expression = analyze(pipeline, nodes[0], nullptr);
                             return analyze(pipeline, nodes[1], expression);
+                        }
+
+                        case T::While:
+                        {
+                            auto condition = (AST::Expression*) analyze(pipeline, nodes[1], nullptr);
+                            auto body = (AST::Statements*) analyze(pipeline, nodes[3], nullptr);
+                            util::Location location(((Terminal) nodes[0])->symbol.location, ((Terminal) nodes[4])->symbol.location);
+                            return new AST::While(pipeline, std::move(location), condition, body);
                         }
 
                         case T::OptAssign:
