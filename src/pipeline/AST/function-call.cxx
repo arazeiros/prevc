@@ -34,6 +34,11 @@ namespace prevc
                 return builder->CreateCall(function, args);
             }
 
+            std::optional<int64_t> FunctionCall::evaluate_as_integer() const noexcept
+            {
+                return {};
+            }
+
             util::String FunctionCall::to_string() const noexcept
             {
                 return util::String::format(

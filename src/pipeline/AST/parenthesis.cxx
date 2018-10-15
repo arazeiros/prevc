@@ -24,6 +24,11 @@ namespace prevc
                 return sub_expression->generate_IR(builder);
             }
 
+            std::optional<int64_t> Parenthesis::evaluate_as_integer() const noexcept
+            {
+                return sub_expression->evaluate_as_integer();
+            }
+
             util::String Parenthesis::to_string() const noexcept
             {
                 return util::String::format(

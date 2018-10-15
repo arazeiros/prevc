@@ -77,6 +77,49 @@ namespace prevc
                 return nullptr;
             }
 
+            std::optional<int64_t> BinaryOperation::evaluate_as_integer() const noexcept
+            {
+                auto optional_right = right_expression->evaluate_as_integer();
+                auto optional_left  = left_expression->evaluate_as_integer();
+
+                if (!optional_right.has_value() || !optional_left.has_value())
+                    return {};
+
+                auto right = optional_right.value();
+                auto left  = optional_left.value();
+
+                switch (operator_)
+                {
+                    case Operator::ADD:
+                        return left + right;
+
+                    case Operator::SUBTRACT:
+                        return left - right;
+
+                    case Operator::MULTIPLY:
+                        return left * right;
+
+                    case Operator::DIVIDE:
+                    {
+                        if (right == 0)
+                            return {};
+
+                        return left / right;
+                    }
+
+                    case Operator::MODULE:
+                    {
+                        if (right == 0)
+                            return {};
+
+                        return left % right;
+                    }
+
+                    default:
+                        return {};
+                }
+            }
+
             util::String BinaryOperation::to_string() const noexcept
             {
                 return util::String::format(

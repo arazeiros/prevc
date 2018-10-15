@@ -29,6 +29,11 @@ namespace prevc
                 return llvm::ConstantInt::get(context, llvm::APInt::getNullValue(8));
             }
 
+            std::optional<int64_t> New::evaluate_as_integer() const noexcept
+            {
+                return {};
+            }
+
             util::String New::to_string() const noexcept
             {
                 return util::String::format(

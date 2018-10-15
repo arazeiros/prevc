@@ -32,6 +32,11 @@ namespace prevc
                 return expression->generate_IR(builder);
             }
 
+            std::optional<int64_t> Compound::evaluate_as_integer() const noexcept
+            {
+                return {};
+            }
+
             util::String Compound::to_string() const noexcept
             {
                 return util::String::format(

@@ -38,6 +38,12 @@ namespace prevc
                 virtual llvm::Value* generate_IR(llvm::IRBuilder<>* builder) override;
 
                 /**
+                 * \brief Evaluate the expression as an integer (if possible).
+                 * \return Returns the evaluated integer.
+                 * */
+                virtual std::optional<std::int64_t> evaluate_as_integer() const noexcept override;
+
+                /**
                  * \brief Returns a string representation of this primitive type.
                  * \return The representation in JSON format.
                  * */

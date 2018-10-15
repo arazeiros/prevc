@@ -24,6 +24,11 @@ namespace prevc
                 return nullptr;
             }
 
+            std::optional<int64_t> VariableName::evaluate_as_integer() const noexcept
+            {
+                return {};
+            }
+
             util::String VariableName::to_string() const noexcept
             {
                 return util::String::format(

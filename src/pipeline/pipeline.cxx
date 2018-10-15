@@ -3,6 +3,7 @@
 #include <prevc/pipeline/output_generation/output-generation.hxx>
 #include <prevc/pipeline/syntax_analysis/syntax-analysis.hxx>
 #include <prevc/pipeline/derivation_analysis/derivation-analysis.hxx>
+#include <prevc/pipeline/AST/expression.hxx>
 
 namespace prevc
 {
@@ -43,8 +44,8 @@ namespace prevc
             syntax_analysis.complete();
             derivation_analysis::DerivationAnalysis derivation_analysis(this);
             derivation_analysis.complete();
-            output_generation::OutputGeneration output_generation(this);
-            output_generation.complete();
+            //output_generation::OutputGeneration output_generation(this);
+            //output_generation.complete();
         }
 
         void Pipeline::release_symbols_vector()

@@ -75,5 +75,6 @@ ADD_EXECUTABLE(prevc
     src/util/string.cxx
     ${DTG_source}
 )
+SET_PROPERTY(TARGET prevc PROPERTY CXX_STANDARD 17)
 TARGET_LINK_LIBRARIES(prevc LLVM)
 ADD_DEPENDENCIES(prevc generate_DTG)

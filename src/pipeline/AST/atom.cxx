@@ -74,6 +74,21 @@ namespace prevc
                 }
             }
 
+            std::optional<int64_t> Atom::evaluate_as_integer() const noexcept
+            {
+                switch (type)
+                {
+                    case Atom::Type::INTEGER:
+                        return std::atoll(lexeme.c_str()); // sure that the lexeme is a valid number
+
+                    case Atom::Type::CHARACTER:
+                        return lexeme.c_str()[1];
+
+                    default:
+                        return {};
+                }
+            }
+
             util::String Atom::to_string() const noexcept
             {
                 return util::String::format(

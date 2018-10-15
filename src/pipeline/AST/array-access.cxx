@@ -29,6 +29,11 @@ namespace prevc
                 return nullptr;
             }
 
+            std::optional<int64_t> ArrayAccess::evaluate_as_integer() const noexcept
+            {
+                return {};
+            }
+
             util::String ArrayAccess::to_string() const noexcept
             {
                 return util::String::format(

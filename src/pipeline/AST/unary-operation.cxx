@@ -55,6 +55,28 @@ namespace prevc
                 return nullptr;
             }
 
+            std::optional<int64_t> UnaryOperation::evaluate_as_integer() const noexcept
+            {
+                auto optional_sub = sub_expression->evaluate_as_integer();
+
+                if (!optional_sub.has_value())
+                    return {};
+
+                auto evaluated = optional_sub.value();
+
+                switch (operator_)
+                {
+                    case Operator::PLUS:
+                        return +evaluated;
+
+                    case Operator::MINUS:
+                        return -evaluated;
+
+                    default:
+                        return {};
+                }
+            }
+
             util::String UnaryOperation::to_string() const noexcept
             {
                 return util::String::format(

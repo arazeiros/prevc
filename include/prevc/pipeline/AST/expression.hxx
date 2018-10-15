@@ -2,6 +2,8 @@
 #ifndef PREVC_PIPELINE_AST_EXPRESSION_HXX
 #define PREVC_PIPELINE_AST_EXPRESSION_HXX
 
+#include <cstdint>
+#include <optional>
 #include <llvm/IR/IRBuilder.h>
 #include <prevc/pipeline/AST/node.hxx>
 
@@ -35,6 +37,12 @@ namespace prevc
                  * \return The IR value representing this expression.
                  * */
                 virtual llvm::Value* generate_IR(llvm::IRBuilder<>* builder) = 0;
+
+                /**
+                 * \brief Evaluate the expression as an integer (if possible).
+                 * \return Returns the evaluated integer.
+                 * */
+                virtual std::optional<std::int64_t> evaluate_as_integer() const noexcept = 0;
             };
         }
     }

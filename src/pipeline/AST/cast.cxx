@@ -27,6 +27,11 @@ namespace prevc
                 return sub->generate_IR(builder);
             }
 
+            std::optional<int64_t> Cast::evaluate_as_integer() const noexcept
+            {
+                return sub->evaluate_as_integer();
+            }
+
             util::String Cast::to_string() const noexcept
             {
                 return util::String::format(
