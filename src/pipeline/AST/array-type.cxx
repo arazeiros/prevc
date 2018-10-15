@@ -24,7 +24,7 @@ namespace prevc
             util::String ArrayType::to_string() const noexcept
             {
                 return util::String::format(
-                        R"({"type": "primitive-type", "location": %s, "size_expression": %s, "data_type": %s})",
+                        R"({"type": "array-type", "location": %s, "size_expression": %s, "data_type": %s})",
                         location.to_string().c_str(),
                         size_expression->to_string().c_str(),
                         type->to_string().c_str());

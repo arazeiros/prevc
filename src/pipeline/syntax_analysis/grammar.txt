@@ -102,11 +102,12 @@ Type -> int
 Type -> Array
 Type -> Record
 Type -> Pointer
-Type -> identifier
+Type -> NamedType
 
-Array   -> arr left_bracket Expression right_bracket Type
-Record  -> rec left_parenthesis Components right_parenthesis
-Pointer -> ptr Type
+Array     -> arr left_bracket Expression right_bracket Type
+Record    -> rec left_parenthesis Components right_parenthesis
+Pointer   -> ptr Type
+NamedType -> identifier
 
 Components    -> Component ExtComponents
 ExtComponents -> $
@@ -125,13 +126,17 @@ Statement -> If
 Statement -> While
 
 ExpressionStatement -> Expression OptAssign
+# TODO
 If                  -> if Expression then Statements OptElse end
+# TODO
 While               -> while Expression do Statements end
 
 OptAssign -> $
+# TODO
 OptAssign -> assign Expression
 
 OptElse -> $
+# TODO
 OptElse -> else Statements
 
 ########################################################
@@ -145,6 +150,7 @@ Declaration -> TypeDeclaration
 Declaration -> VariableDeclaration
 Declaration -> FunctionDeclaration
 
+# TODO
 TypeDeclaration     -> typ identifier colon Type
 VariableDeclaration -> var identifier colon Type
 FunctionDeclaration -> fun identifier left_parenthesis OptParameters right_parenthesis colon Type OptImplementation
@@ -156,4 +162,5 @@ ExtParameters -> comma Parameter ExtParameters
 Parameter     -> identifier colon Type
 
 OptImplementation -> $
+# TODO
 OptImplementation -> assign Expression

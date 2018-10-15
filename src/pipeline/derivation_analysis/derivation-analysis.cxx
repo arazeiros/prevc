@@ -6,7 +6,9 @@
 #include <prevc/pipeline/AST/atom.hxx>
 #include <prevc/pipeline/AST/binary-operation.hxx>
 #include <prevc/pipeline/AST/cast.hxx>
+#include <prevc/pipeline/AST/component.hxx>
 #include <prevc/pipeline/AST/component-access.hxx>
+#include <prevc/pipeline/AST/components.hxx>
 #include <prevc/pipeline/AST/compound.hxx>
 #include <prevc/pipeline/AST/declarations.hxx>
 #include <prevc/pipeline/AST/expression.hxx>
@@ -15,6 +17,7 @@
 #include <prevc/pipeline/AST/function-declaration.hxx>
 #include <prevc/pipeline/AST/parameters.hxx>
 #include <prevc/pipeline/AST/parenthesis.hxx>
+#include <prevc/pipeline/AST/record-type.hxx>
 #include <prevc/pipeline/AST/statements.hxx>
 #include <prevc/pipeline/AST/unary-operation.hxx>
 #include <prevc/pipeline/AST/type.hxx>
@@ -420,6 +423,13 @@ namespace prevc
                             return new AST::ArrayType(pipeline, std::move(location), size_expression, type);
                         }
 
+                        case T::Record:
+                        {
+                            auto components = (AST::Components*) analyze(pipeline, nodes[2], nullptr);
+                            util::Location location(((Terminal) nodes[0])->symbol.location, ((Terminal) nodes[3])->symbol.location);
+                            return new AST::RecordType(pipeline, std::move(location), components);
+                        }
+
                         case T::Pointer:
                         {
                             auto type = (AST::Type*) analyze(pipeline, nodes[1], nullptr);
@@ -431,6 +441,18 @@ namespace prevc
                         {
                             auto& symbol = ((Terminal) nodes[0])->symbol;
                             return new AST::NamedType(pipeline, util::Location(symbol.location), symbol.lexeme);
+                        }
+
+                        case T::Components:
+                            return collect_nodes<AST::Component*, 1, 2, AST::Components>(pipeline, nodes);
+
+                        case T::Component:
+                        {
+                            auto& symbol = ((Terminal) nodes[0])->symbol;
+                            auto& name = symbol.lexeme;
+                            auto type = (AST::Type*) analyze(pipeline, nodes[2], nullptr);
+                            util::Location location(symbol.location, type->location);
+                            return new AST::Component(pipeline, std::move(location), name, type);
                         }
 
                         case T::Statements:

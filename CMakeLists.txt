@@ -41,7 +41,9 @@ ADD_EXECUTABLE(prevc
     src/pipeline/AST/atom.cxx
     src/pipeline/AST/binary-operation.cxx
     src/pipeline/AST/cast.cxx
+    src/pipeline/AST/component.cxx
     src/pipeline/AST/component-access.cxx
+    src/pipeline/AST/components.cxx
     src/pipeline/AST/compound.cxx
     src/pipeline/AST/declaration.cxx
     src/pipeline/AST/declarations.cxx
@@ -57,6 +59,7 @@ ADD_EXECUTABLE(prevc
     src/pipeline/AST/parameters.cxx
     src/pipeline/AST/pointer-type.cxx
     src/pipeline/AST/primitive-type.cxx
+    src/pipeline/AST/record-type.cxx
     src/pipeline/AST/statement.cxx
     src/pipeline/AST/statements.cxx
     src/pipeline/AST/type.cxx
