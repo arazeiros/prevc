@@ -489,14 +489,23 @@ namespace prevc
 
                         case T::FunctionDeclaration:
                         {
-                            auto& symbol = ((Terminal) nodes[1])->symbol;
-                            auto& name = symbol.lexeme;
-                            auto parameters = (AST::Parameters*) analyze(pipeline, nodes[3], nullptr);
-                            auto type = (AST::Type*) analyze(pipeline, nodes[6], nullptr);
-                            util::Location location(((Terminal) nodes[0])->symbol.location, type->location);
-                            auto declaration = new AST::FunctionDeclaration(pipeline, std::move(location), name,
-                                    type, parameters);
-                            return analyze(pipeline, nodes[7], declaration);
+                            auto& symbol              = ((Terminal) nodes[1])->symbol;
+                            auto& name                = symbol.lexeme;
+                            auto  parameters          = (AST::Parameters*) analyze(pipeline, nodes[3], nullptr);
+                            auto  type                = (AST::Type*) analyze(pipeline, nodes[6], nullptr);
+                            auto& implementation_node = ((Variable) nodes[7])->nodes;
+
+                            auto implementation = implementation_node.empty()
+                                    ? nullptr
+                                    : (AST::Expression*) analyze(pipeline, implementation_node[1], nullptr);
+
+                            util::Location location(((Terminal) nodes[0])->symbol.location,
+                                    implementation == nullptr
+                                        ? type->location
+                                        : implementation->location);
+
+                            return new AST::FunctionDeclaration(pipeline, std::move(location), name, type,
+                                                                parameters, implementation);
                         }
 
                         case T::OptParameters:
@@ -514,15 +523,6 @@ namespace prevc
                             auto type = (AST::Type*) analyze(pipeline, nodes[2], nullptr);
                             util::Location location(symbol.location, type->location);
                             return new AST::Parameter(pipeline, std::move(location), name, type);
-                        }
-
-                        case T::OptImplementation:
-                        {
-                            if (nodes.empty())
-                                return accumulator;
-
-                            // TODO create function definition
-                            break;
                         }
 
                         default:

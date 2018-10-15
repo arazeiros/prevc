@@ -3,6 +3,7 @@
 #define PREVC_PIPELINE_AST_FUNCTIONDECLARATION_HXX
 
 #include <prevc/pipeline/AST/declaration.hxx>
+#include <prevc/pipeline/AST/expression.hxx>
 #include <prevc/pipeline/AST/parameters.hxx>
 
 namespace prevc
@@ -24,9 +25,10 @@ namespace prevc
                  * \param name The function declaration name.
                  * \param type The function declaration type.
                  * \param parameters The function parameters.
+                 * \param implementation The implementation of the function, or NULL if there is no implementation provided.
                  * */
                 FunctionDeclaration(Pipeline* pipeline, util::Location&& location, const util::String& name, Type* type,
-                        AST::Parameters* parameters);
+                        AST::Parameters* parameters, Expression* implementation = nullptr);
 
                 /**
                  * \brief Releases used resources.
@@ -41,9 +43,14 @@ namespace prevc
 
             protected:
                 /**
-                 *  brief The function parameters.
+                 * \brief The function parameters.
                  * */
                  AST::Parameters* parameters;
+
+                 /**
+                  * \brief The implementation of the function, or NULL if there is no implementation provided.
+                  * */
+                 AST::Expression* implementation;
             };
         }
     }
