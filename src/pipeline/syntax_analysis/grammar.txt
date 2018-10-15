@@ -126,13 +126,10 @@ Statement -> If
 Statement -> While
 
 ExpressionStatement -> Expression OptAssign
-# TODO
 If                  -> if Expression then Statements OptElse end
-# TODO
 While               -> while Expression do Statements end
 
 OptElse -> $
-# TODO
 OptElse -> else Statements
 
 OptAssign -> $

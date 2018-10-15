@@ -16,6 +16,7 @@
 #include <prevc/pipeline/AST/expression-statement.hxx>
 #include <prevc/pipeline/AST/function-call.hxx>
 #include <prevc/pipeline/AST/function-declaration.hxx>
+#include <prevc/pipeline/AST/if.hxx>
 #include <prevc/pipeline/AST/parameters.hxx>
 #include <prevc/pipeline/AST/parenthesis.hxx>
 #include <prevc/pipeline/AST/record-type.hxx>
@@ -465,6 +466,20 @@ namespace prevc
                         {
                             auto expression = analyze(pipeline, nodes[0], nullptr);
                             return analyze(pipeline, nodes[1], expression);
+                        }
+
+                        case T::If:
+                        {
+                            auto  condition = (AST::Expression*) analyze(pipeline, nodes[1], nullptr);
+                            auto  then_body = (AST::Statements*) analyze(pipeline, nodes[3], nullptr);
+                            auto& else_node = ((Variable) nodes[4])->nodes;
+
+                            auto else_body = else_node.empty()
+                                    ? nullptr
+                                    : (AST::Statements*) analyze(pipeline, else_node[1], nullptr);
+
+                            util::Location location(((Terminal) nodes[0])->symbol.location, ((Terminal) nodes[5])->symbol.location);
+                            return new AST::If(pipeline, std::move(location), condition, then_body, else_body);
                         }
 
                         case T::While:
