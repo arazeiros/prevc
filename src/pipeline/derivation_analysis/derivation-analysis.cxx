@@ -2,6 +2,7 @@
 #include <utility>
 #include <prevc/pipeline/AST/arguments.hxx>
 #include <prevc/pipeline/AST/array-access.hxx>
+#include <prevc/pipeline/AST/array-type.hxx>
 #include <prevc/pipeline/AST/atom.hxx>
 #include <prevc/pipeline/AST/binary-operation.hxx>
 #include <prevc/pipeline/AST/cast.hxx>
@@ -401,6 +402,22 @@ namespace prevc
                             return new AST::Compound(pipeline, std::move(location), statements, expression, declarations);
                         }
 
+                        case T::OptWhere:
+                        {
+                            if (nodes.empty())
+                                return new AST::Declarations(pipeline, util::Location(0, 0), {});
+
+                            return analyze(pipeline, nodes[1], nullptr);
+                        }
+
+                        case T::Array:
+                        {
+                            auto size_expression = (AST::Expression*) analyze(pipeline, nodes[2], nullptr);
+                            auto type = (AST::Type*) analyze(pipeline, nodes[4], nullptr);
+                            util::Location location(((Terminal) nodes[0])->symbol.location, type->location);
+                            return new AST::ArrayType(pipeline, std::move(location), size_expression, type);
+                        }
+
                         case T::Statements:
                             return collect_nodes<AST::Statement*, 1, 2, AST::Statements>(pipeline, nodes);
 
@@ -421,14 +438,6 @@ namespace prevc
                             break;
                         }
 
-                        case T::OptWhere:
-                        {
-                            if (nodes.empty())
-                                return new AST::Declarations(pipeline, util::Location(0, 0), {});
-
-                            return analyze(pipeline, nodes[1], nullptr);
-                        }
-
                         case T::Declarations:
                             return collect_nodes<AST::Declaration*, 1, 2, AST::Declarations>(pipeline, nodes);
 
@@ -437,7 +446,7 @@ namespace prevc
                             auto& symbol = ((Terminal) nodes[1])->symbol;
                             auto& name = symbol.lexeme;
                             auto type = (AST::Type*) analyze(pipeline, nodes[3], nullptr);
-                            util::Location location(symbol.location, type->location);
+                            util::Location location(((Terminal) nodes[0])->symbol.location, type->location);
                             return new AST::VariableDeclaration(pipeline, std::move(location), name, type);
                         }
 
@@ -447,7 +456,7 @@ namespace prevc
                             auto& name = symbol.lexeme;
                             auto parameters = (AST::Parameters*) analyze(pipeline, nodes[3], nullptr);
                             auto type = (AST::Type*) analyze(pipeline, nodes[6], nullptr);
-                            util::Location location(symbol.location, type->location);
+                            util::Location location(((Terminal) nodes[0])->symbol.location, type->location);
                             auto declaration = new AST::FunctionDeclaration(pipeline, std::move(location), name,
                                     type, parameters);
                             return analyze(pipeline, nodes[7], declaration);
