@@ -150,7 +150,6 @@ Declaration -> TypeDeclaration
 Declaration -> VariableDeclaration
 Declaration -> FunctionDeclaration
 
-# TODO
 TypeDeclaration     -> typ identifier colon Type
 VariableDeclaration -> var identifier colon Type
 FunctionDeclaration -> fun identifier left_parenthesis OptParameters right_parenthesis colon Type OptImplementation
@@ -162,5 +161,4 @@ ExtParameters -> comma Parameter ExtParameters
 Parameter     -> identifier colon Type
 
 OptImplementation -> $
-# TODO
 OptImplementation -> assign Expression

@@ -25,6 +25,7 @@
 #include <prevc/pipeline/AST/new.hxx>
 #include <prevc/pipeline/AST/pointer-type.hxx>
 #include <prevc/pipeline/AST/primitive-type.hxx>
+#include <prevc/pipeline/AST/type-declaration.hxx>
 #include <prevc/pipeline/AST/variable-declaration.hxx>
 #include <prevc/pipeline/AST/variable-name.hxx>
 
@@ -477,6 +478,15 @@ namespace prevc
 
                         case T::Declarations:
                             return collect_nodes<AST::Declaration*, 1, 2, AST::Declarations>(pipeline, nodes);
+
+                        case T::TypeDeclaration:
+                        {
+                            auto& symbol = ((Terminal) nodes[1])->symbol;
+                            auto& name = symbol.lexeme;
+                            auto type = (AST::Type*) analyze(pipeline, nodes[3], nullptr);
+                            util::Location location(((Terminal) nodes[0])->symbol.location, type->location);
+                            return new AST::TypeDeclaration(pipeline, std::move(location), name, type);
+                        }
 
                         case T::VariableDeclaration:
                         {
