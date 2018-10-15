@@ -39,6 +39,7 @@ ADD_EXECUTABLE(prevc
     src/pipeline/AST/array-access.cxx
     src/pipeline/AST/atom.cxx
     src/pipeline/AST/binary-operation.cxx
+    src/pipeline/AST/cast.cxx
     src/pipeline/AST/component-access.cxx
     src/pipeline/AST/compound.cxx
     src/pipeline/AST/declaration.cxx

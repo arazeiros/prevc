@@ -4,6 +4,7 @@
 #include <prevc/pipeline/AST/array-access.hxx>
 #include <prevc/pipeline/AST/atom.hxx>
 #include <prevc/pipeline/AST/binary-operation.hxx>
+#include <prevc/pipeline/AST/cast.hxx>
 #include <prevc/pipeline/AST/component-access.hxx>
 #include <prevc/pipeline/AST/compound.hxx>
 #include <prevc/pipeline/AST/declarations.hxx>
@@ -303,6 +304,14 @@ namespace prevc
                                     sub);
                         }
 
+                        case T::Unary1:
+                        {
+                            auto type = (AST::Type*) analyze(pipeline, nodes[1], nullptr);
+                            auto sub = (AST::Expression*) analyze(pipeline, nodes[3], nullptr);
+                            util::Location location(((Terminal) nodes[0])->symbol.location, sub->location);
+                            return new AST::Cast(pipeline, std::move(location), type, sub);
+                        }
+
                         case T::New:
                         {
                             auto type = (AST::Type*) analyze(pipeline, nodes[1], nullptr);
@@ -425,9 +434,9 @@ namespace prevc
 
                         case T::VariableDeclaration:
                         {
-                            auto& symbol = ((Terminal) nodes[0])->symbol;
+                            auto& symbol = ((Terminal) nodes[1])->symbol;
                             auto& name = symbol.lexeme;
-                            auto type = (AST::Type*) analyze(pipeline, nodes[2], nullptr);
+                            auto type = (AST::Type*) analyze(pipeline, nodes[3], nullptr);
                             util::Location location(symbol.location, type->location);
                             return new AST::VariableDeclaration(pipeline, std::move(location), name, type);
                         }
