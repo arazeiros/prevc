@@ -43,6 +43,11 @@ namespace prevc
                 return {};
             }
 
+            bool ArrayAccess::is_lvalue() const noexcept
+            {
+                return array->is_lvalue();
+            }
+
             util::String ArrayAccess::to_string() const noexcept
             {
                 return util::String::format(

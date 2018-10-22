@@ -37,6 +37,12 @@ namespace prevc
                 virtual void check_semantics() override;
 
                 /**
+                 * \brief Tells if this declaration is a component declaration. Guess what? It is.
+                 * \return Returns true.
+                 * */
+                virtual bool is_component_declaration() const noexcept;
+
+                /**
                  * \brief Returns a string representation of this component.
                  * \return The representation in JSON format.
                  * */

@@ -83,6 +83,11 @@ namespace prevc
                 }
             }
 
+            bool UnaryOperation::is_lvalue() const noexcept
+            {
+                return (operator_ == Operator::VAL) && sub_expression->is_lvalue();
+            }
+
             util::String UnaryOperation::to_string() const noexcept
             {
                 return util::String::format(

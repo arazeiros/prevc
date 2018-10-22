@@ -64,6 +64,12 @@ namespace prevc
                 virtual std::optional<std::int64_t> evaluate_as_integer() const noexcept override;
 
                 /**
+                 * \brief Tells if the expression is lvalue or not.
+                 * \return True if expression is lvalue, false otherwise.
+                 * */
+                virtual bool is_lvalue() const noexcept;
+
+                /**
                  * \brief Returns a string representation of this operation.
                  * \return The representation in JSON format.
                  * */

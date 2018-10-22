@@ -12,6 +12,11 @@ namespace prevc
             {
 
             }
+
+            bool Expression::is_lvalue() const noexcept
+            {
+                return false;
+            }
         }
     }
 }

@@ -43,6 +43,12 @@ namespace prevc
                  * \return Returns the evaluated integer.
                  * */
                 virtual std::optional<std::int64_t> evaluate_as_integer() const noexcept = 0;
+
+                /**
+                 * \brief Tells if the expression is lvalue or not.
+                 * \return True if expression is lvalue, false otherwise.
+                 * */
+                virtual bool is_lvalue() const noexcept;
             };
         }
     }

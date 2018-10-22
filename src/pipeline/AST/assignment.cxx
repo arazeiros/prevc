@@ -26,6 +26,10 @@ namespace prevc
                 destination->check_semantics();
                 source->check_semantics();
 
+                if (!destination->is_lvalue())
+                    CompileTimeError::raise(pipeline->file_name, location,
+                            "destination expression of the assignment is not assignable (not a lvalue)");
+
                 // TODO check that destination is LValue
                 // TODO that types of destination and source are compatible
             }

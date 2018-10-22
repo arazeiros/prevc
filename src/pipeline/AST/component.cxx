@@ -19,6 +19,11 @@ namespace prevc
                 VariableDeclaration::check_semantics();
             }
 
+            bool Component::is_component_declaration() const noexcept
+            {
+                return true;
+            }
+
             util::String Component::to_string() const noexcept
             {
                 return util::String::format(

@@ -41,6 +41,11 @@ namespace prevc
                 return {};
             }
 
+            bool ComponentAccess::is_lvalue() const noexcept
+            {
+                return record->is_lvalue();
+            }
+
             util::String ComponentAccess::to_string() const noexcept
             {
                 return util::String::format(
