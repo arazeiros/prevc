@@ -9,14 +9,27 @@ namespace prevc
         {
             NamedType::NamedType(Pipeline* pipeline, util::Location&& location, const util::String& name):
                 Type(pipeline, std::move(location)),
-                name(name)
+                name(name),
+                declaration(nullptr)
             {
 
             }
 
             void NamedType::check_semantics()
             {
-                // TODO ...
+                auto declaration_optional = pipeline->global_namespace->find_declaration(name);
+
+                if (!declaration_optional.has_value())
+                    CompileTimeError::raise(pipeline->file_name, location,
+                            util::String::format("type `%s` not declared", name.c_str()));
+
+                auto declaration = declaration_optional.value();
+
+                if (declaration->kind != Declaration::Kind::Type)
+                    CompileTimeError::raise(pipeline->file_name, location,
+                                            util::String::format("declared identifier `%s` is not a type", name.c_str()));
+
+                this->declaration = (TypeDeclaration*) declaration;
             }
 
             util::String NamedType::to_string() const noexcept

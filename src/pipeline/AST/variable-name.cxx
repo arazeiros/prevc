@@ -25,7 +25,7 @@ namespace prevc
 
                 if (!declaration_optional.has_value())
                     CompileTimeError::raise(pipeline->file_name, location,
-                            util::String::format("using undeclared variable `%s`", name.c_str()));
+                            util::String::format("variable `%s` not declared", name.c_str()));
 
                 auto declaration = declaration_optional.value();
 

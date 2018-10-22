@@ -4,6 +4,7 @@
 
 #include <prevc/pipeline/AST/arguments.hxx>
 #include <prevc/pipeline/AST/expression.hxx>
+#include <prevc/pipeline/AST/function-declaration.hxx>
 #include <prevc/util/string.hxx>
 
 namespace prevc
@@ -67,6 +68,12 @@ namespace prevc
                  * \brief The function call arguments.
                  * */
                 Arguments* arguments;
+
+                /**
+                 * \brief Stores the declaration referenced by this function name.
+                 * Calculated during semantic analysis.
+                 * */
+                FunctionDeclaration* declaration;
             };
         }
     }

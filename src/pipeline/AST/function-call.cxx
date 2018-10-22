@@ -12,7 +12,8 @@ namespace prevc
                     const util::String& name, Arguments* arguments):
                 Expression(pipeline, std::move(location)),
                 name(name),
-                arguments(arguments)
+                arguments(arguments),
+                declaration(nullptr)
             {
 
             }
@@ -24,9 +25,21 @@ namespace prevc
 
             void FunctionCall::check_semantics()
             {
+                auto declaration_optional = pipeline->global_namespace->find_declaration(name);
+
+                if (!declaration_optional.has_value())
+                    CompileTimeError::raise(pipeline->file_name, location,
+                            util::String::format("function `%s` not declared", name.c_str()));
+
+                auto declaration = declaration_optional.value();
+
+                if (declaration->kind != Declaration::Kind::Function)
+                    CompileTimeError::raise(pipeline->file_name, location,
+                            util::String::format("declared identifier `%s` is not a function", name.c_str()));
+
+                this->declaration = (FunctionDeclaration*) declaration;
                 arguments->check_semantics();
 
-                // TODO check if exists the function declaration
                 // TODO check that number of arguments matches
                 // TODO check that type of arguments matches with parameters
             }

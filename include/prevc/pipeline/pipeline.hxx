@@ -15,6 +15,7 @@ namespace prevc
             class Compound;
             class FunctionCall;
             class FunctionDeclaration;
+            class NamedType;
             class New;
             class Parenthesis;
             class UnaryOperation;
@@ -71,6 +72,7 @@ namespace prevc
             friend AST::Compound;
             friend AST::FunctionCall;
             friend AST::FunctionDeclaration;
+            friend AST::NamedType;
             friend AST::New;
             friend AST::Parenthesis;
             friend AST::UnaryOperation;

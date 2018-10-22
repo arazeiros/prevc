@@ -3,6 +3,7 @@
 #define PREVC_PIPELINE_AST_NAMEDTYPE_HXX
 
 #include <prevc/pipeline/AST/type.hxx>
+#include <prevc/pipeline/AST/type-declaration.hxx>
 #include <prevc/util/string.hxx>
 
 namespace prevc
@@ -47,6 +48,12 @@ namespace prevc
                  * \brief The name of the type.
                  * */
                 const util::String name;
+
+                /**
+                 * \brief Stores the declaration referenced by this type name.
+                 * Calculated during semantic analysis.
+                 * */
+                TypeDeclaration* declaration;
             };
         }
     }
