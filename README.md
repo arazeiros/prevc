@@ -19,7 +19,7 @@ $ make
 Project depend on some third-party libraries:
 
  * [UTF8-CPP](http://utfcpp.sourceforge.net/)
- * [LLVM 6](http://llvm.org/)
+ * [LLVM 5](http://llvm.org/)
 
 Project also depends on the `clang` compiler that have to be installed
 and present in the path of the shell.
@@ -27,7 +27,9 @@ and present in the path of the shell.
 On OpenSUSE you can install these by typing command:
 
 ``` console
-# zypper in utfcpp-devel llvm6-devel clang
+# zypper in utfcpp-devel llvm5-devel clang
 ```
 
+## License
 
+`prevc` is provided under the MIT license. See [LICENSE](LICENSE).
