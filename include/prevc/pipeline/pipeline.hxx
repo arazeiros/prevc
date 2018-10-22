@@ -13,6 +13,7 @@ namespace prevc
             class Atom;
             class BinaryOperation;
             class FunctionCall;
+            class FunctionDeclaration;
             class New;
             class Parenthesis;
             class UnaryOperation;
@@ -33,6 +34,12 @@ namespace prevc
             class OutputGeneration;
         }
 
+        namespace semantic_analysis
+        {
+            class Namespace;
+            class SemanticAnalysis;
+        }
+
         namespace syntax_analysis
         {
             class SyntaxAnalysis;
@@ -44,6 +51,7 @@ namespace prevc
 #include <string>
 #include <llvm/IR/Module.h>
 #include <prevc/pipeline/lexical_analysis/symbols-vector.hxx>
+#include <prevc/pipeline/semantic_analysis/namespace.hxx>
 #include <prevc/pipeline/syntax_analysis/syntax-node.hxx>
 #include <prevc/pipeline/AST/node.hxx>
 
@@ -59,11 +67,13 @@ namespace prevc
             friend AST::Atom;
             friend AST::BinaryOperation;
             friend AST::FunctionCall;
+            friend AST::FunctionDeclaration;
             friend AST::New;
             friend AST::Parenthesis;
             friend AST::UnaryOperation;
             friend derivation_analysis::DerivationAnalysis;
             friend lexical_analysis::LexicalAnalysis;
+            friend semantic_analysis::SemanticAnalysis;
             friend syntax_analysis::SyntaxAnalysis;
             friend syntax_analysis::SyntaxTreeBuilder;
             friend output_generation::OutputGeneration;
@@ -104,6 +114,12 @@ namespace prevc
             syntax_analysis::SyntaxNode* derivation_tree;
 
             /**
+             * \brief The global namespace of the module.
+             * Calculated during the "semantic analysis" phase.
+             * */
+            semantic_analysis::Namespace* global_namespace;
+
+            /**
              * \brief The abstract syntax tree of the module.
              * Calculated during the "derivation analysis" phase.
              * */
@@ -124,6 +140,11 @@ namespace prevc
              * \brief Releases the derivation tree.
              * */
             void release_derivation_tree();
+
+            /**
+             * \brief Releases the global namespace.
+             * */
+            void release_global_namespace();
 
             /**
              * \brief Releases the abstract syntax tree.

@@ -22,6 +22,14 @@ namespace prevc
                 delete sub;
             }
 
+            void Cast::check_semantics()
+            {
+                type->check_semantics();
+                sub->check_semantics();
+
+                // TODO check that expression with his type can be casted to the specified type
+            }
+
             llvm::Value* Cast::generate_IR(llvm::IRBuilder<> *builder)
             {
                 return sub->generate_IR(builder);

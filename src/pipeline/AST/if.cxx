@@ -26,6 +26,14 @@ namespace prevc
                     delete else_body;
             }
 
+            void If::check_semantics()
+            {
+                // TODO ...
+                condition->check_semantics();
+                then_body->check_semantics();
+                else_body->check_semantics();
+            }
+
             void If::generate_IR(llvm::IRBuilder<>* builder)
             {
                 // TODO implement...

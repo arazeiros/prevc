@@ -22,6 +22,15 @@ namespace prevc
                 delete index;
             }
 
+            void ArrayAccess::check_semantics()
+            {
+                array->check_semantics();
+                index->check_semantics();
+
+                // TODO check that array is of type array
+                // TODO check that index is of type int
+            }
+
             llvm::Value* ArrayAccess::generate_IR(llvm::IRBuilder<>* builder)
             {
                 // TODO implement

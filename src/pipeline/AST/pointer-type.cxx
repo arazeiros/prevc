@@ -19,6 +19,12 @@ namespace prevc
                 delete type;
             }
 
+            void PointerType::check_semantics()
+            {
+                // TODO ...
+                type->check_semantics();
+            }
+
             util::String PointerType::to_string() const noexcept
             {
                 return util::String::format(

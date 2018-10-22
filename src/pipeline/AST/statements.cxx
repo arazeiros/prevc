@@ -13,6 +13,12 @@ namespace prevc
 
             }
 
+            void Statements::check_semantics()
+            {
+                for (auto& statement : *this)
+                    statement->check_semantics();
+            }
+
             void Statements::generate_IR(llvm::IRBuilder<>* builder)
             {
                 for (auto statement : *this)

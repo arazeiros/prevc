@@ -21,6 +21,13 @@ namespace prevc
                 delete type;
             }
 
+
+            void Parameter::check_semantics()
+            {
+                // TODO ...
+                type->check_semantics();
+            }
+
             util::String Parameter::to_string() const noexcept
             {
                 return util::String::format(

@@ -21,6 +21,12 @@ namespace prevc
                 delete type;
             }
 
+            void ArrayType::check_semantics()
+            {
+                type->check_semantics();
+                // TODO check that size_expression can be evaluated ad compile-time
+            }
+
             util::String ArrayType::to_string() const noexcept
             {
                 return util::String::format(

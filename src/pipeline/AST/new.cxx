@@ -20,6 +20,12 @@ namespace prevc
                 delete type;
             }
 
+            void New::check_semantics()
+            {
+                // TODO ...
+                type->check_semantics();
+            }
+
             llvm::Value* New::generate_IR(llvm::IRBuilder<> *builder)
             {
                 // TODO implementation?

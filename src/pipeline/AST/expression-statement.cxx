@@ -19,6 +19,11 @@ namespace prevc
                 delete expression;
             }
 
+            void ExpressionStatement::check_semantics()
+            {
+                expression->check_semantics();
+            }
+
             void ExpressionStatement::generate_IR(llvm::IRBuilder<>* builder)
             {
                 expression->generate_IR(builder);

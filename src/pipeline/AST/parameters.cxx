@@ -12,6 +12,12 @@ namespace prevc
             {
 
             }
+
+            void Parameters::check_semantics()
+            {
+                for (auto& parameter : *this)
+                    parameter->check_semantics();
+            }
         }
     }
 }

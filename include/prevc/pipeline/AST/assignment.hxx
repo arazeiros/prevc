@@ -33,6 +33,12 @@ namespace prevc
                 virtual ~Assignment();
 
                 /**
+                 * \brief Checks the semantics of the node.
+                 * \param pipeline The pipeline of the node.
+                 * */
+                virtual void check_semantics() override;
+
+                /**
                  * \brief Generate the IR code for this assignment statement expression.
                  * \param builder The builder of the IR block containing this assignment statement.
                  * */

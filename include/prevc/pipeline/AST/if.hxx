@@ -35,6 +35,12 @@ namespace prevc
                 virtual ~If();
 
                 /**
+                 * \brief Checks the semantics of the node.
+                 * \param pipeline The pipeline of the node.
+                 * */
+                virtual void check_semantics() override;
+
+                /**
                  * \brief Generate the IR code for this if statement expression.
                  * \param builder The builder of the IR block containing this if statement.
                  * */

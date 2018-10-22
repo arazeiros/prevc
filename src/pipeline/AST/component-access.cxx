@@ -22,6 +22,13 @@ namespace prevc
                 delete record;
             }
 
+            void ComponentAccess::check_semantics()
+            {
+                record->check_semantics();
+
+                // TODO check if the component is present in the record
+            }
+
             llvm::Value* ComponentAccess::generate_IR(llvm::IRBuilder<>* builder)
             {
                 // TODO implement

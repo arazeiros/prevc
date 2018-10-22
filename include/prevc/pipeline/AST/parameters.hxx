@@ -29,6 +29,12 @@ namespace prevc
                  * \brief Default implementation.
                  * */
                 virtual ~Parameters() = default;
+
+                /**
+                 * \brief Checks the semantics of the node.
+                 * \param pipeline The pipeline of the node.
+                 * */
+                virtual void check_semantics() override;
             };
         }
     }

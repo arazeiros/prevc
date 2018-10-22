@@ -22,6 +22,15 @@ namespace prevc
                 delete arguments;
             }
 
+            void FunctionCall::check_semantics()
+            {
+                arguments->check_semantics();
+
+                // TODO check if exists the function declaration
+                // TODO check that number of arguments matches
+                // TODO check that type of arguments matches with parameters
+            }
+
             llvm::Value* FunctionCall::generate_IR(llvm::IRBuilder<>* builder)
             {
                 auto& module   = pipeline->IR_module;

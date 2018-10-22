@@ -46,6 +46,12 @@ namespace prevc
                 virtual ~Node() = default;
 
                 /**
+                 * \brief Checks the semantics of the node.
+                 * \param pipeline The pipeline of the node.
+                 * */
+                virtual void check_semantics() = 0;
+
+                /**
                  * \brief Returns a string representation of this node.
                  * \return The representation in JSON format.
                  * */

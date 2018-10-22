@@ -31,6 +31,12 @@ namespace prevc
                 virtual ~NamedType() = default;
 
                 /**
+                 * \brief Checks the semantics of the node.
+                 * \param pipeline The pipeline of the node.
+                 * */
+                virtual void check_semantics() override;
+
+                /**
                  * \brief Returns a string representation of this named-type.
                  * \return The representation in JSON format.
                  * */

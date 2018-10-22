@@ -32,6 +32,11 @@ namespace prevc
                 return i;
             }
 
+            void Atom::check_semantics()
+            {
+                // It's OK.
+            }
+
             llvm::Value* Atom::generate_IR(llvm::IRBuilder<>* builder)
             {
                 auto& context = pipeline->IR_module->getContext();

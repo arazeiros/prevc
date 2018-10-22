@@ -30,6 +30,12 @@ namespace prevc
                 virtual ~RecordType();
 
                 /**
+                 * \brief Checks the semantics of the node.
+                 * \param pipeline The pipeline of the node.
+                 * */
+                virtual void check_semantics() override;
+
+                /**
                  * \brief Returns a string representation of this record-type.
                  * \return The representation in JSON format.
                  * */

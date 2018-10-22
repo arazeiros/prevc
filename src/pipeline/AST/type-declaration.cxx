@@ -14,6 +14,11 @@ namespace prevc
 
             }
 
+            void TypeDeclaration::check_semantics()
+            {
+                // TODO ...
+            }
+
             util::String TypeDeclaration::to_string() const noexcept
             {
                 return util::String::format(

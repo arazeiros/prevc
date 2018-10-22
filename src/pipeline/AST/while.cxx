@@ -21,6 +21,13 @@ namespace prevc
                 delete body;
             }
 
+            void While::check_semantics()
+            {
+                // TODO ...
+                condition->check_semantics();
+                body->check_semantics();
+            }
+
             void While::generate_IR(llvm::IRBuilder<>* builder)
             {
                 // TODO implement...

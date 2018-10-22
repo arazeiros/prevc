@@ -12,6 +12,12 @@ namespace prevc
             {
 
             }
+
+            void Components::check_semantics()
+            {
+                for (auto& component : *this)
+                    component->check_semantics();
+            }
         }
     }
 }

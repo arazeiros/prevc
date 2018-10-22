@@ -21,6 +21,15 @@ namespace prevc
                 delete source;
             }
 
+            void Assignment::check_semantics()
+            {
+                destination->check_semantics();
+                source->check_semantics();
+
+                // TODO check that destination is LValue
+                // TODO that types of destination and source are compatible
+            }
+
             void Assignment::generate_IR(llvm::IRBuilder<>* builder)
             {
                 // auto destination_value = destination->generate_IR(builder);

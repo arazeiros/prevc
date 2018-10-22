@@ -84,6 +84,11 @@ namespace prevc
             return std::strcmp(this->c_str(), other.c_str()) == 0;
         }
 
+        bool String::operator<(const String& other) const noexcept
+        {
+            return std::strcmp(this->c_str(), other.c_str()) < 0;
+        }
+
         String String::format(const char* format, ...)
         {
             va_list args;

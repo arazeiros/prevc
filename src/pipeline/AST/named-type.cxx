@@ -14,6 +14,11 @@ namespace prevc
 
             }
 
+            void NamedType::check_semantics()
+            {
+                // TODO ...
+            }
+
             util::String NamedType::to_string() const noexcept
             {
                 return util::String::format(

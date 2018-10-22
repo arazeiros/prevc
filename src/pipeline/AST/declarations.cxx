@@ -12,6 +12,12 @@ namespace prevc
             {
 
             }
+
+            void Declarations::check_semantics()
+            {
+                for (auto& declaration: *this)
+                    declaration->check_semantics();
+            }
         }
     }
 }

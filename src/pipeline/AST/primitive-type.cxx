@@ -14,6 +14,11 @@ namespace prevc
 
             }
 
+            void PrimitiveType::check_semantics()
+            {
+                // It's OK.
+            }
+
             util::String PrimitiveType::to_string() const noexcept
             {
                 return util::String::format(

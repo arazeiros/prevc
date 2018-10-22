@@ -24,6 +24,15 @@ namespace prevc
                 delete declarations;
             }
 
+            void Compound::check_semantics()
+            {
+                statements->check_semantics();
+                expression->check_semantics();
+                declarations->check_semantics();
+
+                // TODO handle new scopes (?), declarations, ... ?
+            }
+
             llvm::Value* Compound::generate_IR(llvm::IRBuilder<>* builder)
             {
                 for (auto statement : *statements)

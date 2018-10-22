@@ -19,6 +19,12 @@ namespace prevc
                 delete components;
             }
 
+            void RecordType::check_semantics()
+            {
+                components->check_semantics();
+                // TODO ...
+            }
+
             util::String RecordType::to_string() const noexcept
             {
                 return util::String::format(

@@ -21,6 +21,11 @@ namespace prevc
                 delete type;
             }
 
+            void Component::check_semantics()
+            {
+                type->check_semantics();
+            }
+
             util::String Component::to_string() const noexcept
             {
                 return util::String::format(

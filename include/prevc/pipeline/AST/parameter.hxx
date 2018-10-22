@@ -38,6 +38,12 @@ namespace prevc
                 virtual ~Parameter();
 
                 /**
+                 * \brief Checks the semantics of the node.
+                 * \param pipeline The pipeline of the node.
+                 * */
+                virtual void check_semantics() override;
+
+                /**
                  * \brief Returns a string representation of this parameter.
                  * \return The representation in JSON format.
                  * */

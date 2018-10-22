@@ -45,6 +45,12 @@ namespace prevc
                 virtual ~Atom();
 
                 /**
+                 * \brief Checks the semantics of the node.
+                 * \param pipeline The pipeline of the node.
+                 * */
+                virtual void check_semantics() override;
+
+                /**
                  * \brief Generate the IR code for this atom expression.
                  * \param builder The builder of the IR block containing this atom expression.
                  * \return The IR value representing this atom expression.

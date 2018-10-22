@@ -17,6 +17,11 @@ namespace prevc
 
             VariableName::~VariableName() = default;
 
+            void VariableName::check_semantics()
+            {
+                // TODO ...
+            }
+
             llvm::Value* VariableName::generate_IR(llvm::IRBuilder<>* builder)
             {
                 // TODO implement

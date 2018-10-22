@@ -55,6 +55,12 @@ namespace prevc
                 virtual ~BinaryOperation();
 
                 /**
+                 * \brief Checks the semantics of the node.
+                 * \param pipeline The pipeline of the node.
+                 * */
+                virtual void check_semantics() override;
+
+                /**
                  * \brief Generate the IR code for this binary operation expression.
                  * \param builder The builder of the IR block containing this binary operation expression.
                  * \return The IR value representing this binary operation expression.

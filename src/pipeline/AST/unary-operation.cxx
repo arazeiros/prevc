@@ -20,6 +20,12 @@ namespace prevc
                 delete sub_expression;
             }
 
+            void UnaryOperation::check_semantics()
+            {
+                // TODO ...
+                sub_expression->check_semantics();
+            }
+
             llvm::Value* UnaryOperation::generate_IR(llvm::IRBuilder<>* builder)
             {
                 auto sub = sub_expression->generate_IR(builder);

@@ -25,6 +25,18 @@ namespace prevc
                     delete implementation;
             }
 
+            void FunctionDeclaration::check_semantics()
+            {
+                // TODO consider inserting declarations during semantic check of the "compound expression"
+
+                auto& global_namespace = pipeline->global_namespace;
+
+                global_namespace->push_scope();
+                parameters->check_semantics();
+                implementation->check_semantics();
+                global_namespace->pop_scope();
+            }
+
             util::String FunctionDeclaration::to_string() const noexcept
             {
                 return util::String::format(

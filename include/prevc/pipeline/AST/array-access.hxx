@@ -27,6 +27,12 @@ namespace prevc
                 virtual ~ArrayAccess();
 
                 /**
+                 * \brief Checks the semantics of the node.
+                 * \param pipeline The pipeline of the node.
+                 * */
+                virtual void check_semantics() override;
+
+                /**
                  * \brief Generate the IR code for this expression.
                  * \param builder The builder of the IR block containing this expression.
                  * \return The IR value representing this expression.

@@ -46,6 +46,12 @@ namespace prevc
                 virtual ~PrimitiveType() = default;
 
                 /**
+                 * \brief Checks the semantics of the node.
+                 * \param pipeline The pipeline of the node.
+                 * */
+                virtual void check_semantics() override;
+
+                /**
                  * \brief Returns a string representation of this primitive type.
                  * \return The representation in JSON format.
                  * */

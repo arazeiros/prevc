@@ -1,6 +1,7 @@
 #include <prevc/pipeline/pipeline.hxx>
 #include <prevc/pipeline/lexical_analysis/lexical-analysis.hxx>
 #include <prevc/pipeline/output_generation/output-generation.hxx>
+#include <prevc/pipeline/semantic_analysis/semantic-analysis.hxx>
 #include <prevc/pipeline/syntax_analysis/syntax-analysis.hxx>
 #include <prevc/pipeline/derivation_analysis/derivation-analysis.hxx>
 #include <prevc/pipeline/AST/expression.hxx>
@@ -22,6 +23,7 @@ namespace prevc
         Pipeline::Pipeline(const std::string& file_name):
             file_name(file_name),
             derivation_tree(nullptr),
+            global_namespace(nullptr),
             abstract_syntax_tree(nullptr),
             IR_module(nullptr)
         {
@@ -32,6 +34,7 @@ namespace prevc
         {
             release_symbols_vector();
             release_derivation_tree();
+            release_global_namespace();
             release_abstract_syntax_tree();
             release_IR_module();
         }
@@ -44,6 +47,8 @@ namespace prevc
             syntax_analysis.complete();
             derivation_analysis::DerivationAnalysis derivation_analysis(this);
             derivation_analysis.complete();
+            semantic_analysis::SemanticAnalysis semantic_analysis(this);
+            semantic_analysis.complete();
             //output_generation::OutputGeneration output_generation(this);
             //output_generation.complete();
         }
@@ -56,6 +61,11 @@ namespace prevc
         void Pipeline::release_derivation_tree()
         {
             zero_delete(&derivation_tree);
+        }
+
+        void Pipeline::release_global_namespace()
+        {
+            zero_delete(&global_namespace);
         }
 
         void Pipeline::release_abstract_syntax_tree()

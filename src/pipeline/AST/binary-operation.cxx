@@ -23,6 +23,15 @@ namespace prevc
                 delete right_expression;
             }
 
+            void BinaryOperation::check_semantics()
+            {
+                left_expression->check_semantics();
+                right_expression->check_semantics();
+
+                // TODO check that expressions are of the same type
+                // TODO check that operator can be used with those expressions types
+            }
+
             llvm::Value* BinaryOperation::generate_IR(llvm::IRBuilder<>* builder)
             {
                 auto left  = left_expression->generate_IR(builder);

@@ -19,6 +19,12 @@ namespace prevc
                 delete sub_expression;
             }
 
+            void Parenthesis::check_semantics()
+            {
+                // TODO ...
+                sub_expression->check_semantics();
+            }
+
             llvm::Value* Parenthesis::generate_IR(llvm::IRBuilder<>* builder)
             {
                 return sub_expression->generate_IR(builder);

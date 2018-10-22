@@ -35,6 +35,12 @@ namespace prevc
                 virtual ~Compound();
 
                 /**
+                 * \brief Checks the semantics of the node.
+                 * \param pipeline The pipeline of the node.
+                 * */
+                virtual void check_semantics() override;
+
+                /**
                  * \brief Generate the IR code for this compound expression.
                  * \param builder The builder of the IR block containing this compound expression.
                  * \return The IR value representing this compound expression.
