@@ -9,7 +9,7 @@ namespace prevc
         {
             VariableDeclaration::VariableDeclaration(Pipeline* pipeline, util::Location&& location,
                                      const util::String& name, Type* type):
-                Declaration(pipeline, std::move(location), name, type)
+                Declaration(pipeline, std::move(location), Declaration::Kind::Variable, name, type)
             {
 
             }

@@ -10,7 +10,7 @@ namespace prevc
             FunctionDeclaration::FunctionDeclaration(Pipeline* pipeline, util::Location&& location,
                                      const util::String& name, Type* type, AST::Parameters* parameters,
                                      Expression* implementation):
-                Declaration(pipeline, std::move(location), name, type),
+                Declaration(pipeline, std::move(location), Declaration::Kind::Function, name, type),
                 parameters(parameters),
                 implementation(implementation)
             {

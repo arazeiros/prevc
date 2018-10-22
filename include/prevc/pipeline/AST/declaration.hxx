@@ -19,18 +19,34 @@ namespace prevc
             {
             public:
                 /**
+                 * \brief Enumeration of declaration kinds.
+                 * */
+                enum class Kind
+                {
+                    Function,
+                    Type,
+                    Variable
+                };
+
+                /**
+                 * \brief The kind of the declaration.
+                 * */
+                const Kind kind;
+
+                /**
                  * \brief The declaration name.
                  * */
-                 const util::String name;
+                const util::String name;
 
                 /**
                  * \brief Create an AST declaration at the specified location.
                  * \param pipeline The pipeline that owns this AST node.
                  * \param location The location of the declaration in the source code.
+                 * \param kind The kind of the declaration.
                  * \param name The declaration name.
                  * \param type The declaration type.
                  * */
-                Declaration(Pipeline* pipeline, util::Location&& location, const util::String& name, Type* type);
+                Declaration(Pipeline* pipeline, util::Location&& location, Kind kind, const util::String& name, Type* type);
 
                 /**
                  * \brief Release the used resources.
