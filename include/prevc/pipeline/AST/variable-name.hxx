@@ -4,6 +4,7 @@
 
 #include <prevc/error.hxx>
 #include <prevc/pipeline/AST/expression.hxx>
+#include <prevc/pipeline/AST/variable-declaration.hxx>
 #include <prevc/util/string.hxx>
 
 namespace prevc
@@ -60,6 +61,13 @@ namespace prevc
                  * \return The representation in JSON format.
                  * */
                 virtual util::String to_string() const noexcept override;
+
+            private:
+                /**
+                 * \brief Stores the declaration referenced by this variable name.
+                 * Calculated during semantic analysis.
+                 * */
+                VariableDeclaration* declaration;
             };
         }
     }

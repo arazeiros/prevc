@@ -1,6 +1,7 @@
 #include <prevc/pipeline/AST/variable-name.hxx>
 #include <utility>
 #include <prevc/error.hxx>
+#include <prevc/pipeline/AST/declaration.hxx>
 
 namespace prevc
 {
@@ -10,7 +11,8 @@ namespace prevc
         {
             VariableName::VariableName(Pipeline* pipeline, util::Location&& location, const util::String& name):
                 Expression(pipeline, std::move(location)),
-                name(name)
+                name(name),
+                declaration(nullptr)
             {
 
             }
@@ -19,7 +21,19 @@ namespace prevc
 
             void VariableName::check_semantics()
             {
-                // TODO ...
+                auto declaration_optional = pipeline->global_namespace->find_declaration(name);
+
+                if (!declaration_optional.has_value())
+                    CompileTimeError::raise(pipeline->file_name, location,
+                            util::String::format("using undeclared variable `%s`", name.c_str()));
+
+                auto declaration = declaration_optional.value();
+
+                if (declaration->kind != Declaration::Kind::Variable)
+                    CompileTimeError::raise(pipeline->file_name, location,
+                            util::String::format("declared identifier `%s` is not a variable", name.c_str()));
+
+                this->declaration = (VariableDeclaration*) declaration;
             }
 
             llvm::Value* VariableName::generate_IR(llvm::IRBuilder<>* builder)

@@ -17,6 +17,7 @@ namespace prevc
             class New;
             class Parenthesis;
             class UnaryOperation;
+            class VariableName;
         }
 
         namespace derivation_analysis
@@ -71,6 +72,7 @@ namespace prevc
             friend AST::New;
             friend AST::Parenthesis;
             friend AST::UnaryOperation;
+            friend AST::VariableName;
             friend derivation_analysis::DerivationAnalysis;
             friend lexical_analysis::LexicalAnalysis;
             friend semantic_analysis::SemanticAnalysis;
