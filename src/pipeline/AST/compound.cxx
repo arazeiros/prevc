@@ -26,11 +26,27 @@ namespace prevc
 
             void Compound::check_semantics()
             {
+                auto& global_namespace = pipeline->global_namespace;
+                global_namespace->push_scope();
+
+                for (auto& declaration : *declarations)
+                {
+                    if (global_namespace->insert_declaration(declaration))
+                        continue;
+
+                    auto  duplicate = global_namespace->find_declaration(declaration->name).value();
+                    auto& location  = duplicate->location;
+
+                    CompileTimeError::raise(pipeline->file_name, declaration->location,
+                            util::String::format("identifier `%s` already used in current scope (at %d:%d)",
+                                    declaration->name.c_str(), location.line_0, location.column_0));
+                }
+
                 statements->check_semantics();
                 expression->check_semantics();
                 declarations->check_semantics();
 
-                // TODO handle new scopes (?), declarations, ... ?
+                global_namespace->pop_scope();
             }
 
             llvm::Value* Compound::generate_IR(llvm::IRBuilder<>* builder)

@@ -12,6 +12,7 @@ namespace prevc
         {
             class Atom;
             class BinaryOperation;
+            class Compound;
             class FunctionCall;
             class FunctionDeclaration;
             class New;
@@ -67,6 +68,7 @@ namespace prevc
         {
             friend AST::Atom;
             friend AST::BinaryOperation;
+            friend AST::Compound;
             friend AST::FunctionCall;
             friend AST::FunctionDeclaration;
             friend AST::New;

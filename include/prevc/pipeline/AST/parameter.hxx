@@ -2,8 +2,7 @@
 #ifndef PREVC_PIPELINE_AST_PARAMETER_HXX
 #define PREVC_PIPELINE_AST_PARAMETER_HXX
 
-#include <prevc/pipeline/AST/node.hxx>
-#include <prevc/pipeline/AST/type.hxx>
+#include <prevc/pipeline/AST/variable-declaration.hxx>
 #include <prevc/util/string.hxx>
 
 namespace prevc
@@ -15,14 +14,9 @@ namespace prevc
             /**
              * \brief Represent a parameter in the AST.
              * */
-            class Parameter: public Node
+            class Parameter: public VariableDeclaration
             {
             public:
-                /**
-                 * \brief The parameter name.
-                 * */
-                 const util::String name;
-
                 /**
                  * \brief Create an AST parameter at the specified location.
                  * \param pipeline The pipeline that owns this AST node.
@@ -33,9 +27,9 @@ namespace prevc
                 Parameter(Pipeline* pipeline, util::Location&& location, const util::String& name, Type* type);
 
                 /**
-                 * \brief Release the used resources.
+                 * \brief Default implementation.
                  * */
-                virtual ~Parameter();
+                virtual ~Parameter() = default;
 
                 /**
                  * \brief Checks the semantics of the node.
@@ -48,12 +42,6 @@ namespace prevc
                  * \return The representation in JSON format.
                  * */
                 virtual util::String to_string() const noexcept override;
-
-            protected:
-                /**
-                 * \brief The parameter type.
-                 * */
-                Type* type;
             };
         }
     }

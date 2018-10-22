@@ -9,23 +9,14 @@ namespace prevc
         {
             Parameter::Parameter(Pipeline* pipeline, util::Location&& location,
                                      const util::String& name, Type* type):
-                Node(pipeline, std::move(location)),
-                name(name),
-                type(type)
+                VariableDeclaration(pipeline, std::move(location), name, type)
             {
 
             }
-
-            Parameter::~Parameter()
-            {
-                delete type;
-            }
-
 
             void Parameter::check_semantics()
             {
-                // TODO ...
-                type->check_semantics();
+                VariableDeclaration::check_semantics();
             }
 
             util::String Parameter::to_string() const noexcept

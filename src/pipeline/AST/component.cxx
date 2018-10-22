@@ -9,21 +9,14 @@ namespace prevc
         {
             Component::Component(Pipeline* pipeline, util::Location&& location,
                                      const util::String& name, Type* type):
-                Node(pipeline, std::move(location)),
-                name(name),
-                type(type)
+                VariableDeclaration(pipeline, std::move(location), name, type)
             {
 
-            }
-
-            Component::~Component()
-            {
-                delete type;
             }
 
             void Component::check_semantics()
             {
-                type->check_semantics();
+                VariableDeclaration::check_semantics();
             }
 
             util::String Component::to_string() const noexcept

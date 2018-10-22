@@ -3,6 +3,7 @@
 #define PREVC_PIPELINE_AST_RECORDTYPE_HXX
 
 #include <prevc/pipeline/AST/components.hxx>
+#include <prevc/pipeline/semantic_analysis/namespace.hxx>
 
 namespace prevc
 {
@@ -46,6 +47,12 @@ namespace prevc
                  * \brief The components.
                  * */
                 Components* components;
+
+                /**
+                 * \brief The local namespace of this record.
+                 * Calculated during the semantic analysis.
+                 * */
+                semantic_analysis::Namespace* local_namespace;
             };
         }
     }

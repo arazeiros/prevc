@@ -27,13 +27,28 @@ namespace prevc
 
             void FunctionDeclaration::check_semantics()
             {
-                // TODO consider inserting declarations during semantic check of the "compound expression"
-
                 auto& global_namespace = pipeline->global_namespace;
-
                 global_namespace->push_scope();
+
+                for (auto& parameter : *parameters)
+                {
+                    if (global_namespace->insert_declaration(parameter))
+                        continue;
+
+                    auto  duplicate = global_namespace->find_declaration(parameter->name).value();
+                    auto& location  = duplicate->location;
+
+                    CompileTimeError::raise(pipeline->file_name, parameter->location,
+                            util::String::format("parameter name `%s` already used (at %d:%d)",
+                                    parameter->name.c_str(), location.line_0, location.column_0));
+                }
+
+                type->check_semantics();
                 parameters->check_semantics();
-                implementation->check_semantics();
+
+                if (implementation != nullptr)
+                    implementation->check_semantics();
+
                 global_namespace->pop_scope();
             }
 

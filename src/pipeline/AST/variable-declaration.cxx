@@ -16,7 +16,7 @@ namespace prevc
 
             void VariableDeclaration::check_semantics()
             {
-                // TODO ...
+                type->check_semantics();
             }
 
             util::String VariableDeclaration::to_string() const noexcept
