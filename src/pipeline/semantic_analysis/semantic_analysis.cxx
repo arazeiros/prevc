@@ -11,6 +11,7 @@ namespace prevc
                 Phase(pipeline)
             {
                 pipeline->global_namespace = new Namespace;
+                pipeline->type_system = new TypeSystem;
             }
 
             SemanticAnalysis::~SemanticAnalysis()

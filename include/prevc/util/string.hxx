@@ -102,6 +102,13 @@ namespace prevc
             bool operator<(const String& other) const noexcept;
 
             /**
+             * \brief Tells if this string starts with the specified one.
+             * \param other The string to compare with.
+             * \return True if string starts with the specified one, false otherwise.
+             * */
+            bool starts_with(const String& other) const noexcept;
+
+            /**
              * \brief Create a String out of the C-like formatted one.
              * \param format The formatted C-like string.
              * \param ... The format arguments.

@@ -24,6 +24,7 @@ namespace prevc
             file_name(file_name),
             derivation_tree(nullptr),
             global_namespace(nullptr),
+            type_system(nullptr),
             abstract_syntax_tree(nullptr),
             IR_module(nullptr)
         {
@@ -35,6 +36,7 @@ namespace prevc
             release_symbols_vector();
             release_derivation_tree();
             release_global_namespace();
+            release_type_system();
             release_abstract_syntax_tree();
             release_IR_module();
         }
@@ -66,6 +68,11 @@ namespace prevc
         void Pipeline::release_global_namespace()
         {
             zero_delete(&global_namespace);
+        }
+
+        void Pipeline::release_type_system()
+        {
+            zero_delete(&type_system);
         }
 
         void Pipeline::release_abstract_syntax_tree()

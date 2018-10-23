@@ -55,6 +55,7 @@ namespace prevc
 #include <llvm/IR/Module.h>
 #include <prevc/pipeline/lexical_analysis/symbols-vector.hxx>
 #include <prevc/pipeline/semantic_analysis/namespace.hxx>
+#include <prevc/pipeline/semantic_analysis/type-system.hxx>
 #include <prevc/pipeline/syntax_analysis/syntax-node.hxx>
 #include <prevc/pipeline/AST/node.hxx>
 
@@ -126,6 +127,12 @@ namespace prevc
             semantic_analysis::Namespace* global_namespace;
 
             /**
+             * \brief The type system, of the module.
+             * Calculated during the "semantic analysis" phase.
+             * */
+            semantic_analysis::TypeSystem* type_system;
+
+            /**
              * \brief The abstract syntax tree of the module.
              * Calculated during the "derivation analysis" phase.
              * */
@@ -151,6 +158,11 @@ namespace prevc
              * \brief Releases the global namespace.
              * */
             void release_global_namespace();
+
+            /**
+             * \brief Releases the type system.
+             * */
+            void release_type_system();
 
             /**
              * \brief Releases the abstract syntax tree.

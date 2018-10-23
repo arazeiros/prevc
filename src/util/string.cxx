@@ -89,6 +89,12 @@ namespace prevc
             return std::strcmp(this->c_str(), other.c_str()) < 0;
         }
 
+        bool String::starts_with(const String& other) const noexcept
+        {
+            const auto& prefix = other.c_str();
+            return strncmp(prefix, c_str(), strlen(prefix)) == 0;
+        }
+
         String String::format(const char* format, ...)
         {
             va_list args;
