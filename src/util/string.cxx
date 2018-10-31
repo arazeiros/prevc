@@ -29,12 +29,15 @@ namespace prevc
 
         }
 
-        String::String(const std::uint8_t* data, std::size_t bytes_to_copy):
+        String::String(const std::uint8_t* data, std::size_t bytes_to_copy, bool move_ownership):
             capacity(bytes_to_copy + 1),
             buffer([&] () -> const std::uint8_t*
                 {
                     if (capacity == 1)
                         return EMPTY_STRING;
+
+                    if (move_ownership)
+                        return data;
 
                     auto tmp = new std::uint8_t[capacity];
                     std::memcpy(tmp, data, bytes_to_copy);
@@ -77,6 +80,20 @@ namespace prevc
         bool String::is_empty() const noexcept
         {
             return buffer == EMPTY_STRING;
+        }
+
+        String String::operator+(const String& other) const noexcept
+        {
+            const size_t this_length  = this->capacity - 1;
+            const size_t other_length = other.capacity - 1;
+            const size_t size         = this_length + other_length;
+
+            auto buffer = new uint8_t[size];
+
+            std::memcpy(&buffer[0],           this->buffer, this_length );
+            std::memcpy(&buffer[this_length], other.buffer, other_length);
+
+            return String(buffer, size, true);
         }
 
         bool String::operator==(const String& other) const noexcept

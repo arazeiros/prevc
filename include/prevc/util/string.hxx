@@ -18,6 +18,7 @@ namespace prevc
         public:
             /**
              * \brief The capacity of the internal buffer of bytes used for this string representation.
+             * Null-character is included in capacity count, so "" string have capacity 1.
              * */
             const std::size_t capacity;
 
@@ -43,11 +44,14 @@ namespace prevc
              *     address.
              * \param data The specified memory address from which data is copied.
              * \param bytes_to_copy The specified amount of data to copy expressed in bytes.
+             * \param move_ownership If false (default) the entire data buffer will be copied (will create a new buffer).
+             *     Otherwise, if true, the data buffer ownership will be moved to this and freed in destructor with
+             *     delete[].
              *
              * Note that data shouldn't contains the null-terminating character, since this will be always added by
              * this constructor. Safety it's important, dude.
              */
-            String(const std::uint8_t* data, std::size_t bytes_to_copy);
+            String(const std::uint8_t* data, std::size_t bytes_to_copy, bool move_ownership = false);
 
             /**
              * \brief Create a string copying data from specified C-string.
@@ -86,6 +90,13 @@ namespace prevc
              * A string is empty if contains no characters (except null-terminating character).
              * */
             bool is_empty() const noexcept;
+
+            /**
+             * \brief Concatenate two strings. Using this as prefix.
+             * \param other The string to concatenate (the postfix).
+             * \return A new concatenated string.
+             * */
+            String operator+(const String& other) const noexcept;
 
             /**
              * \brief Tells if this string is equal to the specified one.
