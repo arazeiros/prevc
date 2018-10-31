@@ -7,26 +7,26 @@ namespace prevc
     {
         namespace semantic_analysis
         {
-            static bool is_word(const util::String& type)
+            Type::Type(Kind kind, size_t size):
+                kind(kind),
+                size(size)
             {
-                return type == "bool"
-                    || type == "char"
-                    || type == "int"
-                    || type.starts_with("ptr");
+
             }
 
-            static bool is_returnable(const util::String& type)
+            bool Type::can_be_assigned() const
             {
-                return type == "void" || is_word(type);
+                return false;
             }
 
-            Type::Type(prevc::util::String&& id):
-                util::String(std::move(id)),
-                can_be_assigned(is_word(*this)),
-                can_be_passed(is_word(*this)),
-                can_be_returned(is_returnable(*this))
+            bool Type::can_be_passed() const
             {
+                return false;
+            }
 
+            bool Type::can_be_returned() const
+            {
+                return false;
             }
         }
     }

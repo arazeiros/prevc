@@ -3,7 +3,6 @@
 #define PREVC_PIPELINE_SEMANTIC_ANALYSIS_TYPESYSTEM_HXX
 
 #include <map>
-#include <prevc/pipeline/semantic_analysis/type.hxx>
 #include <prevc/util/string.hxx>
 
 namespace prevc
@@ -12,6 +11,8 @@ namespace prevc
     {
         namespace semantic_analysis
         {
+            class Type;
+
             /**
              * \brief System that handle types of a Prev module.
              * */
@@ -31,33 +32,28 @@ namespace prevc
                 /**
                  * \brief Provides reference to the type described by the specified type representation.
                  * \param type The specified type representation.
-                 * \return The reference to the type.
+                 * \return The reference to the type. Returns NULL if the type can not be generated.
                  * */
                 const Type* get(util::String&& type);
 
                 /**
                  * \brief Provides reference to the type described by the specified type representation.
                  * \param type The specified type representation.
-                 * \return The reference to the type.
+                 * \return The reference to the type. Returns NULL if the type can not be generated.
                  * */
                 const Type* get(const util::String& type);
 
             private:
                 /**
-                 * \brief The structure for ordering string pointers.
-                 * */
-                struct Less
-                {
-                    bool operator()(const util::String* left, const util::String* right) const noexcept
-                    {
-                        return *left < *right;
-                    }
-                };
-
-                /**
                  * \brief Map that caches all seen types.
                  * */
-                std::map<util::String*, Type*, Less> types;
+                std::map<util::String, const Type*> types;
+
+                /**
+                 * \brief Generate the type out of the id.
+                 * \return The generated type or NULL if id does not represent a valid type.
+                 * */
+                static const Type* generate(const util::String& id);
             };
         }
     }

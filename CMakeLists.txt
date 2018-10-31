@@ -31,6 +31,7 @@ ADD_EXECUTABLE(prevc
     src/pipeline/lexical_analysis/lexical-analysis.cxx
     src/pipeline/lexical_analysis/symbol.cxx
     src/pipeline/lexical_analysis/symbols-vector.cxx
+    src/pipeline/semantic_analysis/atom-type.cxx
     src/pipeline/semantic_analysis/namespace.cxx
     src/pipeline/semantic_analysis/semantic_analysis.cxx
     src/pipeline/semantic_analysis/type.cxx
