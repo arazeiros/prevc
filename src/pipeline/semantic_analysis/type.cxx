@@ -7,9 +7,9 @@ namespace prevc
     {
         namespace semantic_analysis
         {
-            Type::Type(Kind kind, size_t size):
-                kind(kind),
-                size(size)
+            Type::Type(util::String&& id, Kind kind):
+                id(std::move(id)),
+                kind(kind)
             {
 
             }

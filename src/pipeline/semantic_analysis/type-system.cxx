@@ -1,7 +1,12 @@
 #include <prevc/pipeline/semantic_analysis/type-system.hxx>
 #include <prevc/pipeline/semantic_analysis/type.hxx>
 #include <prevc/pipeline/semantic_analysis/atom-type.hxx>
+#include <cstring>
 #include <utility>
+#include <functional>
+#include <prevc/pipeline/semantic_analysis/pointer-type.hxx>
+#include <prevc/pipeline/semantic_analysis/array-type.hxx>
+#include <prevc/pipeline/semantic_analysis/record-type.hxx>
 
 namespace prevc
 {
@@ -9,13 +14,7 @@ namespace prevc
     {
         namespace semantic_analysis
         {
-            TypeSystem::TypeSystem()
-            {
-                get("bool");
-                get("char");
-                get("int");
-                get("void");
-            }
+            TypeSystem::TypeSystem() = default;
 
             TypeSystem::~TypeSystem()
             {
@@ -23,39 +22,20 @@ namespace prevc
                     delete type.second;
             }
 
-            const Type* TypeSystem::get(util::String&& type)
+            const Type* TypeSystem::get_or_insert(const util::String& id, std::function<const Type*()>&& provider)
             {
-                auto searched = types.find(type);
+                auto searched = types.find(&id);
 
                 if (searched != types.end())
                     return searched->second;
 
-                auto real_type = generate(type);
+                auto real_type = provider();
 
                 if (real_type == nullptr)
                     return nullptr;
 
-                auto inserted = types.insert(std::make_pair(std::move(type), real_type));
+                auto inserted = types.insert(std::make_pair(&real_type->id, real_type));
                 return inserted.first->second;
-            }
-
-            const Type* TypeSystem::get(const util::String& type)
-            {
-                return get(util::String(type));
-            }
-
-            const Type* TypeSystem::generate(const util::String& id)
-            {
-                if (id == "void")
-                    return new AtomType(AtomType::Kind::VOID);
-                else if (id == "bool")
-                    return new AtomType(AtomType::Kind::BOOL);
-                else if (id == "char")
-                    return new AtomType(AtomType::Kind::CHAR);
-                else if (id == "int")
-                    return new AtomType(AtomType::Kind::INT);
-
-                return nullptr;
             }
         }
     }

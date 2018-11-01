@@ -6,19 +6,19 @@ namespace prevc
     {
         namespace semantic_analysis
         {
-            static constexpr size_t get_atom_kind_size(AtomType::Kind kind)
+            static util::String to_semantic_string(AtomType::Kind kind)
             {
                 switch (kind)
                 {
-                    case AtomType::Kind::VOID: return 0;
-                    case AtomType::Kind::BOOL: return 1;
-                    case AtomType::Kind::CHAR: return 1;
-                    case AtomType::Kind::INT:  return 8;
+                    case AtomType::Kind::VOID: return "void";
+                    case AtomType::Kind::BOOL: return "bool";
+                    case AtomType::Kind::CHAR: return "char";
+                    case AtomType::Kind::INT:  return "int";
                 }
             }
 
             AtomType::AtomType(Kind kind):
-                Type(Type::Kind::ATOM, get_atom_kind_size(kind)),
+                Type(to_semantic_string(kind), Type::Kind::ATOM),
                 atomKind(kind)
             {
 
@@ -37,6 +37,11 @@ namespace prevc
             bool AtomType::can_be_returned() const
             {
                 return true;
+            }
+
+            util::String AtomType::to_string() const noexcept
+            {
+                return id;
             }
         }
     }

@@ -1,6 +1,6 @@
 
-#ifndef PREVC_PIPELINE_SEMANTIC_ANALYSIS_ATOMTYPE_HXX
-#define PREVC_PIPELINE_SEMANTIC_ANALYSIS_ATOMTYPE_HXX
+#ifndef PREVC_PIPELINE_SEMANTIC_ANALYSIS_POINTERTYPE_HXX
+#define PREVC_PIPELINE_SEMANTIC_ANALYSIS_POINTERTYPE_HXX
 
 #include <prevc/pipeline/semantic_analysis/type.hxx>
 
@@ -8,47 +8,25 @@ namespace prevc
 {
     namespace pipeline
     {
-        namespace AST
-        {
-            class PrimitiveType;
-        }
-
         namespace semantic_analysis
         {
             /**
-             * \brief Represent an atom-type in a Prev module.
+             * \brief Represent a pointar-type in a Prev module.
              * */
-            class AtomType: public Type
+            class PointerType: public Type
             {
                 friend TypeSystem;
-                friend AST::PrimitiveType;
 
             public:
                 /**
-                 * \brief Enumeration of possible atom-type kinds.
-                 * */
-                enum class Kind
-                {
-                    VOID,
-                    BOOL,
-                    CHAR,
-                    INT
-                };
-
-                /**
-                 * \brief The atom-type kind.
-                 * */
-                const Kind atomKind;
-
-                /**
                  * \brief Tells if a value can be assigned to a variable of this type.
-                 * \return True if is not of kind VOID.
+                 * \return True, always.
                  * */
                 virtual bool can_be_assigned() const override;
 
                 /**
                  * \brief Tells if a variable of this type can be passed as argument.
-                 * \return True if is not of kind VOID.
+                 * \return True, always.
                  * */
                 virtual bool can_be_passed() const override;
 
@@ -61,7 +39,7 @@ namespace prevc
                 /**
                  * \brief Default implementation;
                  * */
-                virtual ~AtomType() = default;
+                virtual ~PointerType() = default;
 
                 /**
                  * \brief Returns a string representation of this type.
@@ -71,10 +49,15 @@ namespace prevc
 
             private:
                 /**
-                 * \brief Create a new atom-type.
-                 * \param kind The kind of the atom-type
+                 * \brief Type at which the pointer type is pointing at.
                  * */
-                AtomType(Kind kind);
+                const Type* sub;
+
+                /**
+                 * \brief Create a new pointer-type.
+                 * \param sub Type at which the pointer type is pointing at.
+                 * */
+                PointerType(const Type* sub);
             };
         }
     }

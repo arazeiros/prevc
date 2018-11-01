@@ -33,14 +33,14 @@ namespace prevc
                 };
 
                 /**
+                 * \brief The id of the type (AKA semantic representation).
+                 * */
+                const util::String id;
+
+                /**
                  * \brief The type kind.
                  * */
                 const Kind kind;
-
-                /**
-                 * \brief The size of the type (in bytes).
-                 * */
-                const size_t size;
 
                 /**
                  * \brief Tells if a value can be assigned to a variable of this type.
@@ -65,14 +65,19 @@ namespace prevc
                  * */
                 virtual ~Type() = default;
 
+                /**
+                 * \brief Returns a string representation of a type.
+                 * \return The representation.
+                 * */
+                virtual util::String to_string() const noexcept = 0;
+
             protected:
                 /**
                  * \brief Create a new type.
                  * \param id The id of the type.
                  * \param kind The kind of the type.
-                 * \param size The size of the type (in bytes).
                  * */
-                Type(Kind kind, size_t size);
+                Type(util::String&& id, Kind kind);
             };
         }
     }

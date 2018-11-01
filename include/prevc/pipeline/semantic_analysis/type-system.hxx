@@ -2,6 +2,7 @@
 #ifndef PREVC_PIPELINE_SEMANTIC_ANALYSIS_TYPESYSTEM_HXX
 #define PREVC_PIPELINE_SEMANTIC_ANALYSIS_TYPESYSTEM_HXX
 
+#include <functional>
 #include <map>
 #include <prevc/util/string.hxx>
 
@@ -30,30 +31,30 @@ namespace prevc
                 virtual ~TypeSystem();
 
                 /**
-                 * \brief Provides reference to the type described by the specified type representation.
-                 * \param type The specified type representation.
+                 * \brief Provides reference to the type described by the specified semantic type representation.
+                 * \param id The semantic type representation.
+                 * \param provider Should provide the type in case that the type does not already exist (the type
+                 *     created in this manner will be cached). Should return NULL if can not be generated.
                  * \return The reference to the type. Returns NULL if the type can not be generated.
                  * */
-                const Type* get(util::String&& type);
-
-                /**
-                 * \brief Provides reference to the type described by the specified type representation.
-                 * \param type The specified type representation.
-                 * \return The reference to the type. Returns NULL if the type can not be generated.
-                 * */
-                const Type* get(const util::String& type);
+                const Type* get_or_insert(const util::String& id, std::function<const Type*()>&& provider);
 
             private:
                 /**
-                 * \brief Map that caches all seen types.
+                 * \brief The structure for ordering string pointers.
                  * */
-                std::map<util::String, const Type*> types;
+                struct Less
+                {
+                    bool operator()(const util::String* left, const util::String* right) const noexcept
+                    {
+                        return *left < *right;
+                    }
+                };
 
                 /**
-                 * \brief Generate the type out of the id.
-                 * \return The generated type or NULL if id does not represent a valid type.
+                 * \brief Map that caches all seen types.
                  * */
-                static const Type* generate(const util::String& id);
+                std::map<const util::String*, const Type*, Less> types;
             };
         }
     }
