@@ -10,6 +10,7 @@ namespace prevc
 
         namespace AST
         {
+            class ArrayType;
             class Atom;
             class BinaryOperation;
             class Compound;
@@ -18,6 +19,9 @@ namespace prevc
             class NamedType;
             class New;
             class Parenthesis;
+            class PointerType;
+            class PrimitiveType;
+            class RecordType;
             class UnaryOperation;
             class VariableName;
         }
@@ -68,6 +72,7 @@ namespace prevc
          * */
         class Pipeline
         {
+            friend AST::ArrayType;
             friend AST::Atom;
             friend AST::BinaryOperation;
             friend AST::Compound;
@@ -76,10 +81,14 @@ namespace prevc
             friend AST::NamedType;
             friend AST::New;
             friend AST::Parenthesis;
+            friend AST::PointerType;
+            friend AST::PrimitiveType;
+            friend AST::RecordType;
             friend AST::UnaryOperation;
             friend AST::VariableName;
             friend derivation_analysis::DerivationAnalysis;
             friend lexical_analysis::LexicalAnalysis;
+            friend semantic_analysis::Namespace;
             friend semantic_analysis::SemanticAnalysis;
             friend syntax_analysis::SyntaxAnalysis;
             friend syntax_analysis::SyntaxTreeBuilder;

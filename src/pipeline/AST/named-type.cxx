@@ -39,6 +39,22 @@ namespace prevc
                         location.to_string().c_str(),
                         name.c_str());
             }
+
+            util::String NamedType::to_semantic_string() const noexcept
+            {
+                return name;
+            }
+
+            const semantic_analysis::Type* NamedType::generate_semantic_type() const noexcept
+            {
+                return pipeline->type_system->get_or_insert(name, [this] ()
+                    {
+                        CompileTimeError::raise(this->pipeline->file_name, this->location, util::String::format(
+                                "type `%s` does not exists", this->name.c_str()));
+
+                        return nullptr;
+                    });
+            }
         }
     }
 }

@@ -16,9 +16,13 @@ namespace prevc
              * */
             class RecordType: public Type
             {
-                friend TypeSystem;
-
             public:
+                /**
+                 * \brief Create a new record-type.
+                 * \param subs Types of the components contained in the record.
+                 * */
+                RecordType(std::vector<const Type*>&& subs);
+
                 /**
                  * \brief Default implementation;
                  * */
@@ -35,12 +39,6 @@ namespace prevc
                  * \brief Types of the components contained in the record.
                  * */
                 const std::vector<const Type*> subs;
-
-                /**
-                 * \brief Create a new record-type.
-                 * \param subs Types of the components contained in the record.
-                 * */
-                RecordType(std::vector<const Type*>&& subs);
             };
         }
     }

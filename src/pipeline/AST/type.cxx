@@ -8,9 +8,19 @@ namespace prevc
         namespace AST
         {
             Type::Type(Pipeline* pipeline, util::Location&& location):
-                Node(pipeline, std::move(location))
+                Node(pipeline, std::move(location)),
+                semantic_type(nullptr)
             {
 
+            }
+
+            const semantic_analysis::Type* Type::get_semantic_type() noexcept
+            {
+                if (semantic_type != nullptr)
+                    return semantic_type;
+
+                semantic_type = generate_semantic_type();
+                return semantic_type;
             }
         }
     }

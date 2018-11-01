@@ -15,9 +15,13 @@ namespace prevc
              * */
             class PointerType: public Type
             {
-                friend TypeSystem;
-
             public:
+                /**
+                 * \brief Create a new pointer-type.
+                 * \param sub Type at which the pointer type is pointing at.
+                 * */
+                PointerType(const Type* sub);
+
                 /**
                  * \brief Tells if a value can be assigned to a variable of this type.
                  * \return True, always.
@@ -52,12 +56,6 @@ namespace prevc
                  * \brief Type at which the pointer type is pointing at.
                  * */
                 const Type* sub;
-
-                /**
-                 * \brief Create a new pointer-type.
-                 * \param sub Type at which the pointer type is pointing at.
-                 * */
-                PointerType(const Type* sub);
             };
         }
     }

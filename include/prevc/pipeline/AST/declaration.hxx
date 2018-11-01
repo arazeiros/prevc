@@ -17,6 +17,8 @@ namespace prevc
              * */
             class Declaration: public Node
             {
+                friend RecordType;
+
             public:
                 /**
                  * \brief Enumeration of declaration kinds.

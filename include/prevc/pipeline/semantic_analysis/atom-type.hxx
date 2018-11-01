@@ -59,6 +59,12 @@ namespace prevc
                 virtual bool can_be_returned() const override;
 
                 /**
+                 * \brief Create a new atom-type.
+                 * \param kind The kind of the atom-type
+                 * */
+                AtomType(Kind kind);
+
+                /**
                  * \brief Default implementation;
                  * */
                 virtual ~AtomType() = default;
@@ -68,13 +74,6 @@ namespace prevc
                  * \return The representation.
                  * */
                 virtual util::String to_string() const noexcept override;
-
-            private:
-                /**
-                 * \brief Create a new atom-type.
-                 * \param kind The kind of the atom-type
-                 * */
-                AtomType(Kind kind);
             };
         }
     }

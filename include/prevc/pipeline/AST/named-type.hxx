@@ -43,6 +43,19 @@ namespace prevc
                  * */
                 virtual util::String to_string() const noexcept override;
 
+                /**
+                 * \brief Returns a string semantic representation of this type.
+                 * \return The semantic representation.
+                 * */
+                virtual util::String to_semantic_string() const noexcept override;
+
+            protected:
+                /**
+                 * \brief Generate and returns the semantic type representing this type.
+                 * \return The semantic type representing this type.
+                 * */
+                virtual const semantic_analysis::Type* generate_semantic_type() const noexcept override;
+
             private:
                 /**
                  * \brief The name of the type.

@@ -1,4 +1,5 @@
 #include <prevc/pipeline/AST/record-type.hxx>
+#include <prevc/pipeline/semantic_analysis/record-type.hxx>
 #include <utility>
 
 namespace prevc
@@ -25,6 +26,10 @@ namespace prevc
 
             void RecordType::check_semantics()
             {
+                if (components->empty())
+                    CompileTimeError::raise(pipeline->file_name, location,
+                            "record must have at least one component");
+
                 local_namespace = new semantic_analysis::Namespace;
 
                 for (auto& component : *components)
@@ -49,6 +54,33 @@ namespace prevc
                         R"({"type": "record-type", "location": %s, "components": %s})",
                         location.to_string().c_str(),
                         components->to_string().c_str());
+            }
+
+            util::String RecordType::to_semantic_string() const noexcept
+            {
+                auto i = this->components->begin();
+                std::stringstream stream;
+                stream << "rec (";
+                stream << (*i)->type->to_semantic_string().c_str();
+
+                while (++i != this->components->end())
+                    stream << ", " << (*i)->type->to_semantic_string().c_str();
+
+                stream << ")";
+                return util::String(stream.str());
+            }
+
+            const semantic_analysis::Type* RecordType::generate_semantic_type() const noexcept
+            {
+                return pipeline->type_system->get_or_insert(to_semantic_string(), [this] ()
+                    {
+                        std::vector<const semantic_analysis::Type*> subs;
+
+                        for (auto component : *this->components)
+                            subs.push_back(component->type->get_semantic_type());
+
+                        return new semantic_analysis::RecordType(std::move(subs));
+                    });
             }
         }
     }

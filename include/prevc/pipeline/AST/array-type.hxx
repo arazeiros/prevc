@@ -43,6 +43,19 @@ namespace prevc
                  * */
                 virtual util::String to_string() const noexcept override;
 
+                /**
+                 * \brief Returns a string semantic representation of this type.
+                 * \return The semantic representation.
+                 * */
+                virtual util::String to_semantic_string() const noexcept override;
+
+            protected:
+                /**
+                 * \brief Generate and returns the semantic type representing this type.
+                 * \return The semantic type representing this type.
+                 * */
+                virtual const semantic_analysis::Type* generate_semantic_type() const noexcept override;
+
             private:
                 /**
                  * \brief The expression that represents the size of the array.
@@ -53,6 +66,14 @@ namespace prevc
                  * \brief The type of the array.
                  * */
                 Type* type;
+
+                /**
+                 * \brief The length of the array.
+                 *
+                 * Is computed evaluating `size_expression`.
+                 * Is computed during semantic-analysis.
+                 * */
+                size_t semantic_length;
             };
         }
     }

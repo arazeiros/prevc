@@ -15,13 +15,18 @@ namespace prevc
              * */
             class ArrayType: public Type
             {
-                friend TypeSystem;
-
             public:
                 /**
                  * \brief The length of the array.
                  * */
                 const size_t length;
+
+                /**
+                 * \brief Create a new array-type.
+                 * \param sub Type of the components contained in the array.
+                 * \param length The length of the array.
+                 * */
+                ArrayType(const Type* sub, size_t length);
 
                 /**
                  * \brief Default implementation;
@@ -39,13 +44,6 @@ namespace prevc
                  * \brief Type of the components contained in the array.
                  * */
                 const Type* sub;
-
-                /**
-                 * \brief Create a new array-type.
-                 * \param sub Type of the components contained in the array.
-                 * \param length The length of the array.
-                 * */
-                ArrayType(const Type* sub, size_t length);
             };
         }
     }
