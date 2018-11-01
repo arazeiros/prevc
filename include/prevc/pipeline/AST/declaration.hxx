@@ -17,6 +17,7 @@ namespace prevc
              * */
             class Declaration: public Node
             {
+                friend NamedType;
                 friend RecordType;
 
             public:

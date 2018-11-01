@@ -1,5 +1,6 @@
 #include <prevc/pipeline/AST/named-type.hxx>
 #include <utility>
+#include <sstream>
 
 namespace prevc
 {
@@ -42,18 +43,17 @@ namespace prevc
 
             util::String NamedType::to_semantic_string() const noexcept
             {
-                return name;
+                std::stringstream stream;
+                stream << name.c_str();
+                stream << " <";
+                stream << declaration->type->get_semantic_type()->id.c_str();
+                stream << ">";
+                return stream.str();
             }
 
             const semantic_analysis::Type* NamedType::generate_semantic_type() const noexcept
             {
-                return pipeline->type_system->get_or_insert(name, [this] ()
-                    {
-                        CompileTimeError::raise(this->pipeline->file_name, this->location, util::String::format(
-                                "type `%s` does not exists", this->name.c_str()));
-
-                        return nullptr;
-                    });
+                return declaration->type->get_semantic_type();
             }
         }
     }
