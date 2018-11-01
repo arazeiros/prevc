@@ -39,6 +39,13 @@ namespace prevc
                 virtual ~ArrayType() = default;
 
                 /**
+                 * \brief Tells if this type and the one specified as the parameter equals.
+                 * \param other The other type.
+                 * \return True if they equals, false otherwise.
+                 * */
+                virtual bool equals(const Type& other) const noexcept override;
+
+                /**
                  * \brief Returns a string representation of this type.
                  * \return The representation.
                  * */

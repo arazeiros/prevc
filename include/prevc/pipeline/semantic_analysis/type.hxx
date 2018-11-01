@@ -43,6 +43,52 @@ namespace prevc
                 const Kind kind;
 
                 /**
+                 * \brief Tells if the type is a pointer-type.
+                 * \return True if it is, false otherwise.
+                 * */
+                bool is_pointer() const noexcept;
+
+                /**
+                 * \brief Tells if the type is an array-type.
+                 * \return True if it is, false otherwise.
+                 * */
+                bool is_array() const noexcept;
+
+                /**
+                 * \brief Tells if the type is a record-type.
+                 * \return True if it is, false otherwise.
+                 * */
+                bool is_record() const noexcept;
+
+                /**
+                 * \brief Tells if the type is an int-type.
+                 * \return True if it is, false otherwise.
+                 * */
+                bool is_int() const noexcept;
+
+                /**
+                 * \brief Tells if the type is a void-type.
+                 * \return True if it is, false otherwise.
+                 * */
+                bool is_void() const noexcept;
+
+                /**
+                 * \brief Tells if the type is a bool-type.
+                 * \return True if it is, false otherwise.
+                 * */
+                bool is_bool() const noexcept;
+
+                /**
+                 * \brief Tells if this type and the one specified as the parameter equals.
+                 * \param other The other type.
+                 * \return True if they equals, false otherwise.
+                 *
+                 * Note that two records equals even if they have different components names, but the same types
+                 * in the same order.
+                 * */
+                virtual bool equals(const Type& other) const noexcept = 0;
+
+                /**
                  * \brief Tells if a value can be assigned to a variable of this type.
                  * \return True if can be assigned, false otherwise.
                  * */

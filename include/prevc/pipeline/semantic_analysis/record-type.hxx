@@ -35,6 +35,16 @@ namespace prevc
                 virtual ~RecordType() = default;
 
                 /**
+                 * \brief Tells if this type and the one specified as the parameter equals.
+                 * \param other The other type.
+                 * \return True if they equals, false otherwise.
+                 *
+                 * Note that two records equals even if they have different components names, but the same types
+                 * in the same order.
+                 * */
+                virtual bool equals(const Type& other) const noexcept override;
+
+                /**
                  * \brief Returns the type of the specified component (if present).
                  * \param component_name The name of the component.
                  * \return The type of the component, or nothing if component is not present in this record.

@@ -36,6 +36,24 @@ namespace prevc
                 return {};
             }
 
+            bool RecordType::equals(const Type& other) const noexcept
+            {
+                if (!other.is_record())
+                    return false;
+
+                auto other_type = (const RecordType*) &other;
+                auto size = this->subs.size();
+
+                if (size != other_type->subs.size())
+                    return false;
+
+                for (size_t i = 0; i < size; ++i)
+                    if (!this->subs.at(i).second->equals(*other_type->subs.at(i).second))
+                        return false;
+
+                return true;
+            }
+
             util::String RecordType::to_string() const noexcept
             {
                 return id;

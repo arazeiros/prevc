@@ -19,6 +19,14 @@ namespace prevc
 
             }
 
+            bool PointerType::equals(const Type& other) const noexcept
+            {
+                if (!other.is_pointer())
+                    return false;
+
+                return this->sub->equals(*((const PointerType*) &other)->sub);
+            }
+
             bool PointerType::can_be_assigned() const
             {
                 return true;

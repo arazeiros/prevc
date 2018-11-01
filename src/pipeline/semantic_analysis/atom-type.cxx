@@ -24,6 +24,14 @@ namespace prevc
 
             }
 
+            bool AtomType::equals(const Type& other) const noexcept
+            {
+                if (other.kind != Type::Kind::ATOM)
+                    return false;
+
+                return this->atomKind == ((const AtomType*) &other)->atomKind;
+            }
+
             bool AtomType::can_be_assigned() const
             {
                 return atomKind != AtomType::Kind::VOID;
