@@ -1,5 +1,6 @@
 #include <prevc/pipeline/AST/binary-operation.hxx>
 #include <utility>
+#include <prevc/pipeline/semantic_analysis/atom-type.hxx>
 
 namespace prevc
 {
@@ -81,9 +82,6 @@ namespace prevc
                     case Operator::MODULE:
                         return builder->CreateSRem(left, right);
                 }
-
-                InternalError::raise("illegal state: case not handled");
-                return nullptr;
             }
 
             std::optional<int64_t> BinaryOperation::evaluate_as_integer() const noexcept
@@ -126,6 +124,33 @@ namespace prevc
 
                     default:
                         return {};
+                }
+            }
+
+            const semantic_analysis::Type* BinaryOperation::get_semantic_type()
+            {
+                using SAtom = semantic_analysis::AtomType;
+
+                switch (operator_)
+                {
+                    case Operator::EQU:
+                    case Operator::NEQ:
+                    case Operator::LTH:
+                    case Operator::LEQ:
+                    case Operator::GTH:
+                    case Operator::GEQ:
+                        return pipeline->type_system->get_or_insert("bool", [] () { return new SAtom(SAtom::Kind::BOOL); });
+
+                    case Operator::OR:
+                    case Operator::XOR:
+                    case Operator::AND:
+                    case Operator::ADD:
+                    case Operator::SUBTRACT:
+                    case Operator::MULTIPLY:
+                    case Operator::DIVIDE:
+                    case Operator::MODULE:
+                        // This is true only if both operators must be of the same type as language rule.
+                        return left_expression->get_semantic_type();
                 }
             }
 

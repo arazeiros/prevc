@@ -42,9 +42,9 @@ namespace prevc
                                     declaration->name.c_str(), location.line_0, location.column_0));
                 }
 
+                declarations->check_semantics();
                 statements->check_semantics();
                 expression->check_semantics();
-                declarations->check_semantics();
 
                 global_namespace->pop_scope();
             }
@@ -60,6 +60,11 @@ namespace prevc
             std::optional<int64_t> Compound::evaluate_as_integer() const noexcept
             {
                 return {};
+            }
+
+            const semantic_analysis::Type* Compound::get_semantic_type()
+            {
+                return expression->get_semantic_type();
             }
 
             util::String Compound::to_string() const noexcept

@@ -40,6 +40,11 @@ namespace prevc
                 return sub->evaluate_as_integer();
             }
 
+            const semantic_analysis::Type* Cast::get_semantic_type()
+            {
+                return type->get_semantic_type();
+            }
+
             util::String Cast::to_string() const noexcept
             {
                 return util::String::format(

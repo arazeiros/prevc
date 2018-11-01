@@ -1,4 +1,5 @@
 #include <prevc/pipeline/AST/new.hxx>
+#include <prevc/pipeline/semantic_analysis/pointer-type.hxx>
 #include <utility>
 #include <llvm/IR/Constant.h>
 
@@ -38,6 +39,17 @@ namespace prevc
             std::optional<int64_t> New::evaluate_as_integer() const noexcept
             {
                 return {};
+            }
+
+            const semantic_analysis::Type* New::get_semantic_type()
+            {
+                static const util::String s_ptr = "ptr ";
+                auto semantic_type = type->get_semantic_type();
+
+                return pipeline->type_system->get_or_insert(s_ptr + semantic_type->id, [semantic_type] ()
+                    {
+                        return new semantic_analysis::PointerType(semantic_type);
+                    });
             }
 
             util::String New::to_string() const noexcept

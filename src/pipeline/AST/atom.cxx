@@ -1,6 +1,8 @@
 #include <prevc/pipeline/AST/atom.hxx>
-#include <utility>
+#include <prevc/pipeline/semantic_analysis/atom-type.hxx>
+#include <prevc/pipeline/semantic_analysis/pointer-type.hxx>
 #include <prevc/error.hxx>
+#include <utility>
 
 namespace prevc
 {
@@ -91,6 +93,31 @@ namespace prevc
 
                     default:
                         return {};
+                }
+            }
+
+            const semantic_analysis::Type* Atom::get_semantic_type()
+            {
+                using SAtom = semantic_analysis::AtomType;
+                using SPointer = semantic_analysis::PointerType;
+
+                switch (type)
+                {
+                    case Atom::Type::VOID:
+                        return pipeline->type_system->get_or_insert("void", [] () { return new SAtom(SAtom::Kind::VOID); });
+
+                    case Atom::Type::BOOLEAN:
+                        return pipeline->type_system->get_or_insert("bool", [] () { return new SAtom(SAtom::Kind::BOOL); });
+
+                    case Atom::Type::CHARACTER:
+                        return pipeline->type_system->get_or_insert("char", [] () { return new SAtom(SAtom::Kind::CHAR); });
+
+                    case Atom::Type::INTEGER:
+                        return pipeline->type_system->get_or_insert("int", [] () { return new SAtom(SAtom::Kind::INT); });
+
+                    case Atom::Type::POINTER:
+                        return pipeline->type_system->get_or_insert("ptr void",
+                                [] () { return new SPointer(new SAtom(SAtom::Kind::VOID)); });
                 }
             }
 

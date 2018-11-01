@@ -17,6 +17,11 @@ namespace prevc
             {
             public:
                 /**
+                 * \brief Type at which the pointer type is pointing at.
+                 * */
+                const Type* const sub;
+
+                /**
                  * \brief Create a new pointer-type.
                  * \param sub Type at which the pointer type is pointing at.
                  * */
@@ -50,12 +55,6 @@ namespace prevc
                  * \return The representation.
                  * */
                 virtual util::String to_string() const noexcept override;
-
-            private:
-                /**
-                 * \brief Type at which the pointer type is pointing at.
-                 * */
-                const Type* sub;
             };
         }
     }

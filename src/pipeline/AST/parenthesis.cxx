@@ -21,7 +21,6 @@ namespace prevc
 
             void Parenthesis::check_semantics()
             {
-                // TODO ...
                 sub_expression->check_semantics();
             }
 
@@ -33,6 +32,11 @@ namespace prevc
             std::optional<int64_t> Parenthesis::evaluate_as_integer() const noexcept
             {
                 return sub_expression->evaluate_as_integer();
+            }
+
+            const semantic_analysis::Type* Parenthesis::get_semantic_type()
+            {
+                return sub_expression->get_semantic_type();
             }
 
             util::String Parenthesis::to_string() const noexcept

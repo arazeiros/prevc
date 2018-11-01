@@ -1,6 +1,7 @@
 #include <prevc/pipeline/AST/array-access.hxx>
 #include <utility>
 #include <prevc/error.hxx>
+#include <prevc/pipeline/semantic_analysis/array-type.hxx>
 
 namespace prevc
 {
@@ -46,6 +47,11 @@ namespace prevc
             bool ArrayAccess::is_lvalue() const noexcept
             {
                 return array->is_lvalue();
+            }
+
+            const semantic_analysis::Type* ArrayAccess::get_semantic_type()
+            {
+                return ((const semantic_analysis::ArrayType*) array->get_semantic_type())->sub;
             }
 
             util::String ArrayAccess::to_string() const noexcept

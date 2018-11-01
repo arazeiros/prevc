@@ -61,10 +61,10 @@ namespace prevc
                 auto i = this->components->begin();
                 std::stringstream stream;
                 stream << "rec (";
-                stream << (*i)->type->to_semantic_string().c_str();
+                stream << (*i)->name.c_str() << ": " << (*i)->type->to_string().c_str();
 
                 while (++i != this->components->end())
-                    stream << ", " << (*i)->type->to_semantic_string().c_str();
+                    stream << ", " << (*i)->name.c_str() << ": " << (*i)->type->to_string().c_str();
 
                 stream << ")";
                 return util::String(stream.str());
@@ -74,10 +74,10 @@ namespace prevc
             {
                 return pipeline->type_system->get_or_insert(to_semantic_string(), [this] ()
                     {
-                        std::vector<const semantic_analysis::Type*> subs;
+                        std::vector<std::pair<util::String, const semantic_analysis::Type*>> subs;
 
                         for (auto component : *this->components)
-                            subs.push_back(component->type->get_semantic_type());
+                            subs.emplace_back(std::make_pair(component->name, component->type->get_semantic_type()));
 
                         return new semantic_analysis::RecordType(std::move(subs));
                     });

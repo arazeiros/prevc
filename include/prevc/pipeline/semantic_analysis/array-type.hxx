@@ -22,6 +22,11 @@ namespace prevc
                 const size_t length;
 
                 /**
+                 * \brief Type of the components contained in the array.
+                 * */
+                const Type* const sub;
+
+                /**
                  * \brief Create a new array-type.
                  * \param sub Type of the components contained in the array.
                  * \param length The length of the array.
@@ -38,12 +43,6 @@ namespace prevc
                  * \return The representation.
                  * */
                 virtual util::String to_string() const noexcept override;
-
-            private:
-                /**
-                 * \brief Type of the components contained in the array.
-                 * */
-                const Type* sub;
             };
         }
     }

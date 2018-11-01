@@ -61,6 +61,11 @@ namespace prevc
                 return {};
             }
 
+            const semantic_analysis::Type* FunctionCall::get_semantic_type()
+            {
+                return declaration->type->get_semantic_type();
+            }
+
             util::String FunctionCall::to_string() const noexcept
             {
                 return util::String::format(

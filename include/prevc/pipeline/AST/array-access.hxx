@@ -52,6 +52,14 @@ namespace prevc
                 virtual bool is_lvalue() const noexcept;
 
                 /**
+                 * \brief Returns the semantic type of this expression.
+                 * \return The semantic type of this expression.
+                 *
+                 * Before this method can be called, the call to `check_semantics()` have to be done.
+                 * */
+                virtual const semantic_analysis::Type* get_semantic_type() override;
+
+                /**
                  * \brief Returns a string representation of this expression.
                  * \return The representation in JSON format.
                  * */

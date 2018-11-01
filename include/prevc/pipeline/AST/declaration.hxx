@@ -12,13 +12,22 @@ namespace prevc
     {
         namespace AST
         {
+            class ComponentAccess;
+            class FunctionCall;
+            class NamedType;
+            class RecordType;
+            class VariableName;
+
             /**
              * \brief Represent a declaration in the AST.
              * */
             class Declaration: public Node
             {
+                friend ComponentAccess;
+                friend FunctionCall;
                 friend NamedType;
                 friend RecordType;
+                friend VariableName;
 
             public:
                 /**

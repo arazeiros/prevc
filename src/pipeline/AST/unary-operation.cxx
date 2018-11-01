@@ -1,4 +1,6 @@
 #include <prevc/pipeline/AST/unary-operation.hxx>
+#include <prevc/pipeline/semantic_analysis/atom-type.hxx>
+#include <prevc/pipeline/semantic_analysis/pointer-type.hxx>
 #include <utility>
 
 namespace prevc
@@ -86,6 +88,33 @@ namespace prevc
             bool UnaryOperation::is_lvalue() const noexcept
             {
                 return (operator_ == Operator::VAL) && sub_expression->is_lvalue();
+            }
+
+            const semantic_analysis::Type* UnaryOperation::get_semantic_type()
+            {
+                using SAtom = semantic_analysis::AtomType;
+                using SPointer = semantic_analysis::PointerType;
+
+                switch (operator_)
+                {
+                    case Operator::PLUS:
+                    case Operator::MINUS:
+                    case Operator::NOT:
+                        return sub_expression->get_semantic_type();
+
+                    case Operator::DEL:
+                        return pipeline->type_system->get_or_insert("void", [] () { return new SAtom(SAtom::Kind::VOID); });
+
+                    case Operator::MEM:
+                    {
+                        auto sub_type = sub_expression->get_semantic_type();
+                        return pipeline->type_system->get_or_insert(util::String("ptr ") + sub_type->id,
+                                [sub_type] () { return new SPointer(sub_type); });
+                    }
+
+                    case Operator::VAL:
+                        return ((SPointer*) sub_expression->get_semantic_type())->sub;
+                }
             }
 
             util::String UnaryOperation::to_string() const noexcept

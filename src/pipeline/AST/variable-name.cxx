@@ -50,10 +50,14 @@ namespace prevc
 
             bool VariableName::is_lvalue() const noexcept
             {
-                // TODO should here be `true` always returned?
+                // Should here be `true` always returned?
                 // Can a variable name reference a component declaration? I think no.
-
                 return !declaration->is_component_declaration();
+            }
+
+            const semantic_analysis::Type* VariableName::get_semantic_type()
+            {
+                return this->declaration->type->get_semantic_type();
             }
 
             util::String VariableName::to_string() const noexcept

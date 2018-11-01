@@ -1,6 +1,7 @@
 #include <prevc/pipeline/AST/component-access.hxx>
-#include <utility>
+#include <prevc/pipeline/semantic_analysis/record-type.hxx>
 #include <prevc/error.hxx>
+#include <utility>
 
 namespace prevc
 {
@@ -12,7 +13,8 @@ namespace prevc
                     Expression* record, const util::String& component):
                 Expression(pipeline, std::move(location)),
                 record(record),
-                component(component)
+                component(component),
+                accessed_component_type(nullptr)
             {
 
             }
@@ -26,7 +28,20 @@ namespace prevc
             {
                 record->check_semantics();
 
-                // TODO check if the component is present in the record
+                auto record_type = record->get_semantic_type();
+
+                if (record_type->kind != semantic_analysis::Type::Kind::RECORD)
+                    CompileTimeError::raise(pipeline->file_name, location,
+                            "trying to perform a component access, but the given expression is not a record");
+
+                auto component_type_optional = ((semantic_analysis::RecordType*) record_type)->get_type_of(component);
+
+                if (!component_type_optional.has_value())
+                    CompileTimeError::raise(pipeline->file_name, location, util::String::format(
+                            "trying to perform a component access, but the given component name `%s` is not "
+                            "present in the record type `%s`", component.c_str(), record_type->to_string().c_str()));
+
+                accessed_component_type = component_type_optional.value();
             }
 
             llvm::Value* ComponentAccess::generate_IR(llvm::IRBuilder<>* builder)
@@ -44,6 +59,11 @@ namespace prevc
             bool ComponentAccess::is_lvalue() const noexcept
             {
                 return record->is_lvalue();
+            }
+
+            const semantic_analysis::Type* ComponentAccess::get_semantic_type()
+            {
+                return accessed_component_type;
             }
 
             util::String ComponentAccess::to_string() const noexcept

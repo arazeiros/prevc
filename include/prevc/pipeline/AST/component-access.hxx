@@ -3,6 +3,7 @@
 #define PREVC_PIPELINE_AST_COMPONENTACCESS_HXX
 
 #include <prevc/pipeline/AST/expression.hxx>
+#include <prevc/pipeline/AST/component.hxx>
 
 namespace prevc
 {
@@ -52,6 +53,14 @@ namespace prevc
                 virtual bool is_lvalue() const noexcept;
 
                 /**
+                 * \brief Returns the semantic type of this expression.
+                 * \return The semantic type of this expression.
+                 *
+                 * Before this method can be called, the call to `check_semantics()` have to be done.
+                 * */
+                virtual const semantic_analysis::Type* get_semantic_type() override;
+
+                /**
                  * \brief Returns a string representation of this expression.
                  * \return The representation in JSON format.
                  * */
@@ -67,6 +76,13 @@ namespace prevc
                  * \brief The name of the component to access.
                  * */
                 const util::String component;
+
+                /**
+                 * \brief The type of the component accessed by this expression.
+                 *
+                 * Calculated during semantic-analysis, by `check_semantics()`
+                 * */
+                const semantic_analysis::Type* accessed_component_type;
             };
         }
     }
