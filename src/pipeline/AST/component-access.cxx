@@ -30,7 +30,7 @@ namespace prevc
 
                 auto record_type = record->get_semantic_type();
 
-                if (record_type->kind != semantic_analysis::Type::Kind::RECORD)
+                if (!record_type->is_record())
                     CompileTimeError::raise(pipeline->file_name, location,
                             "trying to perform a component access, but the given expression is not a record");
 

@@ -1,4 +1,5 @@
 #include <prevc/pipeline/AST/assignment.hxx>
+#include <prevc/pipeline/semantic_analysis/type.hxx>
 #include <utility>
 
 namespace prevc
@@ -26,12 +27,19 @@ namespace prevc
                 destination->check_semantics();
                 source->check_semantics();
 
-                if (!destination->is_lvalue())
-                    CompileTimeError::raise(pipeline->file_name, location,
-                            "destination expression of the assignment is not assignable (not a lvalue)");
+                auto destination_type = destination->get_semantic_type();
 
-                // TODO check that destination is LValue
-                // TODO that types of destination and source are compatible
+                if (!destination_type->can_be_assigned() || !destination->is_lvalue())
+                    CompileTimeError::raise(pipeline->file_name, location,
+                            "destination expression of the assignment is not assignable");
+
+                auto source_type = source->get_semantic_type();
+
+                if (!destination_type->equals(*source_type))
+                    CompileTimeError::raise(pipeline->file_name, location, util::String::format(
+                            "destination and source expressions of an assignment must have the same type, "
+                            "but destination is of type `%s` and source of type `%s`",
+                            destination_type->to_string().c_str(), source_type->to_string().c_str()));
             }
 
             void Assignment::generate_IR(llvm::IRBuilder<>* builder)

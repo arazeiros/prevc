@@ -28,8 +28,16 @@ namespace prevc
                 array->check_semantics();
                 index->check_semantics();
 
-                // TODO check that array is of type array
-                // TODO check that index is of type int
+                if (!array->get_semantic_type()->is_array())
+                    CompileTimeError::raise(pipeline->file_name, location,
+                            "trying to perform an array access, but the given expression is not an array");
+
+                auto index_type = index->get_semantic_type();
+
+                if (!index_type->is_int())
+                    CompileTimeError::raise(pipeline->file_name, location, util::String::format(
+                            "trying to perform an array access, the index expression must be of type `int`, "
+                            "but is of type `%s`", index_type->to_string().c_str()));
             }
 
             llvm::Value* ArrayAccess::generate_IR(llvm::IRBuilder<>* builder)
