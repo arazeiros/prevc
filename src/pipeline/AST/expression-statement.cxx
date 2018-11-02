@@ -1,4 +1,5 @@
 #include <prevc/pipeline/AST/expression-statement.hxx>
+#include <prevc/pipeline/semantic_analysis/type.hxx>
 #include <utility>
 
 namespace prevc
@@ -22,6 +23,13 @@ namespace prevc
             void ExpressionStatement::check_semantics()
             {
                 expression->check_semantics();
+
+                auto expression_type = expression->get_semantic_type();
+
+                if (!expression_type->is_void())
+                    CompileTimeError::raise(pipeline->file_name, location, util::String::format(
+                            "statements must be of type `void`, but given is of type `%s`",
+                            expression_type->to_string().c_str()));
             }
 
             void ExpressionStatement::generate_IR(llvm::IRBuilder<>* builder)

@@ -1,4 +1,5 @@
 #include <prevc/pipeline/AST/cast.hxx>
+#include <prevc/pipeline/semantic_analysis/pointer-type.hxx>
 #include <utility>
 #include <llvm/IR/Constant.h>
 
@@ -27,7 +28,35 @@ namespace prevc
                 type->check_semantics();
                 sub->check_semantics();
 
-                // TODO check that expression with his type can be casted to the specified type
+                auto cast_type = type->get_semantic_type();
+                auto expression_type = sub->get_semantic_type();
+
+                if (!cast_type->is_void())
+                {
+                    if (cast_type->is_int())
+                    {
+                        if (!expression_type->is_int() &&
+                            !expression_type->is_char() &&
+                            !expression_type->is_bool())
+                            CompileTimeError::raise(pipeline->file_name, location, util::String::format(
+                                    "casting to type `int` is allowed only to expressions of type `int`, `char` or `bool`, "
+                                    "but given expression is of type `%s`", expression_type->to_string().c_str()));
+                    }
+                    else if (cast_type->is_pointer())
+                    {
+                        if (!expression_type->is_pointer() ||
+                            !((const semantic_analysis::PointerType*) expression_type)->sub->is_void())
+                            CompileTimeError::raise(pipeline->file_name, location, util::String::format(
+                                    "casting to type `%s` is allowed only to expressions of type `ptr void`",
+                                    cast_type->to_string().c_str()));
+                    }
+                    else
+                    {
+                        CompileTimeError::raise(pipeline->file_name, location, util::String::format(
+                                "casting to type `%s` is not allowed",
+                                cast_type->to_string().c_str()));
+                    }
+                }
             }
 
             llvm::Value* Cast::generate_IR(llvm::IRBuilder<> *builder)

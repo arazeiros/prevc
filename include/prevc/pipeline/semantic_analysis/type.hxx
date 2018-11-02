@@ -61,6 +61,12 @@ namespace prevc
                 bool is_record() const noexcept;
 
                 /**
+                 * \brief Tells if the type is an char-type.
+                 * \return True if it is, false otherwise.
+                 * */
+                bool is_char() const noexcept;
+
+                /**
                  * \brief Tells if the type is an int-type.
                  * \return True if it is, false otherwise.
                  * */

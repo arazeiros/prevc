@@ -30,6 +30,11 @@ namespace prevc
                 return kind == Kind::RECORD;
             }
 
+            bool Type::is_char() const noexcept
+            {
+                return kind == Kind::ATOM && ((const AtomType*) this)->atomKind == AtomType::Kind::CHAR;
+            }
+
             bool Type::is_int() const noexcept
             {
                 return kind == Kind::ATOM && ((const AtomType*) this)->atomKind == AtomType::Kind::INT;

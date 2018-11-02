@@ -29,8 +29,58 @@ namespace prevc
                 left_expression->check_semantics();
                 right_expression->check_semantics();
 
-                // TODO check that expressions are of the same type
-                // TODO check that operator can be used with those expressions types
+                auto left_type = left_expression->get_semantic_type();
+                auto right_type = right_expression->get_semantic_type();
+
+                if (!left_type->equals(*right_type))
+                    CompileTimeError::raise(pipeline->file_name, location, util::String::format(
+                            "left and right expressions of a binary operation must have the same type, "
+                            "but left is of type `%s` and right of type `%s`",
+                            left_type->to_string().c_str(), right_type->to_string().c_str()));
+
+                switch (operator_)
+                {
+                    case Operator::EQU:
+                    case Operator::NEQ:
+                    case Operator::LTH:
+                    case Operator::LEQ:
+                    case Operator::GTH:
+                    case Operator::GEQ:
+                    {
+                        if (!left_type->can_be_assigned())
+                            CompileTimeError::raise(pipeline->file_name, location, util::String::format(
+                                    "left and right expressions of a comparison binary operation must be of type `bool`, "
+                                    "`char`, `int` or `ptr`, but they are of type `%s`", left_type->to_string().c_str()));
+
+                        break;
+                    }
+
+                    case Operator::OR:
+                    case Operator::XOR:
+                    case Operator::AND:
+                    {
+                        if (!left_type->is_bool())
+                            CompileTimeError::raise(pipeline->file_name, location, util::String::format(
+                                    "left and right expressions of a logical binary operation must be of type `bool`, "
+                                    "but they are of type `%s`", left_type->to_string().c_str()));
+
+                        break;
+                    }
+
+                    case Operator::ADD:
+                    case Operator::SUBTRACT:
+                    case Operator::MULTIPLY:
+                    case Operator::DIVIDE:
+                    case Operator::MODULE:
+                    {
+                        if (!left_type->is_int())
+                            CompileTimeError::raise(pipeline->file_name, location, util::String::format(
+                                    "left and right expressions of an arithmetic binary operation must be of type `int`, "
+                                    "but they are of type `%s`", left_type->to_string().c_str()));
+
+                        break;
+                    }
+                }
             }
 
             llvm::Value* BinaryOperation::generate_IR(llvm::IRBuilder<>* builder)
