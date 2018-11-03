@@ -12,7 +12,8 @@ namespace prevc
                 Node(pipeline, std::move(location)),
                 kind(kind),
                 name(name),
-                type(type)
+                type(type),
+                semantic_type(nullptr)
             {
 
             }
@@ -20,6 +21,16 @@ namespace prevc
             Declaration::~Declaration()
             {
                 delete type;
+            }
+
+            void Declaration::check_semantics()
+            {
+                semantic_type = type->get_semantic_type();
+            }
+
+            const semantic_analysis::Type* Declaration::get_semantic_type()
+            {
+                return semantic_type;
             }
         }
     }

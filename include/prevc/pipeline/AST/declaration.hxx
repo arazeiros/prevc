@@ -65,11 +65,32 @@ namespace prevc
                  * */
                 virtual ~Declaration();
 
+                /**
+                 * \brief Checks the semantics of the node.
+                 * \param pipeline The pipeline of the node.
+                 * */
+                virtual void check_semantics() override;
+
+                /**
+                 * \brief Returns the semantic type of this expression.
+                 * \return The semantic type of this expression.
+                 *
+                 * Before this method can be called, the call to `check_semantics()` have to be done.
+                 * */
+                const semantic_analysis::Type* get_semantic_type();
+
             protected:
                 /**
                  * \brief The declaration type.
                  * */
                 Type* type;
+
+                /**
+                 * \brief The semantic-type of the declaration.
+                 *
+                 * Calculated during `check_semantics()`.
+                 * */
+                const semantic_analysis::Type* semantic_type;
             };
         }
     }

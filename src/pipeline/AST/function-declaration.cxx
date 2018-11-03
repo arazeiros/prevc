@@ -27,6 +27,8 @@ namespace prevc
 
             void FunctionDeclaration::check_semantics()
             {
+                Declaration::check_semantics();
+
                 auto& global_namespace = pipeline->global_namespace;
                 global_namespace->push_scope();
 
@@ -43,7 +45,6 @@ namespace prevc
                                     parameter->name.c_str(), location.line_0, location.column_0));
                 }
 
-                type->check_semantics();
                 parameters->check_semantics();
 
                 if (implementation != nullptr)

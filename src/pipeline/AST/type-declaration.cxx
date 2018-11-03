@@ -16,7 +16,7 @@ namespace prevc
 
             void TypeDeclaration::check_semantics()
             {
-                type->check_semantics();
+                Declaration::check_semantics();
             }
 
             util::String TypeDeclaration::to_string() const noexcept

@@ -16,7 +16,7 @@ namespace prevc
 
             void VariableDeclaration::check_semantics()
             {
-                type->check_semantics();
+                Declaration::check_semantics();
             }
 
             bool VariableDeclaration::is_component_declaration() const noexcept
