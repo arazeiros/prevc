@@ -39,9 +39,27 @@ namespace prevc
 
                 this->declaration = (FunctionDeclaration*) declaration;
                 arguments->check_semantics();
+                auto& parameters = this->declaration->parameters;
+                auto size = arguments->size();
 
-                // TODO check that number of arguments matches
-                // TODO check that type of arguments matches with parameters
+                if (size != parameters->size())
+                    CompileTimeError::raise(pipeline->file_name, location, util::String::format(
+                            "calling function `%s`, number of arguments must match the number of parameters of defined function, "
+                            "but there are `%i` arguments for `%i` required parameters",
+                            name.c_str(), size, parameters->size()));
+
+                for (size_t i = 0; i < size; ++i)
+                {
+                    auto&      argument       = arguments->at(i);
+                    const auto argument_type  = argument->get_semantic_type();
+                    const auto parameter_type = parameters->at(i)->get_semantic_type();
+
+                    if (!argument_type->equals(*parameter_type))
+                        CompileTimeError::raise(pipeline->file_name, argument->location, util::String::format(
+                                "calling function `%s`, types of arguments and parameters at the same positions have to match, "
+                                "but the argument #%i is of type `%s`, when type `%s` is required",
+                                name.c_str(), i + 1, argument_type->to_string().c_str(), parameter_type->to_string().c_str()));
+                }
             }
 
             llvm::Value* FunctionCall::generate_IR(llvm::IRBuilder<>* builder)

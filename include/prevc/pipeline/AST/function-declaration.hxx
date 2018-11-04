@@ -12,12 +12,17 @@ namespace prevc
     {
         namespace AST
         {
+            class FunctionCall;
+
             /**
              * \brief Represent a function declaration in the AST.
              * */
             class FunctionDeclaration: public Declaration
             {
+                friend FunctionCall;
+
             public:
+
                 /**
                  * \brief Create an AST declaration at the specified location.
                  * \param pipeline The pipeline that owns this AST node.
