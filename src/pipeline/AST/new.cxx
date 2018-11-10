@@ -23,8 +23,11 @@ namespace prevc
 
             void New::check_semantics()
             {
-                // TODO ...
                 type->check_semantics();
+
+                if (type->get_semantic_type()->is_void())
+                    CompileTimeError::raise(pipeline->file_name, location,
+                            "memory allocations of type `void` are not allowed");
             }
 
             llvm::Value* New::generate_IR(llvm::IRBuilder<> *builder)

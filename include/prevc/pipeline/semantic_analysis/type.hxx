@@ -43,6 +43,12 @@ namespace prevc
                 const Kind kind;
 
                 /**
+                 * \brief Tells if the type is a atom-type.
+                 * \return True if it is, false otherwise.
+                 * */
+                bool is_atom() const noexcept;
+
+                /**
                  * \brief Tells if the type is a pointer-type.
                  * \return True if it is, false otherwise.
                  * */

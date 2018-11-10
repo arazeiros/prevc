@@ -15,6 +15,11 @@ namespace prevc
 
             }
 
+            bool Type::is_atom() const noexcept
+            {
+                return kind == Kind::ATOM;
+            }
+
             bool Type::is_pointer() const noexcept
             {
                 return kind == Kind::POINTER;

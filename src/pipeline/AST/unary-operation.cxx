@@ -24,8 +24,72 @@ namespace prevc
 
             void UnaryOperation::check_semantics()
             {
-                // TODO ...
                 sub_expression->check_semantics();
+
+                const auto& expression_type = sub_expression->get_semantic_type();
+
+                switch (operator_)
+                {
+                    case Operator::PLUS:
+                    case Operator::MINUS:
+                    {
+                        if (!expression_type->is_int())
+                            CompileTimeError::raise(pipeline->file_name, location, util::String::format(
+                                    "arithmetic unary operators can be used only on expressions of type `int`, "
+                                    "but the given expression is of type `%s`",
+                                    expression_type->to_string().c_str()));
+
+                        break;
+                    }
+
+                    case Operator::NOT:
+                    {
+                        if (!expression_type->is_bool())
+                            CompileTimeError::raise(pipeline->file_name, location, util::String::format(
+                                    "negation unary operator can be used only on expressions of type `bool`, "
+                                    "but the given expression is of type `%s`",
+                                    expression_type->to_string().c_str()));
+                        break;
+                    }
+
+                    case Operator::DEL:
+                    {
+                        if (!(expression_type->is_pointer() &&
+                            !((const semantic_analysis::PointerType*) expression_type)->sub->is_void()))
+                                CompileTimeError::raise(pipeline->file_name, location, util::String::format(
+                                        "`del` command requires an expression of type `ptr <non-void>`, "
+                                        "but the given expression is of type `%s`",
+                                        expression_type->to_string().c_str()));
+
+                        break;
+                    }
+
+                    case Operator::MEM:
+                    {
+                        if (!sub_expression->is_lvalue())
+                            CompileTimeError::raise(pipeline->file_name, location,
+                                    "only lvalue expressions can be referenced, "
+                                    "but the given expression is not");
+
+                        if (expression_type->is_void())
+                            CompileTimeError::raise(pipeline->file_name, location,
+                                    "expressions of type `void` can't be referenced, "
+                                    "but the given expression is of type `void`");
+
+                        break;
+                    }
+
+                    case Operator::VAL:
+                    {
+                        if (!(expression_type->is_pointer() &&
+                              !((const semantic_analysis::PointerType*) expression_type)->sub->is_void()))
+                            CompileTimeError::raise(pipeline->file_name, location, util::String::format(
+                                    "only expression of type `ptr <non-void>` can be dereferenced, "
+                                    "but the given expression is of type `%s`",
+                                    expression_type->to_string().c_str()));
+                        break;
+                    }
+                }
             }
 
             llvm::Value* UnaryOperation::generate_IR(llvm::IRBuilder<>* builder)

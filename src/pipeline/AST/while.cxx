@@ -1,4 +1,5 @@
 #include <prevc/pipeline/AST/while.hxx>
+#include <prevc/pipeline/semantic_analysis/type.hxx>
 #include <utility>
 
 namespace prevc
@@ -23,9 +24,16 @@ namespace prevc
 
             void While::check_semantics()
             {
-                // TODO ...
                 condition->check_semantics();
                 body->check_semantics();
+
+                const auto& condition_type = condition->get_semantic_type();
+
+                if (!condition_type->is_bool())
+                    CompileTimeError::raise(pipeline->file_name, condition->location, util::String::format(
+                            "condition expressions of while-statements must be of type `bool`, "
+                            "the given expression is of type `%s`",
+                            condition_type->to_string().c_str()));
             }
 
             void While::generate_IR(llvm::IRBuilder<>* builder)

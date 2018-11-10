@@ -17,7 +17,7 @@ namespace prevc
 
             void PrimitiveType::check_semantics()
             {
-
+                // It's ok.
             }
 
             util::String PrimitiveType::to_string() const noexcept

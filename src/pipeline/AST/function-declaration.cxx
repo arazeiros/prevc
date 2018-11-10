@@ -47,8 +47,35 @@ namespace prevc
 
                 parameters->check_semantics();
 
+                for (auto& parameter : *parameters)
+                {
+                    const auto& parameter_type = parameter->get_semantic_type();
+
+                    if (!parameter_type->is_atom() && !parameter_type->is_pointer())
+                        CompileTimeError::raise(pipeline->file_name, parameter->location, util::String::format(
+                                "functions parameters can only be of type `void`, `bool`, `char`, `int` or `ptr <anything>`, "
+                                "type `%s` is not one of them", parameter_type->to_string().c_str()));
+                }
+
+                const auto& return_type = this->get_semantic_type();
+
+                if (!return_type->is_atom() && !return_type->is_pointer())
+                    CompileTimeError::raise(pipeline->file_name, type->location, util::String::format(
+                            "functions return type can only be `void`, `bool`, `char`, `int` or `ptr <anything>`, "
+                            "type `%s` is not one of them", return_type->to_string().c_str()));
+
                 if (implementation != nullptr)
+                {
                     implementation->check_semantics();
+                    const auto& implementation_type = implementation->get_semantic_type();
+
+                    if (!this->get_semantic_type()->equals(*implementation->get_semantic_type()))
+                        CompileTimeError::raise(pipeline->file_name, this->location, util::String::format(
+                                "declared function `%s` return type is `%s`, but the provided implementation returns "
+                                "an expression of type `%s`",
+                                this->name.c_str(), this->get_semantic_type()->to_string().c_str(),
+                                implementation_type->to_string().c_str()));
+                }
 
                 global_namespace->pop_scope();
             }

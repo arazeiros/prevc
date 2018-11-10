@@ -22,7 +22,6 @@ namespace prevc
 
             void PointerType::check_semantics()
             {
-                // TODO ...
                 type->check_semantics();
             }
 
