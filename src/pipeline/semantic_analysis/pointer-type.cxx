@@ -32,6 +32,11 @@ namespace prevc
                 return this->sub->equals(other_type->sub);
             }
 
+            bool PointerType::is_cyclic(std::set<const LinkType *>* set) const noexcept
+            {
+                return false;
+            }
+
             util::String PointerType::to_string() const noexcept
             {
                 return get_id();

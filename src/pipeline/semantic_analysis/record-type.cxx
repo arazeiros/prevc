@@ -58,6 +58,15 @@ namespace prevc
                 return true;
             }
 
+            bool RecordType::is_cyclic(std::set<const LinkType *>* set) const noexcept
+            {
+                for (auto& sub : this->subs)
+                    if (sub.second->is_cyclic(set))
+                        return true;
+
+                return false;
+            }
+
             util::String RecordType::to_string() const noexcept
             {
                 return get_id();

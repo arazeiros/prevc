@@ -32,6 +32,11 @@ namespace prevc
                 return this->atomKind == other->as_atom()->atomKind;
             }
 
+            bool AtomType::is_cyclic(std::set<const LinkType *>* set) const noexcept
+            {
+                return false;
+            }
+
             util::String AtomType::to_string() const noexcept
             {
                 return get_id();

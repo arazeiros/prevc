@@ -10,6 +10,7 @@ namespace prevc
         {
             class ArrayType;
             class AtomType;
+            class LinkType;
             class PointerType;
             class RecordType;
             class Type;
@@ -18,6 +19,7 @@ namespace prevc
 }
 
 #include <cstdint>
+#include <set>
 #include <prevc/util/string.hxx>
 
 namespace prevc
@@ -52,6 +54,13 @@ namespace prevc
                  * \brief Tells if this type is a link type.
                  * */
                 virtual bool is_link() const noexcept;
+
+                /**
+                 * \brief Tells if the type is cyclic.
+                 * \param set The set containing the link types seen before.
+                 * \return True if it is, false otherwise.
+                 * */
+                virtual bool is_cyclic(std::set<const LinkType*>* set) const noexcept = 0;
 
                 /**
                  * \brief Returns the id of the type.

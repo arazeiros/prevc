@@ -41,6 +41,11 @@ namespace prevc
                 return this->sub->equals(other_array->sub);
             }
 
+            bool ArrayType::is_cyclic(std::set<const LinkType *>* set) const noexcept
+            {
+                return this->sub->is_cyclic(set);
+            }
+
             util::String ArrayType::to_string() const noexcept
             {
                 return get_id();

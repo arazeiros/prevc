@@ -51,6 +51,13 @@ namespace prevc
                     {
                         auto type_declaration = (AST::TypeDeclaration*) declaration;
                         auto semantic_type = (semantic_analysis::LinkType*) type_declaration->get_semantic_type();
+
+                        std::set<const semantic_analysis::LinkType*> set;
+
+                        if (semantic_type->is_cyclic(&set))
+                            CompileTimeError::raise(pipeline->file_name, declaration->location, util::String::format(
+                                    "cyclic type declaration found"));
+
                         semantic_type->compress();
                     }
                 }

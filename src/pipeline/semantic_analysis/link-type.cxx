@@ -86,6 +86,16 @@ namespace prevc
                 return this->real->equals(other);
             }
 
+            bool LinkType::is_cyclic(std::set<const prevc::pipeline::semantic_analysis::LinkType *>* set) const noexcept
+            {
+                auto already_inserted = set->insert(this).second == false;
+
+                if (already_inserted)
+                    return true;
+
+                return this->real->is_cyclic(set);
+            }
+
             util::String LinkType::to_string() const noexcept
             {
                 return this->id;

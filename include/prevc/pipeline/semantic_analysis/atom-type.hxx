@@ -51,6 +51,13 @@ namespace prevc
                 virtual bool equals(const Type* other) const noexcept override;
 
                 /**
+                 * \brief Tells if the type is cyclic.
+                 * \param set The set containing the link types seen before.
+                 * \return True if it is, false otherwise.
+                 * */
+                virtual bool is_cyclic(std::set<const LinkType*>* set) const noexcept override;
+
+                /**
                  * \brief Returns a string representation of this type.
                  * \return The representation.
                  * */
