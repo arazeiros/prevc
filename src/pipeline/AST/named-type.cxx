@@ -49,7 +49,7 @@ namespace prevc
 
                 stream << ((declaration != nullptr && declaration != pipeline->current_checking_declaration)
                     ? declaration->get_semantic_type()->get_id().c_str()
-                    : "*");
+                    : "...");
 
                 stream << ">";
                 return stream.str();

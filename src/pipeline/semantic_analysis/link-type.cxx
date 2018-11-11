@@ -62,7 +62,7 @@ namespace prevc
 
             util::String LinkType::to_string() const noexcept
             {
-                return this->id;
+                return real != nullptr ? real->to_string() : this->id;
             }
         }
     }
