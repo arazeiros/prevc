@@ -32,6 +32,9 @@ namespace prevc
 
                 auto other_array = other->as_array();
 
+                if (this == other_array)
+                    return true;
+
                 if (other_array->length != length)
                     return false;
 

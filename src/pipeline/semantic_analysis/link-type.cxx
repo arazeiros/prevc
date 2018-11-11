@@ -1,5 +1,6 @@
 #include <prevc/pipeline/semantic_analysis/link-type.hxx>
 #include <prevc/pipeline/semantic_analysis/concrete-type.hxx>
+#include <prevc/error.hxx>
 #include <utility>
 
 namespace prevc
@@ -15,14 +16,39 @@ namespace prevc
 
             }
 
-            LinkType::~LinkType()
+            LinkType::~LinkType() = default;
+
+            bool LinkType::is_link() const noexcept
             {
-                delete dynamic_cast<const ConcreteType*>(this->real);
+                return true;
             }
 
-            void LinkType::set_real(const prevc::pipeline::semantic_analysis::Type *real) noexcept
+            void LinkType::set_real(const Type *real) noexcept
             {
                 this->real = real;
+            }
+
+            void LinkType::compress()
+            {
+                auto current = this->real;
+
+                while (true)
+                {
+                    if (current == this)
+                        InternalError::raise("link-type loop detected");
+
+                    if (!current->is_link())
+                        break;
+
+                    auto next = dynamic_cast<const LinkType*>(current)->real;
+
+                    if (next == nullptr)
+                        break;
+
+                    current = next;
+                }
+
+                this->real = current;
             }
 
             const util::String& LinkType::get_id() const noexcept
@@ -62,7 +88,7 @@ namespace prevc
 
             util::String LinkType::to_string() const noexcept
             {
-                return real != nullptr ? real->to_string() : this->id;
+                return this->id;
             }
         }
     }

@@ -8,6 +8,7 @@
 #include <cstring>
 #include <utility>
 #include <functional>
+#include <prevc/pipeline/semantic_analysis/link-type.hxx>
 
 namespace prevc
 {

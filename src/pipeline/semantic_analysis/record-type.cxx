@@ -42,6 +42,10 @@ namespace prevc
                     return false;
 
                 auto other_type = other->as_record();
+
+                if (this == other_type)
+                    return true;
+
                 auto size = this->subs.size();
 
                 if (size != other_type->subs.size())

@@ -1,6 +1,7 @@
 #include <prevc/pipeline/AST/named-type.hxx>
 #include <utility>
 #include <sstream>
+#include <prevc/pipeline/semantic_analysis/link-type.hxx>
 
 namespace prevc
 {
@@ -43,16 +44,7 @@ namespace prevc
 
             util::String NamedType::to_semantic_string() const noexcept
             {
-                std::stringstream stream;
-                stream << name.c_str();
-                stream << " <";
-
-                stream << ((declaration != nullptr && declaration != pipeline->current_checking_declaration)
-                    ? declaration->get_semantic_type()->get_id().c_str()
-                    : "...");
-
-                stream << ">";
-                return stream.str();
+                return name;
             }
 
             const semantic_analysis::Type* NamedType::generate_semantic_type(bool cache) const noexcept

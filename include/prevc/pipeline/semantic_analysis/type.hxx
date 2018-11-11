@@ -49,6 +49,11 @@ namespace prevc
                 virtual ~Type() = default;
 
                 /**
+                 * \brief Tells if this type is a link type.
+                 * */
+                virtual bool is_link() const noexcept;
+
+                /**
                  * \brief Returns the id of the type.
                  * \return The id of the type.
                  * */

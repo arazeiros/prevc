@@ -28,10 +28,20 @@ namespace prevc
                 virtual ~LinkType();
 
                 /**
+                 * \brief Tells if this type is a link type.
+                 * */
+                virtual bool is_link() const noexcept override;
+
+                /**
                  * \brief Sets the real type.
                  * \param The real type.
                  * */
                 void set_real(const Type* real) noexcept;
+
+                /**
+                 * \brief Cut the path (removing link types) to the real type.
+                 * */
+                void compress();
 
                 /**
                  * \brief Returns the id of the type.

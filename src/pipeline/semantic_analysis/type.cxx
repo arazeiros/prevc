@@ -10,6 +10,11 @@ namespace prevc
     {
         namespace semantic_analysis
         {
+            bool Type::is_link() const noexcept
+            {
+                return false;
+            }
+
             bool Type::is_array() const noexcept
             {
                 return this->get_kind() == Type::Kind::ARRAY;

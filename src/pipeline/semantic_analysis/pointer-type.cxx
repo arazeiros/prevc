@@ -24,7 +24,12 @@ namespace prevc
                 if (!other->is_pointer())
                     return false;
 
-                return this->sub->equals(other->as_pointer()->sub);
+                auto other_type = other->as_pointer();
+
+                if (this == other_type)
+                    return true;
+
+                return this->sub->equals(other_type->sub);
             }
 
             util::String PointerType::to_string() const noexcept

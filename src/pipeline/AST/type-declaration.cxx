@@ -22,7 +22,7 @@ namespace prevc
 
             const semantic_analysis::Type* TypeDeclaration::generate_semantic_type()
             {
-                return new semantic_analysis::LinkType(this->type->to_semantic_string());
+                return new semantic_analysis::LinkType(util::String(this->name));
             }
 
             const semantic_analysis::Type* TypeDeclaration::generate_real_semantic_type()
