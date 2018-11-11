@@ -18,38 +18,23 @@ namespace prevc
             }
 
             AtomType::AtomType(Kind kind):
-                Type(to_semantic_string(kind), Type::Kind::ATOM),
+                ConcreteType(to_semantic_string(kind), Type::Kind::ATOM),
                 atomKind(kind)
             {
 
             }
 
-            bool AtomType::equals(const Type& other) const noexcept
+            bool AtomType::equals(const Type* other) const noexcept
             {
-                if (other.kind != Type::Kind::ATOM)
+                if (!other->is_atom())
                     return false;
 
-                return this->atomKind == ((const AtomType*) &other)->atomKind;
-            }
-
-            bool AtomType::can_be_assigned() const
-            {
-                return atomKind != AtomType::Kind::VOID;
-            }
-
-            bool AtomType::can_be_passed() const
-            {
-                return atomKind != AtomType::Kind::VOID;
-            }
-
-            bool AtomType::can_be_returned() const
-            {
-                return true;
+                return this->atomKind == other->as_atom()->atomKind;
             }
 
             util::String AtomType::to_string() const noexcept
             {
-                return id;
+                return get_id();
             }
         }
     }

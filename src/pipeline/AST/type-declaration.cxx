@@ -1,4 +1,5 @@
 #include <prevc/pipeline/AST/type-declaration.hxx>
+#include <prevc/pipeline/semantic_analysis/link-type.hxx>
 #include <utility>
 
 namespace prevc
@@ -17,6 +18,16 @@ namespace prevc
             void TypeDeclaration::check_semantics()
             {
                 Declaration::check_semantics();
+            }
+
+            const semantic_analysis::Type* TypeDeclaration::generate_semantic_type()
+            {
+                return new semantic_analysis::LinkType(this->type->to_semantic_string());
+            }
+
+            const semantic_analysis::Type* TypeDeclaration::generate_real_semantic_type()
+            {
+                return type->generate_semantic_type(false);
             }
 
             util::String TypeDeclaration::to_string() const noexcept

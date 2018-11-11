@@ -21,7 +21,7 @@ namespace prevc
             }
 
             RecordType::RecordType(std::vector<std::pair<util::String, const Type*>>&& subs):
-                Type(to_semantic_string(subs), Type::Kind::RECORD),
+                ConcreteType(to_semantic_string(subs), Type::Kind::RECORD),
                 subs(subs)
             {
 
@@ -36,19 +36,19 @@ namespace prevc
                 return {};
             }
 
-            bool RecordType::equals(const Type& other) const noexcept
+            bool RecordType::equals(const Type* other) const noexcept
             {
-                if (!other.is_record())
+                if (!other->is_record())
                     return false;
 
-                auto other_type = (const RecordType*) &other;
+                auto other_type = other->as_record();
                 auto size = this->subs.size();
 
                 if (size != other_type->subs.size())
                     return false;
 
                 for (size_t i = 0; i < size; ++i)
-                    if (!this->subs.at(i).second->equals(*other_type->subs.at(i).second))
+                    if (!this->subs.at(i).second->equals(other_type->subs.at(i).second))
                         return false;
 
                 return true;
@@ -56,7 +56,7 @@ namespace prevc
 
             util::String RecordType::to_string() const noexcept
             {
-                return id;
+                return get_id();
             }
         }
     }

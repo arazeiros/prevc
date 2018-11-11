@@ -46,14 +46,18 @@ namespace prevc
                 std::stringstream stream;
                 stream << name.c_str();
                 stream << " <";
-                stream << declaration->type->get_semantic_type()->id.c_str();
+
+                stream << ((declaration != nullptr && declaration != pipeline->current_checking_declaration)
+                    ? declaration->get_semantic_type()->get_id().c_str()
+                    : "*");
+
                 stream << ">";
                 return stream.str();
             }
 
-            const semantic_analysis::Type* NamedType::generate_semantic_type() const noexcept
+            const semantic_analysis::Type* NamedType::generate_semantic_type(bool cache) const noexcept
             {
-                return declaration->type->get_semantic_type();
+                return declaration->get_semantic_type();
             }
         }
     }

@@ -13,38 +13,23 @@ namespace prevc
             }
 
             PointerType::PointerType(const Type* sub):
-                Type(to_semantic_string(sub), Type::Kind::POINTER),
+                ConcreteType(to_semantic_string(sub), Type::Kind::POINTER),
                 sub(sub)
             {
 
             }
 
-            bool PointerType::equals(const Type& other) const noexcept
+            bool PointerType::equals(const Type* other) const noexcept
             {
-                if (!other.is_pointer())
+                if (!other->is_pointer())
                     return false;
 
-                return this->sub->equals(*((const PointerType*) &other)->sub);
-            }
-
-            bool PointerType::can_be_assigned() const
-            {
-                return true;
-            }
-
-            bool PointerType::can_be_passed() const
-            {
-                return true;
-            }
-
-            bool PointerType::can_be_returned() const
-            {
-                return true;
+                return this->sub->equals(other->as_pointer()->sub);
             }
 
             util::String PointerType::to_string() const noexcept
             {
-                return id;
+                return get_id();
             }
         }
     }

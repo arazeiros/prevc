@@ -49,7 +49,7 @@ namespace prevc
                 static const util::String s_ptr = "ptr ";
                 auto semantic_type = type->get_semantic_type();
 
-                return pipeline->type_system->get_or_insert(s_ptr + semantic_type->id, [semantic_type] ()
+                return pipeline->type_system->get_or_insert(s_ptr + semantic_type->get_id(), [semantic_type] ()
                     {
                         return new semantic_analysis::PointerType(semantic_type);
                     });

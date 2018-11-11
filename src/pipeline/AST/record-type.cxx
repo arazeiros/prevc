@@ -61,18 +61,18 @@ namespace prevc
                 auto i = this->components->begin();
                 std::stringstream stream;
                 stream << "rec (";
-                stream << (*i)->name.c_str() << ": " << (*i)->type->to_string().c_str();
+                stream << (*i)->name.c_str() << ": " << (*i)->type->to_semantic_string().c_str();
 
                 while (++i != this->components->end())
-                    stream << ", " << (*i)->name.c_str() << ": " << (*i)->type->to_string().c_str();
+                    stream << ", " << (*i)->name.c_str() << ": " << (*i)->type->to_semantic_string().c_str();
 
                 stream << ")";
                 return util::String(stream.str());
             }
 
-            const semantic_analysis::Type* RecordType::generate_semantic_type() const noexcept
+            const semantic_analysis::Type* RecordType::generate_semantic_type(bool cache) const noexcept
             {
-                return pipeline->type_system->get_or_insert(to_semantic_string(), [this] ()
+                auto provider = [this] ()
                     {
                         std::vector<std::pair<util::String, const semantic_analysis::Type*>> subs;
 
@@ -80,7 +80,11 @@ namespace prevc
                             subs.emplace_back(std::make_pair(component->name, component->type->get_semantic_type()));
 
                         return new semantic_analysis::RecordType(std::move(subs));
-                    });
+                    };
+
+                return cache
+                    ? pipeline->type_system->get_or_insert(to_semantic_string(), provider)
+                    : provider();
             }
         }
     }

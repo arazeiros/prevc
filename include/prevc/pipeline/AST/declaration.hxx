@@ -13,6 +13,7 @@ namespace prevc
         namespace AST
         {
             class ComponentAccess;
+            class Declarations;
             class FunctionCall;
             class NamedType;
             class RecordType;
@@ -24,6 +25,7 @@ namespace prevc
             class Declaration: public Node
             {
                 friend ComponentAccess;
+                friend Declarations;
                 friend FunctionCall;
                 friend NamedType;
                 friend RecordType;
@@ -78,6 +80,12 @@ namespace prevc
                  * Before this method can be called, the call to `check_semantics()` have to be done.
                  * */
                 const semantic_analysis::Type* get_semantic_type();
+
+                /**
+                 * \brief Generate the semantic type of this expression.
+                 * \return The semantic type of this expression.
+                 * */
+                virtual const semantic_analysis::Type* generate_semantic_type();
 
             protected:
                 /**

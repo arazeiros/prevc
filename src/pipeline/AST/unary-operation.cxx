@@ -54,8 +54,10 @@ namespace prevc
 
                     case Operator::DEL:
                     {
-                        if (!(expression_type->is_pointer() &&
-                            !((const semantic_analysis::PointerType*) expression_type)->sub->is_void()))
+                        if (!(
+                                expression_type->is_pointer()
+                                && !expression_type->as_pointer()->sub->is_void()
+                            ))
                                 CompileTimeError::raise(pipeline->file_name, location, util::String::format(
                                         "`del` command requires an expression of type `ptr <non-void>`, "
                                         "but the given expression is of type `%s`",
@@ -81,8 +83,10 @@ namespace prevc
 
                     case Operator::VAL:
                     {
-                        if (!(expression_type->is_pointer() &&
-                              !((const semantic_analysis::PointerType*) expression_type)->sub->is_void()))
+                        if (!(
+                                expression_type->is_pointer()
+                                && !expression_type->as_pointer()->sub->is_void()
+                        ))
                             CompileTimeError::raise(pipeline->file_name, location, util::String::format(
                                     "only expression of type `ptr <non-void>` can be dereferenced, "
                                     "but the given expression is of type `%s`",
@@ -172,7 +176,7 @@ namespace prevc
                     case Operator::MEM:
                     {
                         auto sub_type = sub_expression->get_semantic_type();
-                        return pipeline->type_system->get_or_insert(util::String("ptr ") + sub_type->id,
+                        return pipeline->type_system->get_or_insert(util::String("ptr ") + sub_type->get_id(),
                                 [sub_type] () { return new SPointer(sub_type); });
                     }
 

@@ -44,8 +44,8 @@ namespace prevc
                     }
                     else if (cast_type->is_pointer())
                     {
-                        if (!expression_type->is_pointer() ||
-                            !((const semantic_analysis::PointerType*) expression_type)->sub->is_void())
+                        if (!expression_type->is_pointer()
+                            || !expression_type->as_pointer()->sub->is_void())
                             CompileTimeError::raise(pipeline->file_name, location, util::String::format(
                                     "casting to type `%s` is allowed only to expressions of type `ptr void`",
                                     cast_type->to_string().c_str()));

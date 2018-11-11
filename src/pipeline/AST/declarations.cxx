@@ -1,5 +1,7 @@
 #include <prevc/pipeline/AST/declarations.hxx>
+#include <prevc/pipeline/AST/type-declaration.hxx>
 #include <utility>
+#include <prevc/pipeline/semantic_analysis/link-type.hxx>
 
 namespace prevc
 {
@@ -16,7 +18,26 @@ namespace prevc
             void Declarations::check_semantics()
             {
                 for (auto& declaration: *this)
-                    declaration->check_semantics();
+                {
+                    if (declaration->kind == Declaration::Kind::Type)
+                    {
+                        auto type_declaration = (AST::TypeDeclaration*) declaration;
+                        pipeline->current_checking_declaration = type_declaration;
+                        auto semantic_type = (semantic_analysis::LinkType*) type_declaration->get_semantic_type();
+
+                        pipeline->type_system->get_or_insert(type_declaration->type->to_semantic_string(),
+                             [&] () { return semantic_type; });
+
+                        type_declaration->check_semantics();
+                        semantic_type->set_real(type_declaration->generate_real_semantic_type());
+                        pipeline->current_checking_declaration = nullptr;
+                    }
+                    else
+                    {
+                        declaration->check_semantics();
+                    }
+                }
+
             }
         }
     }

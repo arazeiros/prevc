@@ -54,7 +54,7 @@ namespace prevc
                     const auto argument_type  = argument->get_semantic_type();
                     const auto parameter_type = parameters->at(i)->get_semantic_type();
 
-                    if (!argument_type->equals(*parameter_type))
+                    if (!argument_type->equals(parameter_type))
                         CompileTimeError::raise(pipeline->file_name, argument->location, util::String::format(
                                 "calling function `%s`, types of arguments and parameters at the same positions have to match, "
                                 "but the argument #%i is of type `%s`, when type `%s` is required",

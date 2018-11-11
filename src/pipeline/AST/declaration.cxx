@@ -25,11 +25,20 @@ namespace prevc
 
             void Declaration::check_semantics()
             {
-                semantic_type = type->get_semantic_type();
+                type->check_semantics();
+                get_semantic_type(); // also generate the semantic type if not generated yet
+            }
+
+            const semantic_analysis::Type* Declaration::generate_semantic_type()
+            {
+                return type->get_semantic_type();
             }
 
             const semantic_analysis::Type* Declaration::get_semantic_type()
             {
+                if (semantic_type == nullptr)
+                    semantic_type = generate_semantic_type();
+
                 return semantic_type;
             }
         }

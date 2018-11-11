@@ -44,12 +44,12 @@ namespace prevc
                  * */
                 virtual util::String to_semantic_string() const noexcept = 0;
 
-            protected:
                 /**
                  * \brief Generate and returns the semantic type representing this type.
+                 * \param cache Tells if the object have to be cached if does not exists yet.
                  * \return The semantic type representing this type.
                  * */
-                virtual const semantic_analysis::Type* generate_semantic_type() const noexcept = 0;
+                virtual const semantic_analysis::Type* generate_semantic_type(bool cache) const noexcept = 0;
 
             private:
                 /**

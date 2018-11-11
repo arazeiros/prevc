@@ -39,7 +39,7 @@ namespace prevc
                 }
             }
 
-            const semantic_analysis::Type* PrimitiveType::generate_semantic_type() const noexcept
+            const semantic_analysis::Type* PrimitiveType::generate_semantic_type(bool cache) const noexcept
             {
                 using SAtom = semantic_analysis::AtomType;
 

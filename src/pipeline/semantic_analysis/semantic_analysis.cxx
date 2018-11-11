@@ -1,7 +1,7 @@
 #include <prevc/pipeline/semantic_analysis/semantic-analysis.hxx>
 #include <prevc/pipeline/semantic_analysis/atom-type.hxx>
 #include <prevc/pipeline/semantic_analysis/namespace.hxx>
-#include <prevc/pipeline/semantic_analysis/type.hxx>
+#include <prevc/pipeline/semantic_analysis/concrete-type.hxx>
 #include <prevc/pipeline/AST/expression.hxx>
 
 namespace prevc
@@ -33,7 +33,7 @@ namespace prevc
                 root->check_semantics();
                 auto type = root->get_semantic_type();
 
-                if (type->kind != SType::Kind::ATOM || ((SAtom*) type)->atomKind != SAtom::Kind::INT)
+                if (!type->is_int())
                     CompileTimeError::raise(pipeline->file_name, root->location, util::String::format(
                             "the root expression of the module must be of type `int`, but the "
                             "given one is of type `%s`", type->to_string().c_str()));

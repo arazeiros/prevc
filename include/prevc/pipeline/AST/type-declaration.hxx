@@ -37,6 +37,18 @@ namespace prevc
                 virtual void check_semantics() override;
 
                 /**
+                 * \brief Generate the fake link-type.
+                 * \return The semantic type of this expression.
+                 * */
+                virtual const semantic_analysis::Type* generate_semantic_type() override;
+
+                /**
+                 * \brief Generate the real semantic type of this expression.
+                 * \return The semantic type of this expression.
+                 * */
+                const semantic_analysis::Type* generate_real_semantic_type();
+
+                /**
                  * \brief Returns a string representation of this type-declaration.
                  * \return The representation in JSON format.
                  * */

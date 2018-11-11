@@ -1,12 +1,13 @@
 #include <prevc/pipeline/semantic_analysis/type-system.hxx>
-#include <prevc/pipeline/semantic_analysis/type.hxx>
+#include <prevc/pipeline/semantic_analysis/concrete-type.hxx>
 #include <prevc/pipeline/semantic_analysis/atom-type.hxx>
-#include <cstring>
-#include <utility>
-#include <functional>
 #include <prevc/pipeline/semantic_analysis/pointer-type.hxx>
 #include <prevc/pipeline/semantic_analysis/array-type.hxx>
 #include <prevc/pipeline/semantic_analysis/record-type.hxx>
+#include <prevc/error.hxx>
+#include <cstring>
+#include <utility>
+#include <functional>
 
 namespace prevc
 {
@@ -32,9 +33,15 @@ namespace prevc
                 auto real_type = provider();
 
                 if (real_type == nullptr)
-                    return nullptr;
+                {
+                    InternalError::raise(util::String::format(
+                            "trying to insert semantic type `%s`, "
+                            "but the provider returned NULL",
+                            id.c_str()));
+                    return nullptr; // just disables warnings
+                }
 
-                auto inserted = types.insert(std::make_pair(&real_type->id, real_type));
+                auto inserted = types.insert(std::make_pair(&real_type->get_id(), real_type));
                 return inserted.first->second;
             }
         }

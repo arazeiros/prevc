@@ -33,6 +33,8 @@ ADD_EXECUTABLE(prevc
     src/pipeline/lexical_analysis/symbols-vector.cxx
     src/pipeline/semantic_analysis/array-type.cxx
     src/pipeline/semantic_analysis/atom-type.cxx
+    src/pipeline/semantic_analysis/concrete-type.cxx
+    src/pipeline/semantic_analysis/link-type.cxx
     src/pipeline/semantic_analysis/namespace.cxx
     src/pipeline/semantic_analysis/pointer-type.cxx
     src/pipeline/semantic_analysis/record-type.cxx

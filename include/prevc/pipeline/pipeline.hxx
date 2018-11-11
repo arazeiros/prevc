@@ -14,6 +14,7 @@ namespace prevc
             class Atom;
             class BinaryOperation;
             class Compound;
+            class Declarations;
             class FunctionCall;
             class FunctionDeclaration;
             class NamedType;
@@ -23,6 +24,7 @@ namespace prevc
             class PrimitiveType;
             class RecordType;
             class UnaryOperation;
+            class TypeDeclaration;
             class VariableName;
         }
 
@@ -76,6 +78,7 @@ namespace prevc
             friend AST::Atom;
             friend AST::BinaryOperation;
             friend AST::Compound;
+            friend AST::Declarations;
             friend AST::FunctionCall;
             friend AST::FunctionDeclaration;
             friend AST::NamedType;
@@ -140,6 +143,12 @@ namespace prevc
              * Calculated during the "semantic analysis" phase.
              * */
             semantic_analysis::TypeSystem* type_system;
+
+            /**
+             * \brief Contains the current declaration that is under semantic check.
+             * Or NULL if there is no such declaration.
+             * */
+            AST::TypeDeclaration* current_checking_declaration;
 
             /**
              * \brief The abstract syntax tree of the module.

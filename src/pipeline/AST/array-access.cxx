@@ -59,7 +59,7 @@ namespace prevc
 
             const semantic_analysis::Type* ArrayAccess::get_semantic_type()
             {
-                return ((const semantic_analysis::ArrayType*) array->get_semantic_type())->sub;
+                return array->get_semantic_type()->as_array()->sub;
             }
 
             util::String ArrayAccess::to_string() const noexcept

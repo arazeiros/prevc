@@ -88,10 +88,11 @@ namespace prevc
             const size_t other_length = other.capacity - 1;
             const size_t size         = this_length + other_length;
 
-            auto buffer = new uint8_t[size];
+            auto buffer = new uint8_t[size + 1];
 
             std::memcpy(&buffer[0],           this->buffer, this_length );
             std::memcpy(&buffer[this_length], other.buffer, other_length);
+            buffer[size] = 0;
 
             return String(buffer, size, true);
         }

@@ -2,7 +2,7 @@
 #ifndef PREVC_PIPELINE_SEMANTIC_ANALYSIS_ARRAYTYPE_HXX
 #define PREVC_PIPELINE_SEMANTIC_ANALYSIS_ARRAYTYPE_HXX
 
-#include <prevc/pipeline/semantic_analysis/type.hxx>
+#include <prevc/pipeline/semantic_analysis/concrete-type.hxx>
 
 namespace prevc
 {
@@ -13,7 +13,7 @@ namespace prevc
             /**
              * \brief Represent a array-type in a Prev module.
              * */
-            class ArrayType: public Type
+            class ArrayType: public ConcreteType
             {
             public:
                 /**
@@ -43,7 +43,7 @@ namespace prevc
                  * \param other The other type.
                  * \return True if they equals, false otherwise.
                  * */
-                virtual bool equals(const Type& other) const noexcept override;
+                virtual bool equals(const Type* other) const noexcept override;
 
                 /**
                  * \brief Returns a string representation of this type.

@@ -1,5 +1,5 @@
 #include <prevc/pipeline/AST/if.hxx>
-#include <prevc/pipeline/semantic_analysis/type.hxx>
+#include <prevc/pipeline/semantic_analysis/concrete-type.hxx>
 #include <utility>
 
 namespace prevc
@@ -31,7 +31,9 @@ namespace prevc
             {
                 condition->check_semantics();
                 then_body->check_semantics();
-                else_body->check_semantics();
+
+                if (else_body != nullptr)
+                    else_body->check_semantics();
 
                 const auto& condition_type = condition->get_semantic_type();
 

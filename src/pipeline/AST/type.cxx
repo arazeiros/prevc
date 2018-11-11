@@ -19,7 +19,7 @@ namespace prevc
                 if (semantic_type != nullptr)
                     return semantic_type;
 
-                semantic_type = generate_semantic_type();
+                semantic_type = generate_semantic_type(true);
                 return semantic_type;
             }
         }

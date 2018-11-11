@@ -2,9 +2,9 @@
 #ifndef PREVC_PIPELINE_SEMANTIC_ANALYSIS_RECORDTYPE_HXX
 #define PREVC_PIPELINE_SEMANTIC_ANALYSIS_RECORDTYPE_HXX
 
-#include <prevc/pipeline/semantic_analysis/type.hxx>
 #include <optional>
 #include <vector>
+#include <prevc/pipeline/semantic_analysis/concrete-type.hxx>
 
 namespace prevc
 {
@@ -15,7 +15,7 @@ namespace prevc
             /**
              * \brief Represent a record-type in a Prev module.
              * */
-            class RecordType: public Type
+            class RecordType: public ConcreteType
             {
             public:
                 /**
@@ -42,7 +42,7 @@ namespace prevc
                  * Note that two records equals even if they have different components names, but the same types
                  * in the same order.
                  * */
-                virtual bool equals(const Type& other) const noexcept override;
+                virtual bool equals(const Type* other) const noexcept override;
 
                 /**
                  * \brief Returns the type of the specified component (if present).

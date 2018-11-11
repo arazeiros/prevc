@@ -32,7 +32,7 @@ namespace prevc
                 auto left_type = left_expression->get_semantic_type();
                 auto right_type = right_expression->get_semantic_type();
 
-                if (!left_type->equals(*right_type))
+                if (!left_type->equals(right_type))
                     CompileTimeError::raise(pipeline->file_name, location, util::String::format(
                             "left and right expressions of a binary operation must have the same type, "
                             "but left is of type `%s` and right of type `%s`",

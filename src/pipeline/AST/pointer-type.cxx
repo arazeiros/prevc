@@ -39,12 +39,16 @@ namespace prevc
                 return s_ptr + type->to_semantic_string();
             }
 
-            const semantic_analysis::Type* PointerType::generate_semantic_type() const noexcept
+            const semantic_analysis::Type* PointerType::generate_semantic_type(bool cache) const noexcept
             {
-                return pipeline->type_system->get_or_insert(to_semantic_string(), [this] ()
+                auto provider = [this] ()
                     {
                         return new semantic_analysis::PointerType(this->type->get_semantic_type());
-                    });
+                    };
+
+                return cache
+                    ? pipeline->type_system->get_or_insert(to_semantic_string(), provider)
+                    : provider();
             }
         }
     }

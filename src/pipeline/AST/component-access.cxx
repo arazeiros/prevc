@@ -34,7 +34,7 @@ namespace prevc
                     CompileTimeError::raise(pipeline->file_name, location,
                             "trying to perform a component access, but the given expression is not a record");
 
-                auto component_type_optional = ((semantic_analysis::RecordType*) record_type)->get_type_of(component);
+                auto component_type_optional = record_type->as_record()->get_type_of(component);
 
                 if (!component_type_optional.has_value())
                     CompileTimeError::raise(pipeline->file_name, location, util::String::format(

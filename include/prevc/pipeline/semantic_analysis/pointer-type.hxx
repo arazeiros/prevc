@@ -2,7 +2,7 @@
 #ifndef PREVC_PIPELINE_SEMANTIC_ANALYSIS_POINTERTYPE_HXX
 #define PREVC_PIPELINE_SEMANTIC_ANALYSIS_POINTERTYPE_HXX
 
-#include <prevc/pipeline/semantic_analysis/type.hxx>
+#include <prevc/pipeline/semantic_analysis/concrete-type.hxx>
 
 namespace prevc
 {
@@ -13,7 +13,7 @@ namespace prevc
             /**
              * \brief Represent a pointar-type in a Prev module.
              * */
-            class PointerType: public Type
+            class PointerType: public ConcreteType
             {
             public:
                 /**
@@ -28,24 +28,6 @@ namespace prevc
                 PointerType(const Type* sub);
 
                 /**
-                 * \brief Tells if a value can be assigned to a variable of this type.
-                 * \return True, always.
-                 * */
-                virtual bool can_be_assigned() const override;
-
-                /**
-                 * \brief Tells if a variable of this type can be passed as argument.
-                 * \return True, always.
-                 * */
-                virtual bool can_be_passed() const override;
-
-                /**
-                 * \brief Tells if a variable of this type can be returned from a function.
-                 * \return True, always.
-                 * */
-                virtual bool can_be_returned() const override;
-
-                /**
                  * \brief Default implementation;
                  * */
                 virtual ~PointerType() = default;
@@ -55,7 +37,7 @@ namespace prevc
                  * \param other The other type.
                  * \return True if they equals, false otherwise.
                  * */
-                virtual bool equals(const Type& other) const noexcept override;
+                virtual bool equals(const Type* other) const noexcept override;
 
                 /**
                  * \brief Returns a string representation of this type.

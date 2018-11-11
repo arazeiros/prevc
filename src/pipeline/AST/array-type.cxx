@@ -58,16 +58,20 @@ namespace prevc
                 stream << "arr [";
                 stream << this->semantic_length;
                 stream << "] ";
-                stream << this->type->get_semantic_type()->id.c_str();
+                stream << this->type->get_semantic_type()->get_id().c_str();
                 return stream.str();
             }
 
-            const semantic_analysis::Type* ArrayType::generate_semantic_type() const noexcept
+            const semantic_analysis::Type* ArrayType::generate_semantic_type(bool cache) const noexcept
             {
-                return pipeline->type_system->get_or_insert(to_semantic_string(), [this] ()
+                auto provider = [this] ()
                     {
                         return new semantic_analysis::ArrayType(this->type->get_semantic_type(), this->semantic_length);
-                    });
+                    };
+
+                return cache
+                    ? pipeline->type_system->get_or_insert(to_semantic_string(), provider)
+                    : provider();
             }
         }
     }

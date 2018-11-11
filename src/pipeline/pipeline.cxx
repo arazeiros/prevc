@@ -25,6 +25,7 @@ namespace prevc
             derivation_tree(nullptr),
             global_namespace(nullptr),
             type_system(nullptr),
+            current_checking_declaration(nullptr),
             abstract_syntax_tree(nullptr),
             IR_module(nullptr)
         {
