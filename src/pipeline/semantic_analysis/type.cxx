@@ -10,6 +10,12 @@ namespace prevc
     {
         namespace semantic_analysis
         {
+            Type::Type():
+                llvm_type(nullptr)
+            {
+
+            }
+
             bool Type::is_link() const noexcept
             {
                 return false;
@@ -112,6 +118,14 @@ namespace prevc
             bool Type::can_be_returned() const
             {
                 return this->is_pointer() || this->is_atom();
+            }
+
+            llvm::Type* Type::get_llvm_type(llvm::LLVMContext &context)
+            {
+                if (llvm_type == nullptr)
+                    llvm_type = generate_llvm_type(context);
+
+                return llvm_type;
             }
         }
     }

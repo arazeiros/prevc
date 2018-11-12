@@ -1,4 +1,5 @@
 #include <prevc/pipeline/semantic_analysis/atom-type.hxx>
+#include <llvm/IR/DerivedTypes.h>
 
 namespace prevc
 {
@@ -40,6 +41,17 @@ namespace prevc
             util::String AtomType::to_string() const noexcept
             {
                 return get_id();
+            }
+
+            llvm::Type* AtomType::generate_llvm_type(llvm::LLVMContext& context)
+            {
+                switch (atomKind)
+                {
+                    case AtomType::Kind::VOID: return llvm::Type::getVoidTy(context);
+                    case AtomType::Kind::BOOL: return llvm::Type::getInt8Ty(context);
+                    case AtomType::Kind::CHAR: return llvm::Type::getInt8Ty(context);
+                    case AtomType::Kind::INT:  return llvm::Type::getInt64Ty(context);
+                }
             }
         }
     }

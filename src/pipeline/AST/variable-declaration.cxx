@@ -36,9 +36,9 @@ namespace prevc
 
             void VariableDeclaration::generate_IR(llvm::IRBuilder<> *builder)
             {
-                // auto type = this->type->get_semantic_type();
-                // TODO this works only for atom types! expand also for others
-                auto type = llvm::Type::getInt64Ty(builder->getContext());
+                auto type = ((semantic_analysis::Type*) this->type->get_semantic_type())
+                        ->get_llvm_type(builder->getContext());
+
                 variable = builder->CreateAlloca(type, nullptr, util::String::format("v%zu", this->id).c_str());
             }
         }

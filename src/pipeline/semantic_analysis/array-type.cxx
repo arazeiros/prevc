@@ -1,4 +1,5 @@
 #include <prevc/pipeline/semantic_analysis/array-type.hxx>
+#include <llvm/IR/DerivedTypes.h>
 #include <sstream>
 
 namespace prevc
@@ -49,6 +50,11 @@ namespace prevc
             util::String ArrayType::to_string() const noexcept
             {
                 return get_id();
+            }
+
+            llvm::Type* ArrayType::generate_llvm_type(llvm::LLVMContext& context)
+            {
+                llvm::ArrayType::get(((Type*) sub)->get_llvm_type(context), length);
             }
         }
     }

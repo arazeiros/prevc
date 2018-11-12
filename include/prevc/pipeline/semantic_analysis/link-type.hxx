@@ -102,6 +102,12 @@ namespace prevc
                  * */
                 virtual util::String to_string() const noexcept override;
 
+            protected:
+                /**
+                 * \brief Generate the llvm-type representing this type.
+                 * */
+                virtual llvm::Type* generate_llvm_type(llvm::LLVMContext& context) override;
+
             private:
                 /**
                  * \brief The id of the type.

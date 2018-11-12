@@ -100,6 +100,11 @@ namespace prevc
             {
                 return this->id;
             }
+
+            llvm::Type* LinkType::generate_llvm_type(llvm::LLVMContext& context)
+            {
+                return ((Type*) this->real)->get_llvm_type(context);
+            }
         }
     }
 }

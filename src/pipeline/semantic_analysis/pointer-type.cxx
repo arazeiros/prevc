@@ -1,4 +1,5 @@
 #include <prevc/pipeline/semantic_analysis/pointer-type.hxx>
+#include <llvm/IR/DerivedTypes.h>
 
 namespace prevc
 {
@@ -40,6 +41,11 @@ namespace prevc
             util::String PointerType::to_string() const noexcept
             {
                 return get_id();
+            }
+
+            llvm::Type* PointerType::generate_llvm_type(llvm::LLVMContext& context)
+            {
+                return llvm::PointerType::getUnqual(((Type*) sub)->get_llvm_type(context));
             }
         }
     }

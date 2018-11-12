@@ -1,4 +1,5 @@
 #include <prevc/pipeline/semantic_analysis/record-type.hxx>
+#include <llvm/IR/DerivedTypes.h>
 #include <sstream>
 
 namespace prevc
@@ -70,6 +71,16 @@ namespace prevc
             util::String RecordType::to_string() const noexcept
             {
                 return get_id();
+            }
+
+            llvm::Type* RecordType::generate_llvm_type(llvm::LLVMContext& context)
+            {
+                llvm_components_types.reserve(this->subs.size());
+
+                for (auto& sub : this->subs)
+                    llvm_components_types.emplace_back(((Type*) sub.second)->get_llvm_type(context));
+
+                return llvm::StructType::create(llvm_components_types);
             }
         }
     }

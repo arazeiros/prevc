@@ -20,6 +20,8 @@ namespace prevc
 
 #include <cstdint>
 #include <set>
+#include <llvm/IR/Type.h>
+#include <llvm/IR/LLVMContext.h>
 #include <prevc/util/string.hxx>
 
 namespace prevc
@@ -44,6 +46,11 @@ namespace prevc
                     ARRAY,
                     RECORD
                 };
+
+                /**
+                 * \brief Initialize the object.
+                 * */
+                Type();
 
                 /**
                  * \brief Default implementation;
@@ -179,6 +186,25 @@ namespace prevc
                  * \return The representation.
                  * */
                 virtual util::String to_string() const noexcept = 0;
+
+                /**
+                 * \brief Get the llvm-type representing this type.
+                 * \param context The llvm context.
+                 * \return brief The llvm-type.
+                 * */
+                llvm::Type* get_llvm_type(llvm::LLVMContext& context);
+
+            protected:
+                /**
+                 * \brief Generate the llvm-type representing this type.
+                 * */
+                virtual llvm::Type* generate_llvm_type(llvm::LLVMContext& context) = 0;
+
+            private:
+                /**
+                 * \brief The llvm-type representing this type.
+                 * */
+                llvm::Type* llvm_type;
             };
         }
     }
