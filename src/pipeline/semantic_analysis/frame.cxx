@@ -1,4 +1,5 @@
 #include <prevc/pipeline/semantic_analysis/frame.hxx>
+#include <llvm/IR/DerivedTypes.h>
 
 namespace prevc
 {
@@ -7,7 +8,8 @@ namespace prevc
         namespace semantic_analysis
         {
             Frame::Frame(std::int32_t level):
-                level(level)
+                level(level),
+                allocated_frame(nullptr)
             {
 
             }
@@ -17,6 +19,18 @@ namespace prevc
                 std::uint64_t index = this->variables.size();
                 this->variables.push_back(variable);
                 return index;
+            }
+
+            llvm::Type* Frame::get_llvm_type(llvm::LLVMContext& context)
+            {
+                if (this->llvm_type != nullptr)
+                    return this->llvm_type;
+
+                for (auto& variable : this->variables)
+                    this->llvm_variables.push_back(((Type*) variable)->get_llvm_type(context));
+
+                this->llvm_type = llvm::StructType::create(context, this->llvm_variables);
+                return this->llvm_type;
             }
         }
     }

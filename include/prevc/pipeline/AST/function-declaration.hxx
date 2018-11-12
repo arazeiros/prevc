@@ -82,7 +82,7 @@ namespace prevc
                   *
                   * Calculated during semantic analysis.
                   * */
-                 const semantic_analysis::Frame* frame;
+                 semantic_analysis::Frame* frame;
             };
         }
     }

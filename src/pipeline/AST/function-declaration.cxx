@@ -83,7 +83,7 @@ namespace prevc
                 }
 
                 global_namespace->pop_scope();
-                this->frame = pipeline->frame_system->pop();
+                this->frame = (semantic_analysis::Frame*) pipeline->frame_system->pop();
             }
 
             util::String FunctionDeclaration::get_native_name() const
@@ -107,6 +107,7 @@ namespace prevc
                 if (this->implementation != nullptr)
                 {
                     llvm::IRBuilder<> builder(llvm::BasicBlock::Create(context, "entry", function));
+                    this->frame->allocated_frame = builder.CreateAlloca(this->frame->get_llvm_type(context));
                     auto value = this->implementation->generate_IR(&builder);
 
                     if (!sem_type->is_void())

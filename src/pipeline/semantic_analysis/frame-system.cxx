@@ -21,9 +21,10 @@ namespace prevc
                 return frame;
             }
 
-            std::uint64_t FrameSystem::allocate_variable(const Type* variable)
+            std::pair<Frame*, std::uint64_t> FrameSystem::allocate_variable(const Type* variable)
             {
-                return this->frames.top()->allocate_variable(variable);
+                auto frame = this->frames.top();
+                return std::make_pair(frame, frame->allocate_variable(variable));
             }
         }
     }

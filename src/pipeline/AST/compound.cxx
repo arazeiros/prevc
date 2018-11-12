@@ -54,25 +54,8 @@ namespace prevc
             llvm::Value* Compound::generate_IR(llvm::IRBuilder<>* builder)
             {
                 for (auto declaration : *declarations)
-                {
-                    switch (declaration->kind)
-                    {
-                        case Declaration::Kind::Variable:
-                        {
-                            dynamic_cast<VariableDeclaration*>(declaration)->generate_IR(builder);
-                            break;
-                        }
-
-                        case Declaration::Kind::Function:
-                        {
-                            dynamic_cast<FunctionDeclaration*>(declaration)->generate_IR();
-                            break;
-                        }
-
-                        default:
-                            break;
-                    }
-                }
+                    if (declaration->kind == Declaration::Kind::Function)
+                        dynamic_cast<FunctionDeclaration*>(declaration)->generate_IR();
 
                 for (auto statement : *statements)
                     statement->generate_IR(builder);

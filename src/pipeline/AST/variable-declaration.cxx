@@ -11,7 +11,7 @@ namespace prevc
             VariableDeclaration::VariableDeclaration(Pipeline* pipeline, util::Location&& location,
                                      const util::String& name, Type* type):
                 Declaration(pipeline, std::move(location), Declaration::Kind::Variable, name, type),
-                variable(nullptr),
+                frame(nullptr),
                 frame_index(-1)
             {
 
@@ -29,7 +29,9 @@ namespace prevc
                 if (parameter != nullptr)
                     return;
 
-                this->frame_index = (std::int64_t) this->pipeline->frame_system->allocate_variable(get_semantic_type());
+                auto access       = this->pipeline->frame_system->allocate_variable(get_semantic_type());
+                this->frame       = access.first;
+                this->frame_index = access.second;
             }
 
             bool VariableDeclaration::is_component_declaration() const noexcept
@@ -44,14 +46,6 @@ namespace prevc
                         location.to_string().c_str(),
                         name.c_str(),
                         type->to_string().c_str());
-            }
-
-            void VariableDeclaration::generate_IR(llvm::IRBuilder<> *builder)
-            {
-                auto type = ((semantic_analysis::Type*) this->type->get_semantic_type())
-                        ->get_llvm_type(builder->getContext());
-
-                variable = builder->CreateAlloca(type, nullptr, util::String::format("v%zu", this->id).c_str());
             }
         }
     }

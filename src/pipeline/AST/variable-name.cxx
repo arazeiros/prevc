@@ -53,9 +53,14 @@ namespace prevc
                 return !declaration->is_component_declaration();
             }
 
-            llvm::Value* VariableName::generate_IR_address(llvm::IRBuilder<> *builder)
+            llvm::Value* VariableName::generate_IR_address(llvm::IRBuilder<>* builder)
             {
-                return declaration->variable;
+                auto& context = builder->getContext();
+                auto  frame   = declaration->frame;
+                auto  base    = frame->allocated_frame;
+                auto  index   = declaration->frame_index;
+
+                return builder->CreateStructGEP(frame->get_llvm_type(context), base, (std::uint32_t) index);
             }
 
             const semantic_analysis::Type* VariableName::get_semantic_type()

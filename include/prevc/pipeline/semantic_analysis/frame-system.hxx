@@ -4,6 +4,7 @@
 
 #include <prevc/pipeline/semantic_analysis/frame.hxx>
 #include <prevc/pipeline/semantic_analysis/type.hxx>
+#include <utility>
 #include <stack>
 
 namespace prevc
@@ -44,9 +45,9 @@ namespace prevc
                 /**
                  * \brief Allocate a new variable in the current frame.
                  * \param variable The type of the variable to allocate.
-                 * \return The index of the allocated variable in the current frame.
+                 * \return A pair containing the frame of the variable and the index in the frame.
                  * */
-                std::uint64_t allocate_variable(const Type* variable);
+                std::pair<Frame*, std::uint64_t> allocate_variable(const Type* variable);
 
             private:
                 /**

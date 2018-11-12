@@ -4,6 +4,7 @@
 
 #include <llvm/IR/IRBuilder.h>
 #include <prevc/pipeline/AST/declaration.hxx>
+#include <prevc/pipeline/semantic_analysis/frame.hxx>
 
 namespace prevc
 {
@@ -18,9 +19,9 @@ namespace prevc
             {
             public:
                 /**
-                 * \brief The allocated LLVM variable.
+                 * \brief The frame containing this variable.
                  * */
-                llvm::AllocaInst* variable;
+                semantic_analysis::Frame* frame;
 
                 /**
                  * \brief The index of the variable in the current frame.
@@ -60,12 +61,6 @@ namespace prevc
                  * \return The representation in JSON format.
                  * */
                 virtual util::String to_string() const noexcept override;
-
-                /**
-                 * \brief Generate the IR code for this variable-declaration.
-                 * \param builder The builder of the IR block containing this variable declaration.
-                 * */
-                void generate_IR(llvm::IRBuilder<>* builder);
             };
         }
     }
