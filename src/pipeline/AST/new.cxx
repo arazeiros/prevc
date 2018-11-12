@@ -40,7 +40,8 @@ namespace prevc
                 auto size = builder->getInt64(layout.getTypeStoreSize(type));
 
                 auto f_malloc = module->getFunction("malloc");
-                return builder->CreateCall(f_malloc, llvm::ArrayRef<llvm::Value*>({size}));
+                auto result = builder->CreateCall(f_malloc, llvm::ArrayRef<llvm::Value*>({size}));
+                return builder->CreatePointerCast(result, llvm::PointerType::getUnqual(type));
             }
 
             std::optional<int64_t> New::evaluate_as_integer() const noexcept

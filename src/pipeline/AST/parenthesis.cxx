@@ -34,6 +34,11 @@ namespace prevc
                 return sub_expression->evaluate_as_integer();
             }
 
+            llvm::Value* Parenthesis::generate_IR_address(llvm::IRBuilder<>* builder)
+            {
+                return sub_expression->generate_IR_address(builder);
+            }
+
             const semantic_analysis::Type* Parenthesis::get_semantic_type()
             {
                 return sub_expression->get_semantic_type();
