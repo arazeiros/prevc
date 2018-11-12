@@ -46,7 +46,31 @@ namespace prevc
 
             void If::generate_IR(llvm::IRBuilder<>* builder)
             {
-                // TODO implement...
+                auto& context   = builder->getContext();
+
+                auto parent     = builder->GetInsertBlock()->getParent();
+                auto then_block = llvm::BasicBlock::Create(context, "then", parent);
+                auto else_block = llvm::BasicBlock::Create(context, "else");
+                auto out_block  = llvm::BasicBlock::Create(context, "out");
+
+                auto condition  = this->condition->generate_IR(builder);
+                auto result     = builder->CreateICmpNE(condition, builder->getFalse());
+                builder->CreateCondBr(result, then_block, else_block);
+
+                builder->SetInsertPoint(then_block);
+                then_body->generate_IR(builder);
+                builder->CreateBr(out_block);
+                // then_block = builder->GetInsertBlock();
+
+                parent->getBasicBlockList().push_back(else_block);
+                builder->SetInsertPoint(else_block);
+                if (else_body != nullptr) else_body->generate_IR(builder);
+                builder->CreateBr(out_block);
+                // else_block = builder->GetInsertBlock();
+
+                parent->getBasicBlockList().push_back(out_block);
+                builder->SetInsertPoint(out_block);
+                // out_block = builder->GetInsertBlock();
             }
 
             util::String If::to_string() const noexcept

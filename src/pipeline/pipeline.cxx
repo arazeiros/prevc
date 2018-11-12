@@ -52,8 +52,8 @@ namespace prevc
             derivation_analysis.complete();
             semantic_analysis::SemanticAnalysis semantic_analysis(this);
             semantic_analysis.complete();
-            //output_generation::OutputGeneration output_generation(this);
-            //output_generation.complete();
+            output_generation::OutputGeneration output_generation(this);
+            output_generation.complete();
         }
 
         void Pipeline::release_symbols_vector()
