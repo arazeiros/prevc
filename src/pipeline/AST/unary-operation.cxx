@@ -98,37 +98,33 @@ namespace prevc
 
             llvm::Value* UnaryOperation::generate_IR(llvm::IRBuilder<>* builder)
             {
-                auto sub = sub_expression->generate_IR(builder);
                 auto& module = pipeline->IR_module;
 
                 switch (operator_)
                 {
                     case Operator::PLUS:
-                        return sub;
+                        return sub_expression->generate_IR(builder);
 
                     case Operator::MINUS:
-                        return builder->CreateNeg(sub);
+                        return builder->CreateNeg(sub_expression->generate_IR(builder));
 
                     case Operator::NOT:
-                        return builder->CreateXor(sub, 1);
+                        return builder->CreateXor(sub_expression->generate_IR(builder), 1);
 
                     case Operator::DEL:
                     {
-                        auto  f_free = module->getFunction("free");
+                        auto sub = sub_expression->generate_IR(builder);
+                        auto f_free = module->getFunction("free");
                         builder->CreateCall(f_free, llvm::ArrayRef<llvm::Value*>({sub}));
                         return sub; // returning the freed address
                     }
 
                     case Operator::MEM:
-                        // TODO implement...
-                        break;
+                        return sub_expression->generate_IR_address(builder);
 
                     case Operator::VAL:
-                        return builder->CreateLoad(sub);
+                        return builder->CreateLoad(generate_IR_address(builder));
                 }
-
-                InternalError::raise("illegal state: case not handled: UnaryOperation::generate_IR");
-                return nullptr;
             }
 
             std::optional<int64_t> UnaryOperation::evaluate_as_integer() const noexcept
@@ -156,6 +152,12 @@ namespace prevc
             bool UnaryOperation::is_lvalue() const noexcept
             {
                 return (operator_ == Operator::VAL) && sub_expression->is_lvalue();
+            }
+
+            llvm::Value* UnaryOperation::generate_IR_address(llvm::IRBuilder<> *builder)
+            {
+                // Operator is @ (AKA VAL)
+                return sub_expression->generate_IR(builder);
             }
 
             const semantic_analysis::Type* UnaryOperation::get_semantic_type()
