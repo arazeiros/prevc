@@ -65,7 +65,12 @@ namespace prevc
             llvm::Value* FunctionCall::generate_IR(llvm::IRBuilder<>* builder)
             {
                 auto& module   = pipeline->IR_module;
-                auto  function = module->getFunction(this->name.c_str());
+                auto  function = module->getFunction(this->declaration->get_native_name().c_str());
+
+                if (function == nullptr)
+                    InternalError::raise(util::String::format(
+                            "function `%s` doesn't exists", this->declaration->get_native_name().c_str()));
+
                 std::vector<llvm::Value*> args;
 
                 for (auto argument : *arguments)

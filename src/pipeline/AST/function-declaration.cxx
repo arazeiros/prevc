@@ -86,6 +86,36 @@ namespace prevc
                 this->frame = pipeline->frame_system->pop();
             }
 
+            util::String FunctionDeclaration::get_native_name() const
+            {
+                return (frame->level <= 1)
+                    ? name
+                    : util::String::format("f_%i_%zu", this->frame->level, this->id);
+            }
+
+            void FunctionDeclaration::generate_IR()
+            {
+                auto& module   = this->pipeline->IR_module;
+                auto& context  = module->getContext();
+                auto  sem_type = ((semantic_analysis::Type*) this->get_semantic_type());
+                auto  type     = sem_type->get_llvm_type(context);
+                auto  linkage  = (this->frame->level <= 1) ? llvm::Function::ExternalLinkage : llvm::Function::PrivateLinkage;
+                auto  fun_type = llvm::FunctionType::get(type, {/* TODO insert function args */}, false);
+                auto  function = llvm::Function::Create(fun_type, linkage, get_native_name().c_str(), module);
+                function->setCallingConv(llvm::CallingConv::C);
+
+                if (this->implementation != nullptr)
+                {
+                    llvm::IRBuilder<> builder(llvm::BasicBlock::Create(context, "entry", function));
+                    auto value = this->implementation->generate_IR(&builder);
+
+                    if (!sem_type->is_void())
+                        builder.CreateRet(value);
+                    else
+                        builder.CreateRetVoid();
+                }
+            }
+
             util::String FunctionDeclaration::to_string() const noexcept
             {
                 return util::String::format(

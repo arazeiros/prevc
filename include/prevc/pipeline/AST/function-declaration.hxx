@@ -48,6 +48,19 @@ namespace prevc
                 virtual void check_semantics() override;
 
                 /**
+                 * \brief Returns the native name of the function.
+                 * \return The native name.
+                 *
+                 * Can be called only after semantic analysis.
+                 * */
+                util::String get_native_name() const;
+
+                /**
+                 * \brief Generate the IR code for this function-declaration.
+                 * */
+                void generate_IR();
+
+                /**
                  * \brief Returns a string representation of this function declaration.
                  * \return The representation in JSON format.
                  * */

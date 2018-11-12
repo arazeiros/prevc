@@ -1,6 +1,7 @@
 #include <prevc/pipeline/AST/compound.hxx>
 #include <utility>
 #include <prevc/pipeline/AST/variable-declaration.hxx>
+#include <prevc/pipeline/AST/function-declaration.hxx>
 
 namespace prevc
 {
@@ -59,17 +60,17 @@ namespace prevc
                         case Declaration::Kind::Variable:
                         {
                             dynamic_cast<VariableDeclaration*>(declaration)->generate_IR(builder);
-                            continue;
+                            break;
                         }
 
                         case Declaration::Kind::Function:
                         {
-                            // TODO implement
-                            continue;
+                            dynamic_cast<FunctionDeclaration*>(declaration)->generate_IR();
+                            break;
                         }
 
                         default:
-                            continue;
+                            break;
                     }
                 }
 
