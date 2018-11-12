@@ -34,6 +34,8 @@ ADD_EXECUTABLE(prevc
     src/pipeline/semantic_analysis/array-type.cxx
     src/pipeline/semantic_analysis/atom-type.cxx
     src/pipeline/semantic_analysis/concrete-type.cxx
+    src/pipeline/semantic_analysis/frame.cxx
+    src/pipeline/semantic_analysis/frame-system.cxx
     src/pipeline/semantic_analysis/link-type.cxx
     src/pipeline/semantic_analysis/namespace.cxx
     src/pipeline/semantic_analysis/pointer-type.cxx

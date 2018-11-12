@@ -15,6 +15,7 @@ namespace prevc
             {
                 pipeline->global_namespace = new Namespace;
                 pipeline->type_system = new TypeSystem;
+                pipeline->frame_system = new FrameSystem;
             }
 
             SemanticAnalysis::~SemanticAnalysis()
@@ -30,13 +31,17 @@ namespace prevc
                 // safe cast: syntax analysis restrict root of a AST to be an expression
                 auto root = (AST::Expression*) pipeline->abstract_syntax_tree;
 
+                pipeline->frame_system->push();
                 root->check_semantics();
+                auto frame = pipeline->frame_system->pop();
                 auto type = root->get_semantic_type();
 
                 if (!type->is_int())
                     CompileTimeError::raise(pipeline->file_name, root->location, util::String::format(
                             "the root expression of the module must be of type `int`, but the "
                             "given one is of type `%s`", type->to_string().c_str()));
+
+                delete frame;
             }
         }
     }

@@ -46,6 +46,7 @@ namespace prevc
 #include <llvm/IR/Module.h>
 #include <prevc/pipeline/lexical_analysis/symbols-vector.hxx>
 #include <prevc/pipeline/semantic_analysis/namespace.hxx>
+#include <prevc/pipeline/semantic_analysis/frame-system.hxx>
 #include <prevc/pipeline/semantic_analysis/type-system.hxx>
 #include <prevc/pipeline/syntax_analysis/syntax-node.hxx>
 #include <prevc/pipeline/AST/node.hxx>
@@ -111,6 +112,12 @@ namespace prevc
             semantic_analysis::TypeSystem* type_system;
 
             /**
+             * \brief The frame system, of the module.
+             * Calculated during the "semantic analysis" phase.
+             * */
+            semantic_analysis::FrameSystem* frame_system;
+
+            /**
              * \brief Contains the current declaration that is under semantic check.
              * Or NULL if there is no such declaration.
              * */
@@ -142,6 +149,11 @@ namespace prevc
              * \brief Releases the global namespace.
              * */
             void release_global_namespace();
+
+            /**
+             * \brief Releases the frame system.
+             * */
+            void release_frame_system();
 
             /**
              * \brief Releases the type system.

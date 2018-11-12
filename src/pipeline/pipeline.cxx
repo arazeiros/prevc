@@ -26,6 +26,7 @@ namespace prevc
             next_declaration_id(1),
             global_namespace(nullptr),
             type_system(nullptr),
+            frame_system(nullptr),
             current_checking_declaration(nullptr),
             abstract_syntax_tree(nullptr),
             IR_module(nullptr)
@@ -39,6 +40,7 @@ namespace prevc
             release_derivation_tree();
             release_global_namespace();
             release_type_system();
+            release_frame_system();
             release_abstract_syntax_tree();
             release_IR_module();
         }
@@ -75,6 +77,11 @@ namespace prevc
         void Pipeline::release_type_system()
         {
             zero_delete(&type_system);
+        }
+
+        void Pipeline::release_frame_system()
+        {
+            zero_delete(&frame_system);
         }
 
         void Pipeline::release_abstract_syntax_tree()

@@ -5,6 +5,7 @@
 #include <prevc/pipeline/AST/declaration.hxx>
 #include <prevc/pipeline/AST/expression.hxx>
 #include <prevc/pipeline/AST/parameters.hxx>
+#include <prevc/pipeline/semantic_analysis/frame.hxx>
 
 namespace prevc
 {
@@ -62,6 +63,13 @@ namespace prevc
                   * \brief The implementation of the function, or NULL if there is no implementation provided.
                   * */
                  AST::Expression* implementation;
+
+                 /**
+                  * \brief The function frame.
+                  *
+                  * Calculated during semantic analysis.
+                  * */
+                 const semantic_analysis::Frame* frame;
             };
         }
     }

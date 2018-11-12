@@ -12,7 +12,8 @@ namespace prevc
                                      Expression* implementation):
                 Declaration(pipeline, std::move(location), Declaration::Kind::Function, name, type),
                 parameters(parameters),
-                implementation(implementation)
+                implementation(implementation),
+                frame(nullptr)
             {
 
             }
@@ -23,6 +24,9 @@ namespace prevc
 
                 if (implementation != nullptr)
                     delete implementation;
+
+                if (frame != nullptr)
+                    delete frame;
             }
 
             void FunctionDeclaration::check_semantics()
@@ -30,6 +34,7 @@ namespace prevc
                 Declaration::check_semantics();
 
                 auto& global_namespace = pipeline->global_namespace;
+                pipeline->frame_system->push();
                 global_namespace->push_scope();
 
                 for (auto& parameter : *parameters)
@@ -78,6 +83,7 @@ namespace prevc
                 }
 
                 global_namespace->pop_scope();
+                this->frame = pipeline->frame_system->pop();
             }
 
             util::String FunctionDeclaration::to_string() const noexcept
