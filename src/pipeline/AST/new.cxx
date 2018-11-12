@@ -32,11 +32,15 @@ namespace prevc
 
             llvm::Value* New::generate_IR(llvm::IRBuilder<> *builder)
             {
-                // TODO implementation?
-                // WARNING: this function just returns 'null'
-                // to calculate the actual size to allocate the size of a type have to be known
-                auto& context = pipeline->IR_module->getContext();
-                return llvm::ConstantInt::get(context, llvm::APInt::getNullValue(8));
+                auto& module  = pipeline->IR_module;
+                auto& context = module->getContext();
+                llvm::DataLayout layout(module);
+
+                auto type = ((semantic_analysis::Type*) this->type->get_semantic_type())->get_llvm_type(context);
+                auto size = builder->getInt64(layout.getTypeStoreSize(type));
+
+                auto f_malloc = module->getFunction("malloc");
+                return builder->CreateCall(f_malloc, llvm::ArrayRef<llvm::Value*>({size}));
             }
 
             std::optional<int64_t> New::evaluate_as_integer() const noexcept
