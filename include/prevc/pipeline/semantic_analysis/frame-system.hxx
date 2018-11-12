@@ -3,6 +3,7 @@
 #define PREVC_PIPELINE_SEMANTIC_ANALYSIS_FRAMESYSTEM_HXX
 
 #include <prevc/pipeline/semantic_analysis/frame.hxx>
+#include <prevc/pipeline/semantic_analysis/type.hxx>
 #include <stack>
 
 namespace prevc
@@ -39,6 +40,13 @@ namespace prevc
                  * The returned frame is not memory managed, so it should be deleted with a `delete`.
                  * */
                 const Frame* pop();
+
+                /**
+                 * \brief Allocate a new variable in the current frame.
+                 * \param variable The type of the variable to allocate.
+                 * \return The index of the allocated variable in the current frame.
+                 * */
+                std::uint64_t allocate_variable(const Type* variable);
 
             private:
                 /**

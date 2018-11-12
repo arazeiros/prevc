@@ -20,6 +20,11 @@ namespace prevc
                 this->frames.pop();
                 return frame;
             }
+
+            std::uint64_t FrameSystem::allocate_variable(const Type* variable)
+            {
+                return this->frames.top()->allocate_variable(variable);
+            }
         }
     }
 }

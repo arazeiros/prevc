@@ -23,6 +23,13 @@ namespace prevc
                 llvm::AllocaInst* variable;
 
                 /**
+                 * \brief The index of the variable in the current frame.
+                 *
+                 * Contains -1 if it's undefined.
+                 * */
+                std::int64_t frame_index;
+
+                /**
                  * \brief Create an AST declaration at the specified location.
                  * \param pipeline The pipeline that owns this AST node.
                  * \param location The location of the declaration in the source code.
