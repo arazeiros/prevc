@@ -24,11 +24,6 @@ namespace prevc
                 if (is_component_declaration())
                     return;
 
-                auto parameter = dynamic_cast<Parameter*>(this);
-
-                if (parameter != nullptr)
-                    return;
-
                 auto access       = this->pipeline->frame_system->allocate_variable(get_semantic_type());
                 this->frame       = access.first;
                 this->frame_index = access.second;

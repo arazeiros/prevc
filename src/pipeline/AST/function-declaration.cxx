@@ -126,14 +126,14 @@ namespace prevc
                     auto frame_type = this->frame->get_llvm_type(context);
                     auto allocated = builder.CreateAlloca(frame_type);
                     this->frame->allocated_frame = allocated;
+                    auto args = function->arg_begin();
 
                     if (this->frame->level > 1)
-                    {
-                        // copy the static link in the local variable
-                        auto static_link = function->arg_begin();
-                        auto var_SL      = builder.CreateStructGEP(frame_type, allocated, 0);
-                        builder.CreateStore(static_link, var_SL);
-                    }
+                        builder.CreateStore(args++, builder.CreateStructGEP(frame_type, allocated, 0));
+
+                    for (auto& parameter : *this->parameters)
+                        builder.CreateStore(args++,
+                                builder.CreateStructGEP(frame_type, allocated, (std::uint32_t) parameter->frame_index));
 
                     auto value = this->implementation->generate_IR(&builder);
 
