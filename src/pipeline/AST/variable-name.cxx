@@ -38,7 +38,7 @@ namespace prevc
 
             llvm::Value* VariableName::generate_IR(llvm::IRBuilder<>* builder)
             {
-                return builder->CreateLoad(declaration->variable);
+                return builder->CreateLoad(generate_IR_address(builder));
             }
 
             std::optional<int64_t> VariableName::evaluate_as_integer() const noexcept
@@ -51,6 +51,11 @@ namespace prevc
                 // Should here be `true` always returned?
                 // Can a variable name reference a component declaration? I think no.
                 return !declaration->is_component_declaration();
+            }
+
+            llvm::Value* VariableName::generate_IR_address(llvm::IRBuilder<> *builder)
+            {
+                return declaration->variable;
             }
 
             const semantic_analysis::Type* VariableName::get_semantic_type()

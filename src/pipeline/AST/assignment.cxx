@@ -49,9 +49,9 @@ namespace prevc
 
             void Assignment::generate_IR(llvm::IRBuilder<>* builder)
             {
-                // auto destination_value = destination->generate_IR(builder);
-                // auto source_value = source->generate_IR(builder);
-                // TODO implement...
+                auto destination = this->destination->generate_IR_address(builder);
+                auto source = this->source->generate_IR(builder);
+                builder->CreateStore(source, destination);
             }
 
             util::String Assignment::to_string() const noexcept

@@ -17,6 +17,12 @@ namespace prevc
             {
                 return false;
             }
+
+            llvm::Value* Expression::generate_IR_address(llvm::IRBuilder<> *builder)
+            {
+                InternalError::raise("trying to generate IR address of incompatible expression");
+                return nullptr;
+            }
         }
     }
 }
