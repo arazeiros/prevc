@@ -55,7 +55,11 @@ namespace prevc
             {
                 for (auto declaration : *declarations)
                     if (declaration->kind == Declaration::Kind::Function)
-                        dynamic_cast<FunctionDeclaration*>(declaration)->generate_IR();
+                        dynamic_cast<FunctionDeclaration*>(declaration)->generate_IR_declaration();
+
+                for (auto declaration : *declarations)
+                    if (declaration->kind == Declaration::Kind::Function)
+                        dynamic_cast<FunctionDeclaration*>(declaration)->generate_IR_implementation();
 
                 for (auto statement : *statements)
                     statement->generate_IR(builder);

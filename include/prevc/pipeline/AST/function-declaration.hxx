@@ -6,6 +6,8 @@
 #include <prevc/pipeline/AST/expression.hxx>
 #include <prevc/pipeline/AST/parameters.hxx>
 #include <prevc/pipeline/semantic_analysis/frame.hxx>
+#include <llvm/IR/Type.h>
+#include <vector>
 
 namespace prevc
 {
@@ -56,9 +58,16 @@ namespace prevc
                 util::String get_native_name() const;
 
                 /**
-                 * \brief Generate the IR code for this function-declaration.
+                 * \brief Generate the function declaration IR code for this function-declaration.
                  * */
-                void generate_IR();
+                void generate_IR_declaration();
+
+                /**
+                 * \brief Generate the function implementation IR code for this function-declaration.
+                 *
+                 * If implementation is present.
+                 * */
+                void generate_IR_implementation();
 
                 /**
                  * \brief Returns a string representation of this function declaration.
@@ -83,6 +92,11 @@ namespace prevc
                   * Calculated during semantic analysis.
                   * */
                  semantic_analysis::Frame* frame;
+
+                 /**
+                  * \brief The llvm types of parameters.
+                  * */
+                 std::vector<llvm::Type*> llvm_parameters;
             };
         }
     }

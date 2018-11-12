@@ -5,6 +5,7 @@
 #include <prevc/error.hxx>
 #include <prevc/pipeline/AST/expression.hxx>
 #include <prevc/pipeline/AST/variable-declaration.hxx>
+#include <prevc/pipeline/semantic_analysis/frame.hxx>
 #include <prevc/util/string.hxx>
 
 namespace prevc
@@ -92,6 +93,11 @@ namespace prevc
                  * Calculated during semantic analysis.
                  * */
                 VariableDeclaration* declaration;
+
+                /**
+                 * \brief The frame in which this variable access stands.
+                 */
+                semantic_analysis::Frame* frame;
             };
         }
     }

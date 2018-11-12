@@ -2,16 +2,24 @@
 #ifndef PREVC_PIPELINE_SEMANTIC_ANALYSIS_FRAME_HXX
 #define PREVC_PIPELINE_SEMANTIC_ANALYSIS_FRAME_HXX
 
+#include <prevc/pipeline/semantic_analysis/pointer-type.hxx>
 #include <prevc/pipeline/semantic_analysis/type.hxx>
 #include <cstdint>
 #include <vector>
-#include <llvm/IR/Type.h>
+#include <llvm/IR/DerivedTypes.h>
 #include <llvm/IR/Instructions.h>
 
 namespace prevc
 {
     namespace pipeline
     {
+        namespace AST
+        {
+            class FunctionCall;
+            class FunctionDeclaration;
+            class VariableName;
+        }
+
         namespace semantic_analysis
         {
             /**
@@ -19,6 +27,10 @@ namespace prevc
              * */
             class Frame
             {
+                friend AST::FunctionCall;
+                friend AST::FunctionDeclaration;
+                friend AST::VariableName;
+
             public:
                 /**
                  * \brief The level of the frame.
@@ -34,7 +46,7 @@ namespace prevc
                  * \brief Creates a new function frame.
                  * \brief The level of the frame.
                  * */
-                Frame(std::int32_t level);
+                Frame(std::int32_t level, Frame* static_link);
 
                 /**
                  * \brief Default implementation.
@@ -52,7 +64,7 @@ namespace prevc
                  * \brief Get the llvm type representing this frame.
                  * \param context The llvm context.
                  * */
-                llvm::Type* get_llvm_type(llvm::LLVMContext& context);
+                llvm::StructType* get_llvm_type(llvm::LLVMContext& context);
 
             private:
                 /**
@@ -68,7 +80,12 @@ namespace prevc
                 /**
                  * \brief The llvm type representing this frame.
                  * */
-                llvm::Type* llvm_type;
+                llvm::StructType* llvm_type;
+
+                /**
+                 * \brief The frame's static link.
+                 * */
+                Frame* static_link;
             };
         }
     }

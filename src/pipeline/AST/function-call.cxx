@@ -13,7 +13,8 @@ namespace prevc
                 Expression(pipeline, std::move(location)),
                 name(name),
                 arguments(arguments),
-                declaration(nullptr)
+                declaration(nullptr),
+                frame(nullptr)
             {
 
             }
@@ -60,11 +61,14 @@ namespace prevc
                                 "but the argument #%i is of type `%s`, when type `%s` is required",
                                 name.c_str(), i + 1, argument_type->to_string().c_str(), parameter_type->to_string().c_str()));
                 }
+
+                this->frame = this->pipeline->frame_system->get_current();
             }
 
             llvm::Value* FunctionCall::generate_IR(llvm::IRBuilder<>* builder)
             {
                 auto& module   = pipeline->IR_module;
+                auto& context  = module->getContext();
                 auto  function = module->getFunction(this->declaration->get_native_name().c_str());
 
                 if (function == nullptr)
@@ -72,6 +76,22 @@ namespace prevc
                             "function `%s` doesn't exists", this->declaration->get_native_name().c_str()));
 
                 std::vector<llvm::Value*> args;
+                auto declaration_frame_level = declaration->frame->level;
+
+                if (declaration_frame_level > 1)
+                {
+                    auto               frame = this->frame;
+                    llvm::Instruction* base  = frame->allocated_frame;
+
+                    while (frame->level + 1 != declaration_frame_level)
+                    {
+                        auto static_link = builder->CreateStructGEP(frame->get_llvm_type(context), base, 0);
+                        base = builder->CreateLoad(static_link);
+                        frame = frame->static_link;
+                    }
+
+                    args.push_back(base);
+                }
 
                 for (auto argument : *arguments)
                     args.emplace_back(argument->generate_IR(builder));

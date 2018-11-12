@@ -5,6 +5,7 @@
 #include <prevc/pipeline/AST/arguments.hxx>
 #include <prevc/pipeline/AST/expression.hxx>
 #include <prevc/pipeline/AST/function-declaration.hxx>
+#include <prevc/pipeline/semantic_analysis/frame.hxx>
 #include <prevc/util/string.hxx>
 
 namespace prevc
@@ -82,6 +83,11 @@ namespace prevc
                  * Calculated during semantic analysis.
                  * */
                 FunctionDeclaration* declaration;
+
+                /**
+                 * \brief The frame in which the function call is located.
+                 * */
+                semantic_analysis::Frame* frame;
             };
         }
     }

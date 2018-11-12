@@ -93,21 +93,48 @@ namespace prevc
                     : util::String::format("f_%i_%zu", this->frame->level, this->id);
             }
 
-            void FunctionDeclaration::generate_IR()
+            void FunctionDeclaration::generate_IR_declaration()
             {
                 auto& module   = this->pipeline->IR_module;
                 auto& context  = module->getContext();
                 auto  sem_type = ((semantic_analysis::Type*) this->get_semantic_type());
                 auto  type     = sem_type->get_llvm_type(context);
                 auto  linkage  = (this->frame->level <= 1) ? llvm::Function::ExternalLinkage : llvm::Function::PrivateLinkage;
-                auto  fun_type = llvm::FunctionType::get(type, {/* TODO insert function args */}, false);
+                llvm_parameters.reserve(parameters->size() + 1);
+
+                if (this->frame->level > 1)
+                    llvm_parameters.push_back(llvm::PointerType::getUnqual(frame->static_link->get_llvm_type(context)));
+
+                for (auto& parameter : *this->parameters)
+                    llvm_parameters.push_back(((semantic_analysis::Type*) parameter->get_semantic_type())->get_llvm_type(context));
+
+                auto  fun_type = llvm::FunctionType::get(type, llvm_parameters, false);
                 auto  function = llvm::Function::Create(fun_type, linkage, get_native_name().c_str(), module);
                 function->setCallingConv(llvm::CallingConv::C);
+            }
 
+            void FunctionDeclaration::generate_IR_implementation()
+            {
                 if (this->implementation != nullptr)
                 {
+                    auto& module   = this->pipeline->IR_module;
+                    auto& context  = module->getContext();
+                    auto  sem_type = ((semantic_analysis::Type*) this->get_semantic_type());
+                    auto  function = module->getFunction(get_native_name().c_str());
+
                     llvm::IRBuilder<> builder(llvm::BasicBlock::Create(context, "entry", function));
-                    this->frame->allocated_frame = builder.CreateAlloca(this->frame->get_llvm_type(context));
+                    auto frame_type = this->frame->get_llvm_type(context);
+                    auto allocated = builder.CreateAlloca(frame_type);
+                    this->frame->allocated_frame = allocated;
+
+                    if (this->frame->level > 1)
+                    {
+                        // copy the static link in the local variable
+                        auto static_link = function->arg_begin();
+                        auto var_SL      = builder.CreateStructGEP(frame_type, allocated, 0);
+                        builder.CreateStore(static_link, var_SL);
+                    }
+
                     auto value = this->implementation->generate_IR(&builder);
 
                     if (!sem_type->is_void())

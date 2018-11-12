@@ -12,7 +12,8 @@ namespace prevc
             VariableName::VariableName(Pipeline* pipeline, util::Location&& location, const util::String& name):
                 Expression(pipeline, std::move(location)),
                 name(name),
-                declaration(nullptr)
+                declaration(nullptr),
+                frame(nullptr)
             {
 
             }
@@ -34,6 +35,7 @@ namespace prevc
                             util::String::format("declared identifier `%s` is not a variable", name.c_str()));
 
                 this->declaration = (VariableDeclaration*) declaration;
+                this->frame = this->pipeline->frame_system->get_current();
             }
 
             llvm::Value* VariableName::generate_IR(llvm::IRBuilder<>* builder)
@@ -55,12 +57,19 @@ namespace prevc
 
             llvm::Value* VariableName::generate_IR_address(llvm::IRBuilder<>* builder)
             {
-                auto& context = builder->getContext();
-                auto  frame   = declaration->frame;
-                auto  base    = frame->allocated_frame;
-                auto  index   = declaration->frame_index;
+                auto&              context = builder->getContext();
+                auto               frame   = this->frame;
+                llvm::Instruction* base    = frame->allocated_frame;
 
-                return builder->CreateStructGEP(frame->get_llvm_type(context), base, (std::uint32_t) index);
+                while (frame != declaration->frame)
+                {
+                    auto static_link = builder->CreateStructGEP(frame->get_llvm_type(context), base, 0);
+                    base = builder->CreateLoad(static_link);
+                    frame = frame->static_link;
+                }
+
+                auto index = (std::uint32_t) declaration->frame_index;
+                return builder->CreateStructGEP(frame->get_llvm_type(context), base, index);
             }
 
             const semantic_analysis::Type* VariableName::get_semantic_type()

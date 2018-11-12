@@ -13,6 +13,8 @@ namespace prevc
     {
         namespace semantic_analysis
         {
+            class PointerType;
+
             /**
              * \brief System that handle function frames of a Prev module.
              * */
@@ -25,9 +27,21 @@ namespace prevc
                 FrameSystem();
 
                 /**
-                 * \brief Default implementation.
+                 * \brief Release used resources.
                  * */
-                virtual ~FrameSystem() = default;
+                virtual ~FrameSystem();
+
+                /**
+                 * \brief Returns the current frame level.
+                 * \return The current frame level.
+                 * */
+                std::uint64_t get_level() const;
+
+                /**
+                 * \brief Returns the current frame.
+                 * \return The current frame.
+                 * */
+                Frame* get_current() const;
 
                 /**
                  * \brief Adds a new frame on the top.
