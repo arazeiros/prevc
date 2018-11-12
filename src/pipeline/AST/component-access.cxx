@@ -14,6 +14,7 @@ namespace prevc
                 Expression(pipeline, std::move(location)),
                 record(record),
                 component(component),
+                record_type(nullptr),
                 accessed_component_type(nullptr)
             {
 
@@ -34,7 +35,8 @@ namespace prevc
                     CompileTimeError::raise(pipeline->file_name, location,
                             "trying to perform a component access, but the given expression is not a record");
 
-                auto component_type_optional = record_type->as_record()->get_type_of(component);
+                this->record_type = record_type->as_record();
+                auto component_type_optional = this->record_type->get_type_of(component);
 
                 if (!component_type_optional.has_value())
                     CompileTimeError::raise(pipeline->file_name, location, util::String::format(
@@ -46,9 +48,7 @@ namespace prevc
 
             llvm::Value* ComponentAccess::generate_IR(llvm::IRBuilder<>* builder)
             {
-                // TODO implement
-                InternalError::raise("missing implementation: AST component access generating IR");
-                return nullptr;
+                return builder->CreateLoad(generate_IR_address(builder));
             }
 
             std::optional<int64_t> ComponentAccess::evaluate_as_integer() const noexcept
@@ -59,6 +59,15 @@ namespace prevc
             bool ComponentAccess::is_lvalue() const noexcept
             {
                 return record->is_lvalue();
+            }
+
+            llvm::Value* ComponentAccess::generate_IR_address(llvm::IRBuilder<> *builder)
+            {
+                auto& context = builder->getContext();
+                auto type     = ((semantic_analysis::Type*) this->record_type)->get_llvm_type(context);
+                auto record   = this->record->generate_IR_address(builder);
+                auto index    = this->record_type->get_index_of(component);
+                return builder->CreateStructGEP(type, record, (unsigned int) index);
             }
 
             const semantic_analysis::Type* ComponentAccess::get_semantic_type()

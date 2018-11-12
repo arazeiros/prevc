@@ -53,6 +53,15 @@ namespace prevc
                 virtual bool is_lvalue() const noexcept;
 
                 /**
+                 * \brief Generate the IR code for this expression (returning the address of the expression).
+                 * \param builder The builder of the IR block containing this expression.
+                 * \return The IR address representing this expression.
+                 *
+                 * The expression must be lvalue, otherwise this function has unexpected behaviour.
+                 * */
+                virtual llvm::Value* generate_IR_address(llvm::IRBuilder<>* builder) override;
+
+                /**
                  * \brief Returns the semantic type of this expression.
                  * \return The semantic type of this expression.
                  *
@@ -76,6 +85,11 @@ namespace prevc
                  * \brief The name of the component to access.
                  * */
                 const util::String component;
+
+                /**
+                 * \brief The semantic record type.
+                 * */
+                const semantic_analysis::RecordType* record_type;
 
                 /**
                  * \brief The type of the component accessed by this expression.

@@ -1,4 +1,5 @@
 #include <prevc/pipeline/semantic_analysis/record-type.hxx>
+#include <prevc/error.hxx>
 #include <llvm/IR/DerivedTypes.h>
 #include <sstream>
 
@@ -35,6 +36,18 @@ namespace prevc
                         return pair.second;
 
                 return {};
+            }
+
+            std::size_t RecordType::get_index_of(const util::String& component_name) const noexcept
+            {
+                std::size_t limit = subs.size();
+
+                for (size_t index = 0; index < limit; ++index)
+                    if (subs.at(index).first == component_name)
+                        return index;
+
+                InternalError::raise("component not present in record");
+                return 0;
             }
 
             bool RecordType::equals(const Type* other) const noexcept

@@ -59,6 +59,13 @@ namespace prevc
                 std::optional<const Type*> get_type_of(const util::String& component_name) const noexcept;
 
                 /**
+                 * \brief Returns the index of the specified component.
+                 * \param component_name The name of the component.
+                 * \return The index of the component.
+                 * */
+                std::size_t get_index_of(const util::String& component_name) const noexcept;
+
+                /**
                  * \brief Returns a string representation of this type.
                  * \return The representation.
                  * */
