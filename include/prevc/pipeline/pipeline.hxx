@@ -10,22 +10,7 @@ namespace prevc
 
         namespace AST
         {
-            class ArrayType;
-            class Atom;
-            class BinaryOperation;
-            class Compound;
-            class Declarations;
-            class FunctionCall;
-            class FunctionDeclaration;
-            class NamedType;
-            class New;
-            class Parenthesis;
-            class PointerType;
-            class PrimitiveType;
-            class RecordType;
-            class UnaryOperation;
             class TypeDeclaration;
-            class VariableName;
         }
 
         namespace derivation_analysis
@@ -74,29 +59,6 @@ namespace prevc
          * */
         class Pipeline
         {
-            friend AST::ArrayType;
-            friend AST::Atom;
-            friend AST::BinaryOperation;
-            friend AST::Compound;
-            friend AST::Declarations;
-            friend AST::FunctionCall;
-            friend AST::FunctionDeclaration;
-            friend AST::NamedType;
-            friend AST::New;
-            friend AST::Parenthesis;
-            friend AST::PointerType;
-            friend AST::PrimitiveType;
-            friend AST::RecordType;
-            friend AST::UnaryOperation;
-            friend AST::VariableName;
-            friend derivation_analysis::DerivationAnalysis;
-            friend lexical_analysis::LexicalAnalysis;
-            friend semantic_analysis::Namespace;
-            friend semantic_analysis::SemanticAnalysis;
-            friend syntax_analysis::SyntaxAnalysis;
-            friend syntax_analysis::SyntaxTreeBuilder;
-            friend output_generation::OutputGeneration;
-
         public:
             /**
              * \brief The filename of the module.
@@ -119,12 +81,16 @@ namespace prevc
              * */
             void compile();
 
-        private:
             /**
              * \brief The symbols vector.
              * Filled during the "lexical analysis" phase.
              * */
             lexical_analysis::SymbolsVector symbols_vector;
+
+            /**
+             * \brief The next declaration id.
+             * */
+            std::size_t next_declaration_id;
 
             /**
              * \brief The derivation tree of the module.

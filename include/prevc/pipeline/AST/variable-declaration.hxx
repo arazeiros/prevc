@@ -2,6 +2,7 @@
 #ifndef PREVC_PIPELINE_AST_VARIABLEDECLARATION_HXX
 #define PREVC_PIPELINE_AST_VARIABLEDECLARATION_HXX
 
+#include <llvm/IR/IRBuilder.h>
 #include <prevc/pipeline/AST/declaration.hxx>
 
 namespace prevc
@@ -16,6 +17,11 @@ namespace prevc
             class VariableDeclaration: public Declaration
             {
             public:
+                /**
+                 * \brief The allocated LLVM variable.
+                 * */
+                llvm::AllocaInst* variable;
+
                 /**
                  * \brief Create an AST declaration at the specified location.
                  * \param pipeline The pipeline that owns this AST node.
@@ -47,6 +53,12 @@ namespace prevc
                  * \return The representation in JSON format.
                  * */
                 virtual util::String to_string() const noexcept override;
+
+                /**
+                 * \brief Generate the IR code for this variable-declaration.
+                 * \param builder The builder of the IR block containing this variable declaration.
+                 * */
+                void generate_IR(llvm::IRBuilder<>* builder);
             };
         }
     }

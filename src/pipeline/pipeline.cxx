@@ -23,6 +23,7 @@ namespace prevc
         Pipeline::Pipeline(const std::string& file_name):
             file_name(file_name),
             derivation_tree(nullptr),
+            next_declaration_id(1),
             global_namespace(nullptr),
             type_system(nullptr),
             current_checking_declaration(nullptr),

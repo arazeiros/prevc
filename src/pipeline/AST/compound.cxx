@@ -1,5 +1,6 @@
 #include <prevc/pipeline/AST/compound.hxx>
 #include <utility>
+#include <prevc/pipeline/AST/variable-declaration.hxx>
 
 namespace prevc
 {
@@ -51,6 +52,27 @@ namespace prevc
 
             llvm::Value* Compound::generate_IR(llvm::IRBuilder<>* builder)
             {
+                for (auto declaration : *declarations)
+                {
+                    switch (declaration->kind)
+                    {
+                        case Declaration::Kind::Variable:
+                        {
+                            dynamic_cast<VariableDeclaration*>(declaration)->generate_IR(builder);
+                            continue;
+                        }
+
+                        case Declaration::Kind::Function:
+                        {
+                            // TODO implement
+                            continue;
+                        }
+
+                        default:
+                            continue;
+                    }
+                }
+
                 for (auto statement : *statements)
                     statement->generate_IR(builder);
 

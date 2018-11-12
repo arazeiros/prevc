@@ -10,6 +10,7 @@ namespace prevc
             Declaration::Declaration(Pipeline* pipeline, util::Location&& location, Kind kind,
                                      const util::String& name, Type* type):
                 Node(pipeline, std::move(location)),
+                id(pipeline->next_declaration_id++),
                 kind(kind),
                 name(name),
                 type(type),

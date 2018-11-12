@@ -38,9 +38,7 @@ namespace prevc
 
             llvm::Value* VariableName::generate_IR(llvm::IRBuilder<>* builder)
             {
-                // TODO implement
-                InternalError::raise("missing implementation: AST variable name generating IR");
-                return nullptr;
+                return builder->CreateLoad(declaration->variable);
             }
 
             std::optional<int64_t> VariableName::evaluate_as_integer() const noexcept

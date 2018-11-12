@@ -43,6 +43,11 @@ namespace prevc
                 };
 
                 /**
+                 * \brief The id of the declaration.
+                 * */
+                const std::size_t id;
+
+                /**
                  * \brief The kind of the declaration.
                  * */
                 const Kind kind;
