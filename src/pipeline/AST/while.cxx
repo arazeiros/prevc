@@ -38,7 +38,23 @@ namespace prevc
 
             void While::generate_IR(llvm::IRBuilder<>* builder)
             {
-                // TODO implement...
+                auto& context   = builder->getContext();
+                auto parent     = builder->GetInsertBlock()->getParent();
+                auto test_block = llvm::BasicBlock::Create(context, "test", parent);
+                auto do_block   = llvm::BasicBlock::Create(context, "do", parent);
+                auto out_block  = llvm::BasicBlock::Create(context, "out", parent);
+
+                builder->CreateBr(test_block);
+
+                builder->SetInsertPoint(test_block);
+                auto condition = builder->CreateICmpNE(this->condition->generate_IR(builder), builder->getFalse());
+                builder->CreateCondBr(condition, do_block, out_block);
+
+                builder->SetInsertPoint(do_block);
+                this->body->generate_IR(builder);
+                builder->CreateBr(test_block);
+
+                builder->SetInsertPoint(out_block);
             }
 
             util::String While::to_string() const noexcept
