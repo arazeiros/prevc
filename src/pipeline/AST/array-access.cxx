@@ -42,9 +42,7 @@ namespace prevc
 
             llvm::Value* ArrayAccess::generate_IR(llvm::IRBuilder<>* builder)
             {
-                // TODO implement
-                InternalError::raise("missing implementation: AST array access generating IR");
-                return nullptr;
+                return builder->CreateLoad(generate_IR_address(builder));
             }
 
             std::optional<int64_t> ArrayAccess::evaluate_as_integer() const noexcept
@@ -55,6 +53,14 @@ namespace prevc
             bool ArrayAccess::is_lvalue() const noexcept
             {
                 return array->is_lvalue();
+            }
+
+            llvm::Value* ArrayAccess::generate_IR_address(llvm::IRBuilder<> *builder)
+            {
+                auto array = this->array->generate_IR_address(builder);
+                auto index = this->index->generate_IR(builder);
+                auto zero  = builder->getInt8(0);
+                return builder->CreateGEP(array, {zero, index});
             }
 
             const semantic_analysis::Type* ArrayAccess::get_semantic_type()
