@@ -10,7 +10,14 @@ namespace prevc
         {
             FrameSystem::FrameSystem() = default;
 
-            FrameSystem::~FrameSystem() = default;
+            FrameSystem::~FrameSystem()
+            {
+                while (!this->frames.empty())
+                {
+                    delete this->frames.top();
+                    this->frames.pop();
+                }
+            }
 
             std::uint64_t FrameSystem::get_level() const
             {

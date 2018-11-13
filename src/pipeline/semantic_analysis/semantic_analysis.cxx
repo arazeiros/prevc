@@ -40,8 +40,6 @@ namespace prevc
                     CompileTimeError::raise(pipeline->file_name, root->location, util::String::format(
                             "the root expression of the module must be of type `int`, but the "
                             "given one is of type `%s`", type->to_string().c_str()));
-
-                delete frame;
             }
         }
     }

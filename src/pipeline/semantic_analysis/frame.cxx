@@ -10,7 +10,8 @@ namespace prevc
             Frame::Frame(std::int32_t level, Frame* static_link):
                 level(level),
                 allocated_frame(nullptr),
-                static_link(static_link)
+                static_link(static_link),
+                llvm_type(nullptr)
             {
                 // reserve the index for the static link
                 this->allocate_variable(nullptr);
