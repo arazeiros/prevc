@@ -10,6 +10,7 @@ namespace prevc
 
         namespace AST
         {
+            class VariableDeclaration;
             class TypeDeclaration;
         }
 
@@ -43,6 +44,7 @@ namespace prevc
 }
 
 #include <string>
+#include <vector>
 #include <llvm/IR/Module.h>
 #include <prevc/pipeline/lexical_analysis/symbols-vector.hxx>
 #include <prevc/pipeline/semantic_analysis/namespace.hxx>
@@ -116,6 +118,13 @@ namespace prevc
              * Calculated during the "semantic analysis" phase.
              * */
             semantic_analysis::FrameSystem* frame_system;
+
+            /**
+             * \brief The vector containing all the global variables.
+             *
+             * It's filled during semantic analysis.
+             * */
+            std::vector<AST::VariableDeclaration*> global_variables;
 
             /**
              * \brief Contains the current declaration that is under semantic check.

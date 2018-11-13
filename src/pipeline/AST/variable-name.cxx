@@ -57,19 +57,26 @@ namespace prevc
 
             llvm::Value* VariableName::generate_IR_address(llvm::IRBuilder<>* builder)
             {
-                auto&              context = builder->getContext();
-                auto               frame   = this->frame;
-                llvm::Instruction* base    = frame->allocated_frame;
-
-                while (frame != declaration->frame)
+                if (this->declaration->frame->level > 0)
                 {
-                    auto static_link = builder->CreateStructGEP(frame->get_llvm_type(context), base, 0);
-                    base = builder->CreateLoad(static_link);
-                    frame = frame->static_link;
-                }
+                    auto&              context = builder->getContext();
+                    auto               frame   = this->frame;
+                    llvm::Instruction* base    = frame->allocated_frame;
 
-                auto index = (std::uint32_t) declaration->frame_index;
-                return builder->CreateStructGEP(frame->get_llvm_type(context), base, index);
+                    while (frame != declaration->frame)
+                    {
+                        auto static_link = builder->CreateStructGEP(frame->get_llvm_type(context), base, 0);
+                        base = builder->CreateLoad(static_link);
+                        frame = frame->static_link;
+                    }
+
+                    auto index = (std::uint32_t) declaration->frame_index;
+                    return builder->CreateStructGEP(frame->get_llvm_type(context), base, index);
+                }
+                else
+                {
+                    return this->pipeline->IR_module->getNamedGlobal(this->name.c_str());
+                }
             }
 
             const semantic_analysis::Type* VariableName::get_semantic_type()

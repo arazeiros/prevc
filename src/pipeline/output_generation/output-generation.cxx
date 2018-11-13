@@ -10,6 +10,7 @@
 #include <llvm/Target/TargetOptions.h>
 #include <llvm/Target/TargetMachine.h>
 #include <prevc/pipeline/AST/expression.hxx>
+#include <prevc/pipeline/AST/variable-declaration.hxx>
 
 namespace prevc
 {
@@ -124,6 +125,17 @@ namespace prevc
                 module->setTargetTriple(target_triple);
 
                 declare_standard_library(context, module);
+
+                for (auto variable : pipeline->global_variables)
+                {
+                    auto name = variable->name.c_str();
+                    auto type = ((semantic_analysis::Type*) variable->get_semantic_type())->get_llvm_type(*context);
+
+                    auto global_variable = new llvm::GlobalVariable(*module, type, false,
+                            llvm::GlobalValue::InternalLinkage, nullptr, name);
+
+                    global_variable->setInitializer(llvm::ConstantInt::getFalse(*context));
+                }
 
                 auto main_type = llvm::Type::getInt32Ty(*context);
                 auto main = (llvm::Function*) module->getOrInsertFunction("main", main_type, NULL);

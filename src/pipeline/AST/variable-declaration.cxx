@@ -27,6 +27,9 @@ namespace prevc
                 auto access       = this->pipeline->frame_system->allocate_variable(get_semantic_type());
                 this->frame       = access.first;
                 this->frame_index = access.second;
+
+                if (this->frame->level == 0)
+                    this->pipeline->global_variables.push_back(this);
             }
 
             bool VariableDeclaration::is_component_declaration() const noexcept
