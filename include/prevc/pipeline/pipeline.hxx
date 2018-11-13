@@ -4,6 +4,8 @@
 
 namespace prevc
 {
+    class Settings;
+
     namespace pipeline
     {
         class Pipeline;
@@ -64,15 +66,21 @@ namespace prevc
         {
         public:
             /**
+             * \brief The settings (parsed from command line arguments).
+             * */
+            const Settings* settings;
+
+            /**
              * \brief The filename of the module.
              * */
             const std::string file_name;
 
             /**
              * \brief Create a pipeline for the specified module.
+             * \param settings The settings.
              * \param file_name The filename of the module.
              * */
-            Pipeline(const std::string& file_name);
+            Pipeline(const Settings* settings, const std::string& file_name);
 
             /**
              * \brief Release the used resources.

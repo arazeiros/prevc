@@ -8,9 +8,19 @@ namespace prevc
 {
     struct Settings
     {
+        /**
+         * \brief Enumeration of possible output formats.
+         * */
+        enum class OutputFormat
+        {
+            EXECUTABLE,
+            LLVM_IR
+        };
+
         bool                        help;
         bool                        version;
         std::vector<const char*>    sources;
+        OutputFormat                output_format;
 
     private:
         /**

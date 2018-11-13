@@ -20,7 +20,8 @@ namespace prevc
             *element = nullptr;
         }
 
-        Pipeline::Pipeline(const std::string& file_name):
+        Pipeline::Pipeline(const Settings* settings, const std::string& file_name):
+            settings(settings),
             file_name(file_name),
             derivation_tree(nullptr),
             next_declaration_id(1),

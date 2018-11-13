@@ -11,6 +11,7 @@
 #include <llvm/Target/TargetMachine.h>
 #include <prevc/pipeline/AST/expression.hxx>
 #include <prevc/pipeline/AST/variable-declaration.hxx>
+#include <prevc/settings.hxx>
 
 namespace prevc
 {
@@ -33,8 +34,8 @@ namespace prevc
                 auto intType   = llvm::Type::getInt64Ty(*context);
                 auto ptrType   = llvm::Type::getInt8PtrTy(*context);
 
-                auto f_malloc    = (llvm::Function*) module->getOrInsertFunction("malloc", ptrType, intType, nullptr);
-                auto f_free      = (llvm::Function*) module->getOrInsertFunction("free", voidType, ptrType, nullptr);
+                auto f_malloc    = (llvm::Function*) module->getOrInsertFunction("malloc", llvm::FunctionType::get(ptrType, {intType}, false));
+                auto f_free      = (llvm::Function*) module->getOrInsertFunction("free", llvm::FunctionType::get(voidType, {ptrType}, false));
                 auto f_printf    = (llvm::Function*) module->getOrInsertFunction("printf", llvm::FunctionType::get(int32Type, {ptrType}, true));
                 auto f_putchar   = (llvm::Function*) module->getOrInsertFunction("putchar", llvm::FunctionType::get(int32Type, {int32Type}, false));
                 auto f_printint  = llvm::Function::Create(llvm::FunctionType::get(voidType, {intType}, false), llvm::Function::PrivateLinkage, "printint", module);
@@ -103,12 +104,8 @@ namespace prevc
                 }
             }
 
-            void OutputGeneration::complete_0()
+            static llvm::TargetMachine* generate_code(llvm::LLVMContext* context, llvm::Module* module, Pipeline* pipeline)
             {
-                auto context = new llvm::LLVMContext();
-                auto module = new llvm::Module(pipeline->file_name, *context);
-                pipeline->IR_module = module;
-
                 auto target_triple = llvm::sys::getDefaultTargetTriple();
                 std::string error;
                 auto target = llvm::TargetRegistry::lookupTarget(target_triple, error);
@@ -116,7 +113,7 @@ namespace prevc
                 if (target == nullptr)
                 {
                     InternalError::raise(error.c_str());
-                    return; // should never come here, but disable warnings
+                    return nullptr; // should never come here, but disable warnings
                 }
 
                 auto RM = llvm::Optional<llvm::Reloc::Model>();
@@ -132,7 +129,7 @@ namespace prevc
                     auto type = ((semantic_analysis::Type*) variable->get_semantic_type())->get_llvm_type(*context);
 
                     auto global_variable = new llvm::GlobalVariable(*module, type, false,
-                            llvm::GlobalValue::InternalLinkage, nullptr, name);
+                                                                    llvm::GlobalValue::InternalLinkage, nullptr, name);
 
                     global_variable->setInitializer(llvm::ConstantInt::getFalse(*context));
                 }
@@ -144,29 +141,64 @@ namespace prevc
                 llvm::IRBuilder<> builder(block);
                 auto expression = ((AST::Expression *) pipeline->abstract_syntax_tree)->generate_IR(&builder);
                 builder.CreateRet(builder.CreateIntCast(expression, main_type, true));
+                return target_machine;
+            }
 
+            static void emit_code(llvm::Module* module, llvm::TargetMachine* target_machine, Pipeline* pipeline)
+            {
                 const std::size_t extension_length = std::string(".prev").length();
-                const std::string exe_name = pipeline->file_name.substr(0, pipeline->file_name.length() - extension_length);
-                const std::string obj_name = exe_name + ".o";
+                const std::string base_name = pipeline->file_name.substr(0, pipeline->file_name.length() - extension_length);
 
-                std::error_code error_code;
-                llvm::raw_fd_ostream out(obj_name, error_code, llvm::sys::fs::OpenFlags::F_None);
+                switch (pipeline->settings->output_format)
+                {
+                    case Settings::OutputFormat::EXECUTABLE:
+                    {
+                        const std::string obj_name = base_name + ".o";
 
-                if (error_code)
-                    IOError::raise(util::String::format("could not open file: %s", error_code.message().c_str()));
+                        std::error_code error_code;
+                        llvm::raw_fd_ostream out(obj_name, error_code, llvm::sys::fs::OpenFlags::F_None);
 
-                llvm::legacy::PassManager pass_manager;
+                        if (error_code)
+                            IOError::raise(util::String::format("could not open file: %s", error_code.message().c_str()));
 
-                if (target_machine->addPassesToEmitFile(pass_manager, out, llvm::TargetMachine::CGFT_ObjectFile))
-                    InternalError::raise("target_machine can't emit a file of this type");
+                        llvm::legacy::PassManager pass_manager;
 
-                pass_manager.run(*module);
-                out.flush();
+                        if (target_machine->addPassesToEmitFile(pass_manager, out, llvm::TargetMachine::CGFT_ObjectFile))
+                            InternalError::raise("target_machine can't emit a file of this type");
 
-                pipeline->release_abstract_syntax_tree();
+                        pass_manager.run(*module);
+                        out.flush();
 
-                util::String link_command(util::String::format("clang -o %s %s", exe_name.c_str(), obj_name.c_str()));
-                std::system(link_command.c_str());
+                        pipeline->release_abstract_syntax_tree();
+
+                        util::String link_command(util::String::format("clang -o %s %s", base_name.c_str(), obj_name.c_str()));
+                        std::system(link_command.c_str());
+                        break;
+                    }
+
+                    case Settings::OutputFormat::LLVM_IR:
+                    {
+                        const std::string llvm_ir_name = base_name + ".ll";
+
+                        std::error_code error_code;
+                        llvm::raw_fd_ostream out(llvm_ir_name, error_code, llvm::sys::fs::OpenFlags::F_None);
+
+                        if (error_code)
+                            IOError::raise(util::String::format("could not open file: %s", error_code.message().c_str()));
+
+                        module->print(out, nullptr);
+                    }
+                }
+            }
+
+            void OutputGeneration::complete_0()
+            {
+                auto context = new llvm::LLVMContext();
+                auto module = new llvm::Module(pipeline->file_name, *context);
+                pipeline->IR_module = module;
+
+                auto target_machine = generate_code(context, module, pipeline);
+                emit_code(module, target_machine, pipeline);
             }
         }
     }

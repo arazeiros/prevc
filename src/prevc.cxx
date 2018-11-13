@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 
             for (auto source : settings->sources)
             {
-                pipeline::Pipeline* pipeline = new pipeline::Pipeline(source);
+                pipeline::Pipeline* pipeline = new pipeline::Pipeline(settings, source);
                 pipeline->compile();
                 delete pipeline;
             }

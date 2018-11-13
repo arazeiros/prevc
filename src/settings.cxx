@@ -8,7 +8,8 @@ namespace prevc
 {
     Settings::Settings():
         help(false),
-        version(false)
+        version(false),
+        output_format(OutputFormat::EXECUTABLE)
     {
 
     }
@@ -69,6 +70,11 @@ namespace prevc
                     assert_no_ext(ext, arg);
                     settings->version = true;
                 }
+                else if ((ext = match(option, "out-llvm-ir")))
+                {
+                    assert_no_ext(ext, arg);
+                    settings->output_format = Settings::OutputFormat::LLVM_IR;
+                }
                 else
                 {
                     unknown_argument(arg);
@@ -94,6 +100,7 @@ namespace prevc
                 "Usage: prevc [OPTIONS] SOURCE...\n"
                 "\n"
                 "Options:\n"
+                "    --out-llvm-ir    Produces llvm IR as compilation output.\n"
                 "    --version        Prints compiler version.\n"
                 "    --help           Prints this help.\n"
         );
