@@ -47,7 +47,7 @@ namespace prevc
                 builder->CreateBr(test_block);
 
                 builder->SetInsertPoint(test_block);
-                auto condition = builder->CreateICmpNE(this->condition->generate_IR(builder), builder->getFalse());
+                auto condition = builder->CreateICmpNE(this->condition->generate_IR(builder), builder->getInt8(0));
                 builder->CreateCondBr(condition, do_block, out_block);
 
                 builder->SetInsertPoint(do_block);

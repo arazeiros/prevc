@@ -54,7 +54,7 @@ namespace prevc
                 auto out_block  = llvm::BasicBlock::Create(context, "out");
 
                 auto condition  = this->condition->generate_IR(builder);
-                auto result     = builder->CreateICmpNE(condition, builder->getFalse());
+                auto result     = builder->CreateICmpNE(condition, builder->getInt8(0));
                 builder->CreateCondBr(result, then_block, else_block);
 
                 builder->SetInsertPoint(then_block);

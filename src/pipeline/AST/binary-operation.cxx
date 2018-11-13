@@ -100,22 +100,22 @@ namespace prevc
                         return builder->CreateAnd(left, right);
 
                     case Operator::EQU:
-                        return builder->CreateICmpEQ(left, right);
+                        return builder->CreateIntCast(builder->CreateICmpEQ(left, right), builder->getInt8Ty(), false);
 
                     case Operator::NEQ:
-                        return builder->CreateICmpNE(left, right);
+                        return builder->CreateIntCast(builder->CreateICmpNE(left, right), builder->getInt8Ty(), false);
 
                     case Operator::LTH:
-                        return builder->CreateICmpSLT(left, right);
+                        return builder->CreateIntCast(builder->CreateICmpSLT(left, right), builder->getInt8Ty(), false);
 
                     case Operator::LEQ:
-                        return builder->CreateICmpSLE(left, right);
+                        return builder->CreateIntCast(builder->CreateICmpSLE(left, right), builder->getInt8Ty(), false);
 
                     case Operator::GTH:
-                        return builder->CreateICmpSGT(left, right);
+                        return builder->CreateIntCast(builder->CreateICmpSGT(left, right), builder->getInt8Ty(), false);
 
                     case Operator::GEQ:
-                        return builder->CreateICmpSGE(left, right);
+                        return builder->CreateIntCast(builder->CreateICmpSGE(left, right), builder->getInt8Ty(), false);
 
                     case Operator::ADD:
                         return builder->CreateAdd(left, right);
