@@ -24,8 +24,9 @@ ADD_CUSTOM_COMMAND(
 ADD_CUSTOM_TARGET(generate_DTG DEPENDS ${DTG_enum_header} ${DTG_header} ${DTG_source})
 
 ADD_EXECUTABLE(prevc
-    src/prevc.cxx
     src/error.cxx
+    src/prevc.cxx
+    src/settings.cxx
     src/pipeline/phase.cxx
     src/pipeline/pipeline.cxx
     src/pipeline/lexical_analysis/lexical-analysis.cxx

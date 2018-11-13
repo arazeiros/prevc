@@ -1,0 +1,9 @@
+
+#ifndef PREVC_VERSION_HXX
+#define PREVC_VERSION_HXX
+
+#define PREVC_VERSION_MAJOR (1)
+#define PREVC_VERSION_MINOR (0)
+#define PREVC_VERSION_BUILD (0)
+
+#endif
