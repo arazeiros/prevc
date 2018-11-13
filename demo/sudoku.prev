@@ -1,0 +1,257 @@
+###
+# A sudoku solver.
+# Credits to Matevž Fabjančič for the code.
+###
+
+{
+	init_9861490083();
+	# init_evil4063096482();
+
+	dump_board();
+	[void] solve(0,0);
+	dump_board()
+	: 0
+
+	where
+		var board: arr[9*9] int;
+
+		fun init_9861490083(): void = {
+			place_number(0,4,5);
+
+			place_number(1,0,3);
+			place_number(1,2,2);
+			place_number(1,7,6);
+
+			place_number(2,0,7);
+			place_number(2,2,4);
+			place_number(2,3,2);
+			place_number(2,5,8);
+			place_number(2,6,9);
+			place_number(2,7,1);
+
+			place_number(3,2,7);
+			place_number(3,5,3);
+			place_number(3,6,4);
+			place_number(3,8,5);
+
+			place_number(4,2,5);
+			place_number(4,3,6);
+			place_number(4,4,8);
+			place_number(4,5,7);
+			place_number(4,6,1);
+
+			place_number(5,0,9);
+			place_number(5,2,3);
+			place_number(5,3,4);
+			place_number(5,6,7);
+
+			place_number(6,1,7);
+			place_number(6,2,6);
+			place_number(6,3,5);
+			place_number(6,5,1);
+			place_number(6,6,3);
+			place_number(6,8,2);
+
+			place_number(7,1,2);
+			place_number(7,6,8);
+			place_number(7,8,4);
+
+			place_number(8,4,7)
+
+			: none
+		};
+
+		fun init_evil4063096482(): void = {
+			place_number(0,0,1);
+			place_number(0,4,6);
+
+			place_number(1,7,8);
+			place_number(1,8,7);
+
+			place_number(2,0,9);
+			place_number(2,3,3);
+			place_number(2,6,6);
+			place_number(2,7,2);
+
+			place_number(3,4,3);
+			place_number(3,5,9);
+			place_number(3,6,8);
+
+			place_number(4,1,3);
+			place_number(4,4,8);
+			place_number(4,7,4);
+
+			place_number(5,2,5);
+			place_number(5,3,7);
+			place_number(5,4,1);
+
+			place_number(6,1,9);
+			place_number(6,2,1);
+			place_number(6,5,7);
+			place_number(6,8,6);
+
+			place_number(7,0,6);
+			place_number(7,1,2);
+
+			place_number(8,4,5);
+			place_number(8,8,8)
+
+			: none
+		};
+
+		fun solve(i: int, j: int): bool = {
+
+
+			is_solved = false;
+
+			if (j == 9) then
+				j = 0;
+				i = i + 1
+			end;
+
+			#printint(i);printchar(' ');printint(j);printchar(' ');println();
+
+			if (i == 9) then
+				is_solved = true
+			else
+				if (board[i * 9 + j] != 0) then
+					#
+					is_solved = solve(i, j+1)
+				else
+					n = 1;
+
+					loop = true;
+
+					while (n <= 9 & loop) do
+						place_number(i, j, n);
+						#dump_board();
+						if check_row(i,j,n) & check_col(i,j,n) & check_square(i,j,n) then
+							is_solved = solve(i,j+1);
+							if (is_solved) then
+								loop = false
+							end
+						end;
+						if (!is_solved) then
+							place_number(i,j,0)
+						end;
+						n = n + 1
+					end
+				end
+			end
+
+			: is_solved
+
+			where
+				var loop: bool;
+				var is_solved: bool;
+				var n: int
+		};
+
+		fun place_number(i: int, j: int, n: int): void = {
+			#printint(i + 1);printchar(' ');printint(j + 1);printchar(' ');printint(n);println();
+			board[i * 9 + j] = n
+			: none
+		};
+
+		fun check_row(i: int, j: int, n: int): bool = {
+			offset = 0;
+			retval = true;
+			while (offset < 9) do
+				if (j != offset) & (board[i * 9 + offset] == n) then
+					retval = false
+				end;
+				offset = offset + 1
+			end
+
+			: retval
+
+			where
+				var offset: int;
+				var retval: bool
+		};
+
+		fun check_col(i: int, j: int, n: int): bool = {
+			offset = 0;
+			retval = true;
+			while (offset < 9) do
+				if (i  != offset) & (board[offset * 9 + j] == n) then
+					retval = false
+				end;
+				offset = offset + 1
+			end
+
+			: retval
+
+			where
+				var offset: int;
+				var retval: bool
+		};
+
+		fun check_square(i: int, j: int, n: int): bool = {
+
+			retval = true;
+
+			square_i = i / 3;
+			square_j = j / 3;
+
+			offset_i = 0;
+			while (offset_i < 3) do
+				offset_j = 0;
+				while (offset_j < 3) do
+					if (
+						(square_i * 3 + offset_i) != i &
+						(square_j * 3 + offset_j) != j &
+						board[(square_i * 3 + offset_i) * 9 + square_j * 3 + offset_j] == n
+					) then
+						retval = false
+					end;
+					offset_j = offset_j + 1
+				end;
+				offset_i = offset_i + 1
+			end
+
+			: retval
+
+			where
+				var square_i: int;
+				var square_j: int;
+				var offset_i: int;
+				var offset_j: int;
+				var retval: bool
+		};
+
+		fun dump_board(): void = {
+			i = 0;
+
+			while (i < 9) do
+				j = 0;
+				while (j < 9) do
+					#printint(i);println();
+					printint(board[i * 9 + j]);
+					if (j == 2 | j == 5) then
+						printchar(' ');
+						printchar(' ')
+					end;
+					printchar(' ');
+					j = j + 1
+				end;
+				i = i + 1;
+				if (i == 3 | i == 6) then
+					println()
+				end;
+				println()
+			end;
+			printchar('-');printchar('-');printchar('-');printchar('-');printchar('-');printchar('-');
+			println()
+
+
+			: none
+			where
+				var i: int;
+				var j: int
+		};
+
+		fun printint(n: int): void;
+		fun println(): void;
+		fun printchar(c: char): void
+}
