@@ -22,10 +22,10 @@ int main(int argc, char** argv)
         else
         {
             setlocale(LC_ALL, "");
-            llvm::InitializeAllTargetInfos();
-            llvm::InitializeAllTargets();
-            llvm::InitializeAllTargetMCs();
-            llvm::InitializeAllAsmPrinters();
+            LLVMInitializeX86TargetInfo();
+            LLVMInitializeX86Target();
+            LLVMInitializeX86TargetMC();
+            LLVMInitializeX86AsmPrinter();
 
             for (auto source : settings->sources)
             {

@@ -19,15 +19,15 @@ $ make
 Project depend on some third-party libraries:
 
  * [UTF8-CPP](http://utfcpp.sourceforge.net/)
- * [LLVM 5](http://llvm.org/)
+ * [LLVM 7](http://llvm.org/)
 
 Project also depends on the `clang` compiler that have to be installed
 and present in the path of the shell.
 
-On OpenSUSE you can install these by typing command:
+On Ubuntu 18.10 you can install these by typing command:
 
 ``` console
-# zypper in utfcpp-devel llvm5-devel clang
+$ sudo apt install libutfcpp-dev llvm-7-dev clang
 ```
 
 ## License

@@ -163,7 +163,7 @@ namespace prevc
 
                         llvm::legacy::PassManager pass_manager;
 
-                        if (target_machine->addPassesToEmitFile(pass_manager, out, llvm::TargetMachine::CGFT_ObjectFile))
+                        if (target_machine->addPassesToEmitFile(pass_manager, out, nullptr, llvm::TargetMachine::CGFT_ObjectFile))
                             InternalError::raise("target_machine can't emit a file of this type");
 
                         pass_manager.run(*module);
