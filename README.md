@@ -43,6 +43,7 @@ Building also depends on Python 3 (for some source code generation), so make sur
 ### Dependencies
 
 Project depend on some third-party libraries:
+ * [libzip](https://libzip.org/)
  * [UTF8-CPP](http://utfcpp.sourceforge.net/)
  * [LLVM 7](http://llvm.org/) (not backward compatible with previous LLVM versions)
 
@@ -52,7 +53,7 @@ make sure that `clang` is installed and present in the path of the shell.
 On Ubuntu 18.10 you can install these by typing command:
 
 ``` console
-$ sudo apt install libutfcpp-dev llvm-7-dev clang
+$ sudo apt install libutfcpp-dev libzip-dev llvm-7-dev clang
 ```
 
 ## License
