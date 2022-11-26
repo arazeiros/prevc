@@ -4,6 +4,7 @@
 #include <fstream>
 #include <llvm/IR/IRBuilder.h>
 #include <llvm/IR/LegacyPassManager.h>
+#include <llvm/Support/Host.h>
 #include <llvm/Support/FileSystem.h>
 #include <llvm/Support/raw_os_ostream.h>
 #include <llvm/Support/TargetRegistry.h>
@@ -34,10 +35,10 @@ namespace prevc
                 auto intType   = llvm::Type::getInt64Ty(*context);
                 auto ptrType   = llvm::Type::getInt8PtrTy(*context);
 
-                auto f_malloc    = (llvm::Function*) module->getOrInsertFunction("malloc", llvm::FunctionType::get(ptrType, {intType}, false));
-                auto f_free      = (llvm::Function*) module->getOrInsertFunction("free", llvm::FunctionType::get(voidType, {ptrType}, false));
-                auto f_printf    = (llvm::Function*) module->getOrInsertFunction("printf", llvm::FunctionType::get(int32Type, {ptrType}, true));
-                auto f_putchar   = (llvm::Function*) module->getOrInsertFunction("putchar", llvm::FunctionType::get(int32Type, {int32Type}, false));
+                auto f_malloc    = module->getOrInsertFunction("malloc", llvm::FunctionType::get(ptrType, {intType}, false));
+                auto f_free      = module->getOrInsertFunction("free", llvm::FunctionType::get(voidType, {ptrType}, false));
+                auto f_printf    = module->getOrInsertFunction("printf", llvm::FunctionType::get(int32Type, {ptrType}, true));
+                auto f_putchar   = module->getOrInsertFunction("putchar", llvm::FunctionType::get(int32Type, {int32Type}, false));
                 auto f_printint  = llvm::Function::Create(llvm::FunctionType::get(voidType, {intType}, false), llvm::Function::PrivateLinkage, "printint", module);
                 auto f_printchar = llvm::Function::Create(llvm::FunctionType::get(voidType, {intType}, false), llvm::Function::PrivateLinkage, "printchar", module);
                 auto f_printbool = llvm::Function::Create(llvm::FunctionType::get(voidType, {intType}, false), llvm::Function::PrivateLinkage, "printbool", module);
@@ -116,7 +117,7 @@ namespace prevc
                     return nullptr; // should never come here, but disable warnings
                 }
 
-                auto RM = llvm::Optional<llvm::Reloc::Model>();
+                auto RM = llvm::Optional<llvm::Reloc::Model>(llvm::Reloc::Model::PIC_);
                 auto target_machine = target->createTargetMachine(target_triple, "generic", "", llvm::TargetOptions(), RM);
                 module->setDataLayout(target_machine->createDataLayout());
                 module->setTargetTriple(target_triple);
@@ -135,7 +136,8 @@ namespace prevc
                 }
 
                 auto main_type = llvm::Type::getInt32Ty(*context);
-                auto main = (llvm::Function*) module->getOrInsertFunction("main", main_type, NULL);
+                module->getOrInsertFunction("main", main_type);
+                auto main = module->getFunction("main");
                 main->setCallingConv(llvm::CallingConv::C);
                 auto block = llvm::BasicBlock::Create(*context, "entry", main);
                 llvm::IRBuilder<> builder(block);
@@ -156,14 +158,14 @@ namespace prevc
                         const std::string obj_name = base_name + ".o";
 
                         std::error_code error_code;
-                        llvm::raw_fd_ostream out(obj_name, error_code, llvm::sys::fs::OpenFlags::F_None);
+                        llvm::raw_fd_ostream out(obj_name, error_code, llvm::sys::fs::OpenFlags::OF_None);
 
                         if (error_code)
                             IOError::raise(util::String::format("could not open file: %s", error_code.message().c_str()));
 
                         llvm::legacy::PassManager pass_manager;
 
-                        if (target_machine->addPassesToEmitFile(pass_manager, out, nullptr, llvm::TargetMachine::CGFT_ObjectFile))
+                        if (target_machine->addPassesToEmitFile(pass_manager, out, nullptr, llvm::CGFT_ObjectFile))
                             InternalError::raise("target_machine can't emit a file of this type");
 
                         pass_manager.run(*module);
@@ -181,7 +183,7 @@ namespace prevc
                         const std::string llvm_ir_name = base_name + ".ll";
 
                         std::error_code error_code;
-                        llvm::raw_fd_ostream out(llvm_ir_name, error_code, llvm::sys::fs::OpenFlags::F_None);
+                        llvm::raw_fd_ostream out(llvm_ir_name, error_code, llvm::sys::fs::OpenFlags::OF_Text);
 
                         if (error_code)
                             IOError::raise(util::String::format("could not open file: %s", error_code.message().c_str()));
