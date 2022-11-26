@@ -124,6 +124,9 @@ namespace prevc
 
                     case Operator::VAL:
                         return builder->CreateLoad(generate_IR_address(builder));
+
+                    default:
+                        InternalError::raise("can't generate IR for unary-operation: unknown opearator");
                 }
             }
 
@@ -184,6 +187,9 @@ namespace prevc
 
                     case Operator::VAL:
                         return ((SPointer*) sub_expression->get_semantic_type())->sub;
+
+                    default:
+                        InternalError::raise("can't get unary-operation semantic-type: unknown type");
                 }
             }
 

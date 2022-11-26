@@ -54,7 +54,7 @@ namespace prevc
 
             llvm::Type* ArrayType::generate_llvm_type(llvm::LLVMContext& context)
             {
-                llvm::ArrayType::get(((Type*) sub)->get_llvm_type(context), length);
+                return llvm::ArrayType::get(((Type*) sub)->get_llvm_type(context), length);
             }
         }
     }

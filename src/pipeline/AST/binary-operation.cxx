@@ -131,6 +131,9 @@ namespace prevc
 
                     case Operator::MODULE:
                         return builder->CreateSRem(left, right);
+
+                    default:
+                        InternalError::raise("cant't generate IR for the binary-operation: unknown operator");
                 }
             }
 
@@ -201,6 +204,9 @@ namespace prevc
                     case Operator::MODULE:
                         // This is true only if both operators must be of the same type as language rule.
                         return left_expression->get_semantic_type();
+
+                    default:
+                        InternalError::raise("can't get binary-operation semantic-type: unknown type");
                 }
             }
 

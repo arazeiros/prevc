@@ -308,6 +308,11 @@ class VariableHeaderGenerator(SourceGenerator):
         for variable in self.variables:
             self.line('case VariableType::{:s}: return "{:s}";'.format(variable.name, variable.name))
 
+        self.empty_line()
+        self.line('default:')
+        self.indent()
+        self.line('InternalError::raise("cant\'t convert type to string: unknown type");')
+        self.unindent()
         self.scope_out()
         self.scope_out()
 
@@ -316,6 +321,8 @@ class VariableHeaderGenerator(SourceGenerator):
         self.empty_line()
         self.ifndef(protection)
         self.define(protection)
+        self.empty_line()
+        self.line('#include <prevc/error.hxx>')
         self.empty_line()
         self.namespace('prevc')
         self.scope_in()

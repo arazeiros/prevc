@@ -72,7 +72,7 @@ namespace prevc
          * \param location The location of error in the source file.
          * \param message The error message.
          * */
-        static void raise(const util::String& reference, const util::Location& location, const util::String& message);
+        [[noreturn]] static void raise(const util::String& reference, const util::Location& location, const util::String& message);
 
     private:
         /**
@@ -92,7 +92,7 @@ namespace prevc
          * \brief Raise an internal error with the specified
          * \param message The error message.
          * */
-        static void raise(const util::String& message);
+        [[noreturn]] static void raise(const util::String& message);
 
     private:
         /**
@@ -112,7 +112,7 @@ namespace prevc
          * \brief Raise an internal error with the specified message.
          * \param message The error message.
          * */
-        static void raise(const util::String& message);
+        [[noreturn]] static void raise(const util::String& message);
 
     private:
         /**

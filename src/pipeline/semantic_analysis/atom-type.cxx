@@ -1,4 +1,5 @@
 #include <prevc/pipeline/semantic_analysis/atom-type.hxx>
+#include <prevc/error.hxx>
 #include <llvm/IR/DerivedTypes.h>
 
 namespace prevc
@@ -15,6 +16,9 @@ namespace prevc
                     case AtomType::Kind::BOOL: return "bool";
                     case AtomType::Kind::CHAR: return "char";
                     case AtomType::Kind::INT:  return "int";
+
+                    default:
+                        InternalError::raise("can't convert atom-kind to semantic string: kind unknown");
                 }
             }
 
@@ -51,6 +55,9 @@ namespace prevc
                     case AtomType::Kind::BOOL: return llvm::Type::getInt8Ty(context);
                     case AtomType::Kind::CHAR: return llvm::Type::getInt8Ty(context);
                     case AtomType::Kind::INT:  return llvm::Type::getInt64Ty(context);
+
+                    default:
+                        InternalError::raise("can't generate llvm type from atom-kind: kind unknown");
                 }
             }
         }

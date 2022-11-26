@@ -36,6 +36,9 @@ namespace prevc
                     case Name::BOOL: return "bool";
                     case Name::CHAR: return "char";
                     case Name::INT:  return "int";
+
+                    default:
+                        InternalError::raise("can't get primitive-type semantic-string: unknown name");
                 }
             }
 
@@ -56,6 +59,9 @@ namespace prevc
 
                     case PrimitiveType::Name::INT:
                         return pipeline->type_system->get_or_insert("int", [] () { return new SAtom(SAtom::Kind::INT); });
+
+                    default:
+                        InternalError::raise("can't get primitive-type semantic-type: unknown type");
                 }
             }
         }

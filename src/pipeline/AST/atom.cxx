@@ -77,7 +77,6 @@ namespace prevc
 
                     default:
                         InternalError::raise("illegal state: case not handled: AST atom generating IR");
-                        return nullptr;
                 }
             }
 
@@ -118,6 +117,9 @@ namespace prevc
                     case Atom::Type::POINTER:
                         return pipeline->type_system->get_or_insert("ptr void",
                                 [] () { return new SPointer(new SAtom(SAtom::Kind::VOID)); });
+
+                    default:
+                        InternalError::raise("can't get atom semantic-type: unknown type");
                 }
             }
 
