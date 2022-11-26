@@ -2,10 +2,17 @@
 .idea/
 
 # CMake build folders:
-cmake-build*
+cmake-build*/
+build/
 
 # ignored folder (put in whatever you want):
 ignored/
 
 # Valgrind files:
 vgcore.*
+
+# common generated system files
+*.o
+
+# demo executables
+demo/sudoku
