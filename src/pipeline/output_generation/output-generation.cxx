@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <llvm/IR/IRBuilder.h>
 #include <llvm/IR/LegacyPassManager.h>
 #include <llvm/Support/Host.h>
@@ -173,8 +174,12 @@ namespace prevc
 
                         pipeline->release_abstract_syntax_tree();
 
-                        util::String link_command(util::String::format("clang -o %s %s", base_name.c_str(), obj_name.c_str()));
-                        std::system(link_command.c_str());
+                        std::stringstream link_command;
+                        link_command << "ld -pie -z relro --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o ";
+                        link_command << base_name.c_str() << " /lib/x86_64-linux-gnu/Scrt1.o /lib/x86_64-linux-gnu/crti.o ";
+                        link_command << obj_name.c_str() << " -lc /lib/x86_64-linux-gnu/crtn.o";
+
+                        std::system(link_command.str().c_str());
                         break;
                     }
 
