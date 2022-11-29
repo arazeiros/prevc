@@ -18,7 +18,7 @@ FROM base as build
 
 # installing the `build` dependencies
 RUN apt-get update
-RUN apt-get install -y g++ cmake llvm-13 libzip-dev libutfcpp-dev
+RUN apt-get install -y g++ cmake python3 llvm-13 libzip-dev libutfcpp-dev
 
 # copying the source files needed for the compilation
 COPY include/ include/
