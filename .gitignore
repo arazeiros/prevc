@@ -16,3 +16,6 @@ vgcore.*
 
 # demo executables
 demo/sudoku
+
+# docker-slim related files
+slim.report.json
