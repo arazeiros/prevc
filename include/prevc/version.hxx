@@ -4,6 +4,6 @@
 
 #define PREVC_VERSION_MAJOR (1)
 #define PREVC_VERSION_MINOR (0)
-#define PREVC_VERSION_BUILD (0)
+#define PREVC_VERSION_BUILD (1)
 
 #endif
