@@ -25,6 +25,20 @@ For some extra help:
 prevc --help
 ```
 
+## Docker
+
+A Docker image, with a pre-compiled `prevc` executable, is available on [Docker Hub](https://hub.docker.com/r/pintarj/prevc). You can download it with:
+```bash
+docker pull pintarj/prevc
+```
+
+To compile a local `.prev` file (for example `demo/sudoku.prev`), mounting a folder in a Docker container, run:
+```bash
+docker run --rm --volume $(pwd):/prevc pintarj/prevc /usr/local/bin/prevc demo/sudoku.prev
+```
+
+**NOTE:** The produced executable will require, on execution, a version of [GLIBC](https://www.gnu.org/software/libc/) installed on the local machine _compatible_ with the version with which it was compiled in the Docker container.
+
 ## Building
 
 On Ubuntu 22.04 all dependencies can be installed with:
