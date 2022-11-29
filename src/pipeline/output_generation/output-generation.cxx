@@ -100,8 +100,7 @@ namespace prevc
                     // defining println
                     auto block = llvm::BasicBlock::Create(*context, "entry", f_println);
                     llvm::IRBuilder<> builder(block);
-                    llvm::ArrayRef<llvm::Value*> args({llvm::ConstantInt::get(int32Type, '\n')});
-                    builder.CreateCall(f_putchar, args);
+                    builder.CreateCall(f_putchar, llvm::ArrayRef<llvm::Value*>({llvm::ConstantInt::get(int32Type, '\n')}));
                     builder.CreateRetVoid();
                 }
             }
